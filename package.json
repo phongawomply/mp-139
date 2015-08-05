@@ -1,0 +1,32 @@
+{
+  "name": "app-template-angular",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.4.3",
+    "angular-route": "^1.4.3",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "@womply/global-component-ui": "0.7.1",
+    "@womply/styleguide-ui": "^0.9.0",
+    "angular-animate": "^1.4.3",
+    "angular-aria": "^1.4.3",
+    "angular-material": "^0.10.0",
+    "connect-livereload": "^0.5.3",
+    "del": "^1.2.0",
+    "express": "^4.13.2",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-livereload": "^3.8.0",
+    "gulp-sass": "^2.0.4",
+    "gulp-shell": "^0.4.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "merge-stream": "^0.1.7",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.1.2",
+    "tiny-lr": "^0.1.6",
+    "vinyl-paths": "^1.0.0",
+    "womply-eslint": "*"
+  }
+}

@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/assets/css/angular-material.min.css">
+    <link rel="stylesheet" href="/assets/css/styleguide.css">
+    <link rel="stylesheet" href="/assets/css/global-components-ui.css">
+  </head>
+  <body data-ng-app="womply" data-ng-controller="AppController as app">
+
+    <top-bar
+        data-application-id="{{app.applicationId}}"
+        data-user-menu-links="app.userMenuLinks"></top-bar>
+
+    <section>
+      <ng-view></ng-view>
+    </section>
+
+    <!-- script tags -->
+    <script src="/lib/underscore-min.js"></script>
+    <script src="/lib/angular.min.js"></script>
+    <script src="/lib/angular-route.min.js"></script>
+    <script src="/lib/angular-material.min.js"></script>
+    <script src="/lib/global-components-ui.js"></script>
+    <script src="/js/womply.js"></script>
+    <!-- end script tags -->
+  </body>
+</html>
