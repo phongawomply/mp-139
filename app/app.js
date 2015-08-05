@@ -35,7 +35,6 @@ angular.module('womply')
         var location = _.find(locations, function(loc) {
           return loc.slug == self.slug || loc.id == self.slug;
         });
-
         if(_.isString(location.partner_slug)) {
           $document[0].body.id = location.partner_slug.toLowerCase();
         }

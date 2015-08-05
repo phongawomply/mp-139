@@ -1,14 +1,16 @@
 var gulp        = require('gulp'),
     concat      = require('gulp-concat'),
+    uglify      = require('gulp-uglify'),
     babel       = require('gulp-babel'),
     sourcemaps  = require('gulp-sourcemaps'),
     directories = require('./directories.js');
 
 gulp.task('build:js', function() {
-  return gulp.src([directories.src + '/**/app.module.js', directories.src + '/**/*.js'])
+  return gulp.src([directories.src + '/**/*.module.js', directories.src + '/**/*.js'])
     .pipe(sourcemaps.init())
     .pipe(babel())
-    .pipe(concat('./js/womply.js'))
+    .pipe(uglify())
+    .pipe(concat('./js/womply.min.js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(directories.build));
 });

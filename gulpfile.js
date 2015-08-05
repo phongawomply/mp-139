@@ -38,6 +38,20 @@ gulp.task('watch', ['build:watch']);
  */
 gulp.task('build', ['build:js', 'build:html']);
 /**
+ * Test the files for development
+ * which test unconcat files
+ */
+gulp.task('test-dev', function() {
+  sequence('build', 'test:karma');
+});
+/**
+ * Test the files for release
+ * which tests the concat file
+ */
+gulp.task('test-release', function() {
+  sequence('build', 'test:karma-concat');
+});
+/**
  * Serve the files
  */
 gulp.task('serve', function() {
