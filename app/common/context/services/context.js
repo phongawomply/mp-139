@@ -2,10 +2,16 @@ angular.module('womply')
   /**
    * Context service to provide the application with data
    */
-  .factory('Context', ['$rootScope', '$http', '$q', '$route', 'Environment', function($rootScope, $http, $q, $route, Environment) {
+  .factory('Context', ['$rootScope', '$http', '$q', '$route', '$location', 'Environment', function($rootScope, $http, $q, $route, $location, Environment) {
 
     var merchantLocationsDefer = $q.defer();
     var userDefer = $q.defer();
+
+    var merchantSlug = $location.path().split('/')[1];
+
+    $rootScope.$on('$locationChangeStart', function() {
+      merchantSlug = $location.path().split('/')[1];
+    });
 
     return {
       /**
@@ -32,10 +38,9 @@ angular.module('womply')
        */
       getCurrentMerchantLocation: function() {
         var defer = $q.defer();
-        var deregister = $rootScope.$on('$routeChangeSuccess', function() {
-          defer.resolve($route.current.params.slug);
-          deregister();
-        });
+
+        defer.resolve(merchantSlug);
+
         return defer.promise;
       },
       /**

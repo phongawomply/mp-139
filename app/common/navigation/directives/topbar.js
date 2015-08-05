@@ -4,7 +4,7 @@ angular.module('womply')
    *
    * @directive
    */
-  .directive('topBar', ['$document', 'Context', function($document, Context) {
+  .directive('topBar', ['$document', '$location', 'Context', function($document, $location, Context) {
     return {
       restrict: 'E',
       scope: {
@@ -55,18 +55,18 @@ angular.module('womply')
           }
         });
 
-        // Set the locaiton menu
+        // Set the location menu
         var _locationChangeCallback = function(slug) {
-          console.log(slug);
-
           Context.getMerchantLocations().then(function(locations) {
             var location = _.find(locations, function(loc) {
-              return loc.slug == slug;
+              return loc.slug == slug || loc.id == slug;
             });
 
             if(_.isString(location.partner_slug)) {
               $document[0].body.id = location.partner_slug.toLowerCase();
             }
+
+            $location.path('/' + slug + '/summary');
           });
         };
 

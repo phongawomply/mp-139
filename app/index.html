@@ -1,8 +1,8 @@
 <html>
   <head>
-    <link rel="stylesheet" href="/assets/css/angular-material.min.css">
-    <link rel="stylesheet" href="/assets/css/styleguide.css">
-    <link rel="stylesheet" href="/assets/css/global-components-ui.css">
+    <link rel="stylesheet" href="/css/angular-material.min.css">
+    <link rel="stylesheet" href="/css/styleguide.css">
+    <link rel="stylesheet" href="/css/global-components-ui.css">
   </head>
   <body data-ng-app="womply" data-ng-controller="AppController as app">
 
@@ -10,9 +10,7 @@
         data-application-id="{{app.applicationId}}"
         data-user-menu-links="app.userMenuLinks"></top-bar>
 
-    <section>
-      <ng-view></ng-view>
-    </section>
+    <side-bar data-navigation-links="app.navigationLinks" data-navigation-selected="app.navigationSelected"></side-bar>
 
     <!-- script tags -->
     <script src="/lib/underscore-min.js"></script>
