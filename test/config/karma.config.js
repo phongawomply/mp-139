@@ -12,7 +12,7 @@ module.exports = function(config) {
       'app/*.js',
       'app/**/*.js',
       'test/lib/angular-mocks.js',
-      'test/jasmine/*spec.js'
+      'test/jasmine/**/*spec.js'
     ],
     exclude: [
     ],
@@ -23,6 +23,6 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
     autoWatch: false,
     browsers: ['PhantomJS'],
-    singleRun: true
+    singleRun: false
   });
 };
