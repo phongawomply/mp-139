@@ -38,18 +38,24 @@ gulp.task('watch', ['build:watch']);
  */
 gulp.task('build', ['build:js', 'build:html']);
 /**
+ * Setup the test environment
+ */
+gulp.task('test:karma:setup', function() {
+  sequence('clean', 'build', 'library:angular-mocks');
+});
+/**
  * Test the files for development
  * which test unconcat files
  */
-gulp.task('test-dev', function() {
-  sequence('build', 'test:karma');
+gulp.task('test:karma:dev', function() {
+  sequence('test:karma:setup', 'test:karma');
 });
 /**
  * Test the files for release
  * which tests the concat file
  */
-gulp.task('test-release', function() {
-  sequence('build', 'test:karma-concat');
+gulp.task('test:karma:prod', function() {
+  sequence('test:karma:setup', 'test:karma-concat');
 });
 /**
  * Serve the files

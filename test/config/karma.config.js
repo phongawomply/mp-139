@@ -4,7 +4,6 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: [
       'build/lib/angular.min.js',
-      'build/lib/angular-mocks.js',
       'build/lib/angular-material.min.js',
       'build/lib/angular-route.min.js',
       'build/lib/global-components-ui.js',
@@ -12,6 +11,7 @@ module.exports = function(config) {
       'app/*.module.js',
       'app/*.js',
       'app/**/*.js',
+      'test/lib/angular-mocks.js',
       'test/jasmine/*spec.js'
     ],
     exclude: [

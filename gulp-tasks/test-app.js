@@ -8,7 +8,7 @@ var Server          = require('karma').Server
  */
  gulp.task('test:karma', function (done) {
    new Server({
-     configFile: __dirname + '/../test/testConfig/karma.config.js',
+     configFile: __dirname + '/../test/config/karma.config.js',
      singleRun: true
    }, done).start();
 });
@@ -17,7 +17,7 @@ var Server          = require('karma').Server
  */
  gulp.task('test:karma-concat', function (done) {
    new Server({
-     configFile: __dirname + '/../test/testConfig/karma.concat.config.js',
+     configFile: __dirname + '/../test/config/karma.concat.config.js',
      singleRun: true
    }, done).start();
 });
