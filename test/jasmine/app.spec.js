@@ -5,6 +5,7 @@ describe("AppController", function() {
   var $location;
   var $q;
 
+  disableModuleRun('womply');
 
   beforeEach(module('womply'));
 
@@ -17,36 +18,55 @@ describe("AppController", function() {
     $q = $injector.get('$q');
   }));
 
-  it('should be setup', function() {
-    var $scope = {};
-    //Mock the Context factory
-    var Context = function($q) {
-      return {
-        getCurrentMerchantLocation: function() {
-          var def = $q.defer();
-          def.resolve('x');
-          return def.promise;
-        },
-        getMerchantLocations: function() {
-          var def = $q.defer();
-          def.resolve([{slug:'x', partner_slug:'y'}]);
-          return def.promise;
-        }
-      }
-    };
-
-    //Mock the initialize http call
-    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=197330').respond({
-      data:{
-        data: {
-          merchant_locations:[{slug:'x', partner_slug:'x'}]
-        }
-      }
+  beforeEach(inject(function(ConfigLoader, Context) {
+    var defer = $q.defer();
+    defer.resolve({
+      UserMenuLinks: 'userMenuLinks',
+      ApplicationId: 'applicationId',
+      NavigationLinks: 'navigationLinks',
+      NavigationSelected: 'navigationSelected'
     });
 
-    var controller = $controller('AppController', { $scope: $scope, Context: new Context($q)});
+    spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
+
+    var slug = $q.defer();
+    slug.resolve('1111');
+    spyOn(Context, 'getCurrentMerchantLocation').and.returnValue(slug.promise);
+
+    var locations = $q.defer();
+    locations.resolve([
+      {
+        slug: '1111',
+        partner_slug: 'partner'
+      }
+    ]);
+    spyOn(Context, 'getMerchantLocations').and.returnValue(locations.promise);
+  }));
+
+
+  it('initializes config loader', inject(function() {
+    var controller = $controller('AppController');
     $rootScope.$digest();
-    $httpBackend.flush();
-    expect(controller.applicationId).toEqual('customer-analytics');
-  });
+
+    expect(controller.applicationId).toEqual('applicationId');
+    expect(controller.userMenuLinks).toEqual('userMenuLinks');
+    expect(controller.navigationLinks).toEqual('navigationLinks');
+    expect(controller.navigationSelected).toEqual('navigationSelected');
+  }));
+
+  it('initializes the merchant slug', inject(function(Context) {
+    var controller = $controller('AppController');
+    $rootScope.$digest();
+
+    expect(controller.slug).toEqual('1111');
+  }));
+
+  it('initializes the body id', inject(function($document) {
+    var controller = $controller('AppController');
+    $rootScope.$digest();
+
+    expect($document[0].body.id).toEqual('partner');
+  }));
+
+
 });

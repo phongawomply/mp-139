@@ -41,7 +41,7 @@ gulp.task('build', ['build:js', 'build:html']);
  * Setup the test environment
  */
 gulp.task('test:karma:setup', function(cb) {
-  sequence('clean', 'build', 'libraries', 'library:angular-mocks', cb);
+  sequence('clean', 'build', 'gc', 'libraries', 'library:angular-mocks', cb);
 });
 /**
  * Test the files for development

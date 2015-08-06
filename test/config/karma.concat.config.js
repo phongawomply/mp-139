@@ -4,17 +4,25 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: [
       'build/lib/angular.min.js',
-      'build/lib/angular-mocks.js',
       'build/lib/angular-material.min.js',
       'build/lib/angular-route.min.js',
       'build/lib/global-components-ui.js',
       'build/lib/underscore-min.js',
       'build/js/womply.min.js',
-      'test/jasmine/*spec.js'
+      'build/html/**/*.html',
+      'test/lib/angular-mocks.js',
+      'test/jasmine/disable_module_run.js',
+      'test/jasmine/**/*spec.js'
     ],
     exclude: [
     ],
-    preprocessors: {},
+    preprocessors: {
+      'build/html/**/*.html': 'ng-html2js'
+    },
+    ngHtml2JsPreprocessor: {
+      moduleName: 'templates',
+      stripPrefix: 'build'
+    },
     reporters: ['dots'],
     port: 9876,
     colors: true,

@@ -19,11 +19,15 @@ angular.module('womply')
        * @returns {Q.Promise}
        */
       initialize: function() {
-        return $http.get(Environment.getApiPath() + '/initialize?id=197330')
-                .then(function(response) {
-                  merchantLocationsDefer.resolve(response.data.data.merchant_locations);
-                  userDefer.resolve(response.data.data.user);
-                });
+        return Environment.getApiPath()
+          .then(function(apiPath) {
+            return $http.get(apiPath + '/initialize?id=' + merchantSlug)
+              .then(function(response) {
+                merchantLocationsDefer.resolve(response.data.data.merchant_locations);
+                userDefer.resolve(response.data.data.user);
+              });
+          });
+
       },
       /**
        * Get the merchant locations

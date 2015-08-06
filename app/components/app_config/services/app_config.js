@@ -13,6 +13,8 @@ angular.module('womply')
               href: Environment.getInsightsPath() + '/users/sign_out'
             }
           ],
+          ApiBase: 'http://local.womply.com:5000',
+          ApiPath: '/api/0.1',
           NavigationLinks: [
             {
               id:     'nav1',
