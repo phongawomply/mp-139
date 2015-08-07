@@ -2,9 +2,16 @@ angular.module('womply')
   /**
    * Set the $http request to allow for XHR
    */
-  .config(['$httpProvider', function($httpProvider) {
+  .config(function($httpProvider, $routeProvider) {
     $httpProvider.defaults.withCredentials = true;
-  }])
+    $routeProvider
+      .when('/:slug/nav1', {
+        template: '<p>Nav 1</p>'
+      })
+      .when('/:slug/nav2', {
+        template: '<p>Nav 2</p>'
+      });
+  })
   /**
    * Initialize the context
    */
