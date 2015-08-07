@@ -9,7 +9,7 @@ gulp.task('build:js', function() {
   return gulp.src([directories.src + '/**/*.module.js', directories.src + '/**/*.js'])
     .pipe(sourcemaps.init())
     .pipe(babel())
-    .pipe(uglify())
+    //.pipe(uglify())
     .pipe(concat('./js/womply.min.js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(directories.build));
