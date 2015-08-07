@@ -58,6 +58,10 @@ gulp.task('test:karma:prod', function() {
   sequence('test:karma:setup', 'test:karma-concat');
 });
 /**
+ * Serve the api blueprints
+ */
+gulp.task('blueprints', ['serve:blueprints']);
+/**
  * Serve the files
  */
 gulp.task('serve', function() {

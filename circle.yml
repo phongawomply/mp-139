@@ -1,0 +1,21 @@
+machine:
+  post:
+    - npm install -g gulp
+    - npm install -g protractor
+
+dependencies:
+  pre:
+    - |
+      npm login <<!
+      $NPM_USERNAME
+      $NPM_PASSWORD
+      $NPM_EMAIL!
+  override:
+    - sudo apt-get update
+    - sudo apt-get install google-chrome-stable
+    - npm install
+
+test:
+  pre:
+    - git config --global user.name 'deploy'
+    - git config --global user.email 'devs@womply.com'
