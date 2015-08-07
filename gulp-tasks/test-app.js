@@ -1,7 +1,7 @@
 var gulp            = require('gulp');
 var Server          = require('karma').Server
-//var protractor      = require('gulp-protractor').protractor;
-//var webdriverUpdate = require('gulp-protractor').webdriver_update;
+var protractor      = require('gulp-protractor').protractor;
+var webdriverUpdate = require('gulp-protractor').webdriver_update;
 
 /**
  * Run all karma unit tests
@@ -21,17 +21,16 @@ var Server          = require('karma').Server
      singleRun: true
    }, done).start();
 });
-
 /**
- *
+ * Run all protractor tests
  */
 
-// gulp.task('test:protractor', ['webdriver-update'], function() {
-//   return gulp.src(['./src/tests/*.js'])
-//     .pipe(protractor({
-//       'configFile' : __dirname + '/tests/config/protractor.conf.js'
-//     }))
-//     .on('error', function(e) { throw e; });
-// });
-//
-// gulp.task('webdriver-update', webdriverUpdate);
+gulp.task('test:protractor', ['webdriver-update'], function() {
+  return gulp.src(['../test/protractor/**/*spec.js'])
+    .pipe(protractor({
+      'configFile' : __dirname + '/../test/config/protractor.config.js'
+    }))
+    .on('error', function(e) { throw e; });
+});
+
+gulp.task('webdriver-update', webdriverUpdate);

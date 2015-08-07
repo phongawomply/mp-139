@@ -58,6 +58,12 @@ gulp.task('test:karma:prod', function() {
   sequence('test:karma:setup', 'test:karma-concat');
 });
 /**
+ * Run protractor tests
+ */
+gulp.task('protractor', function() {
+  sequence('test:protractor');
+});
+/**
  * Serve the api blueprints
  */
 gulp.task('blueprints', ['serve:blueprints']);
