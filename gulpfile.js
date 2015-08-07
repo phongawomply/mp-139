@@ -36,7 +36,7 @@ gulp.task('watch', ['build:watch']);
 /**
  * Build the JS and HTML
  */
-gulp.task('build', ['build:js', 'build:html']);
+gulp.task('build', ['build:js', 'build:html', 'build:css']);
 /**
  * Setup the test environment
  */

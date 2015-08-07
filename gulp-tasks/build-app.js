@@ -2,6 +2,7 @@ var gulp        = require('gulp'),
     concat      = require('gulp-concat'),
     uglify      = require('gulp-uglify'),
     babel       = require('gulp-babel'),
+    sass        = require('gulp-sass'),
     sourcemaps  = require('gulp-sourcemaps'),
     directories = require('./directories.js');
 
@@ -20,7 +21,15 @@ gulp.task('build:html', function() {
     .pipe(gulp.dest(directories.html));
 });
 
+gulp.task('build:css', function() {
+  return gulp.src([directories.src + '/**/*.scss'])
+    .pipe(sass({indentedSyntax: true}).on('error', sass.logError))
+    .pipe(concat('styles.min.js'))
+    .pipe(gulp.dest(directories.css));
+});
+
 gulp.task('build:watch', function() {
   gulp.watch(directories.src + '/**/*.js', ['build:js']);
   gulp.watch(directories.src + '/**/*.html', ['build:html']);
+  gulp.watch(directories.src + '/**/*.scss', ['build:css']);
 });
