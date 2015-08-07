@@ -17,13 +17,19 @@ module.exports = function(config) {
     exclude: [
     ],
     preprocessors: {
-      'build/html/**/*.html': 'ng-html2js'
+      'build/html/**/*.html'    : 'ng-html2js',
+      'build/js/womply.min.js'  : ['sourcemap', 'coverage']
     },
     ngHtml2JsPreprocessor: {
       moduleName: 'templates',
       stripPrefix: 'build'
     },
-    reporters: ['dots'],
+    coverageReporter: {
+      type: 'lcov',
+      dir:  'coverage/',
+      subdir: '.'
+    },
+    reporters: ['dots', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

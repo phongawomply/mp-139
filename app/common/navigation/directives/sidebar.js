@@ -34,7 +34,7 @@ angular.module('womply')
          */
         var isNavigationCollectionValid = function() {
           var navigationValid = true;
-          if (!_.isFunction($scope.navigationSelected)) {
+          if (!_.isFunction($scope.navigationSelected())) {
             navigationValid = _.reduce($scope.navigationLinks, function(valid, nav) {
               if (valid && !nav.hasOwnProperty('href')) {
                 return false;
