@@ -15,9 +15,47 @@ describe('SideBar', function() {
   });
 
   var element, scope, rootScope;
-  beforeEach(inject(function($rootScope, $compile) {
-    rootScope = $rootScope;
 
+  beforeEach(inject(function($rootScope) {
+    rootScope = $rootScope;
+  }));
+
+  describe('sets up navigation', function() {
+    beforeEach(inject(function($rootScope, $compile) {
+      rootScope = $rootScope;
+
+      rootScope.navigationLinks = [
+        {
+          id: '1',
+          name: 'nav1',
+          route: 'nav1',
+          href: 'nav1'
+        }
+      ];
+
+      var ele = angular.element('<div><side-bar id="sideBar" data-navigation-links="navigationLinks"></side-bar></div>');
+      element = $compile(ele)($rootScope.$new());
+
+      $rootScope.$digest();
+      scope = element.find('#sideBar').isolateScope();
+    }));
+
+    it('renders the navigation', function() {
+      expect(navigationRenderSpy).toHaveBeenCalled();
+    });
+
+    it('sets the active navigation', function() {
+      expect(setActiveSpy).toHaveBeenCalled();
+    });
+
+    it('sets active when location changes', inject(function($rootScope) {
+      $rootScope.$broadcast('$locationChangeStart');
+      $rootScope.$digest();
+      expect(setActiveSpy.calls.count()).toEqual(2);
+    }));
+  });
+
+  it('sets the click function', inject(function($compile) {
     rootScope.navigationLinks = [
       {
         id: '1',
@@ -27,28 +65,6 @@ describe('SideBar', function() {
       }
     ];
 
-    var ele = angular.element('<div><side-bar id="sideBar" data-navigation-links="navigationLinks"></side-bar></div>');
-    element = $compile(ele)($rootScope.$new());
-
-    $rootScope.$digest();
-    scope = element.find('#sideBar').isolateScope();
-  }));
-
-  it('renders the navigation', function() {
-    expect(navigationRenderSpy).toHaveBeenCalled();
-  });
-
-  it('sets the active navigation', function() {
-    expect(setActiveSpy).toHaveBeenCalled();
-  });
-
-  it('sets active when location changes', inject(function($rootScope) {
-    $rootScope.$broadcast('$locationChangeStart');
-    $rootScope.$digest();
-    expect(setActiveSpy.calls.count()).toEqual(2);
-  }));
-
-  it('sets the click function', inject(function($compile) {
     rootScope.clickFn = jasmine.createSpy();
     var ele = angular.element('<div><side-bar id="sideBar" data-navigation-links="navigationLinks" data-navigation-selected="clickFn"></side-bar></div>');
     element = $compile(ele)(rootScope.$new());
@@ -57,7 +73,24 @@ describe('SideBar', function() {
     scope = element.find('#sideBar').isolateScope();
 
     expect(navigationRenderSpy).toHaveBeenCalled();
-    expect(navigationRenderSpy.calls.count()).toEqual(2);
+  }));
+
+  it('has invalid navigation links', inject(function($compile) {
+    rootScope.navigationLinks = [
+      {
+        id: '1',
+        name: 'nav1',
+        route: 'nav1'
+      }
+    ];
+    rootScope.clickFn = jasmine.createSpy();
+    var ele = angular.element('<div><side-bar id="sideBar" data-navigation-links="navigationLinks"></side-bar></div>');
+    element = $compile(ele)(rootScope.$new());
+
+    rootScope.$digest();
+    scope = element.find('#sideBar').isolateScope();
+
+    expect(navigationRenderSpy).not.toHaveBeenCalled();
   }));
 
 });

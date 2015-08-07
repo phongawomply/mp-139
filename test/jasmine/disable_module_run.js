@@ -1,3 +1,5 @@
 function disableModuleRun(module) {
-  angular.module(module)._runBlocks = [];
+  beforeEach(function() {
+    angular.module(module)._runBlocks = [];
+  });
 }

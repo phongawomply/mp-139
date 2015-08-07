@@ -26,7 +26,7 @@ gulp.task('libraries', ['library:angular', 'library:angular-route', 'library:ang
  * Clean up the build directories
  */
 gulp.task('clean', function() {
-  return gulp.src([directories.build])
+  return gulp.src([directories.build, directories.coverage])
     .pipe(vinyl_paths(del));
 });
 /**
@@ -62,14 +62,20 @@ gulp.task('test:karma:prod', function() {
  */
 gulp.task('blueprints', ['serve:blueprints']);
 /**
+ * Setup the serve tasks
+ */
+gulp.task('serve:setup', function(cb) {
+  sequence('clean', 'asset', 'build', 'libraries', cb);
+});
+/**
  * Serve the files
  */
 gulp.task('serve', function() {
-  sequence('clean', 'asset', 'build', 'libraries', 'web-server', 'watch');
+  sequence('serve:setup', 'web-server', 'watch');
 });
 /**
  * Serve the files with live reload
  */
 gulp.task('serve:livereload', function() {
-  sequence('clean', 'asset', 'build', 'libraries', 'web-server:livereload', 'watch', 'livereload');
+  sequence('serve:setup', 'web-server:livereload', 'watch', 'livereload');
 });

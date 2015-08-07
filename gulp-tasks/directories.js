@@ -1,6 +1,7 @@
 var build_dir =  './build';
 module.exports = {
   build:    build_dir,
+  coverage: './coverage',
   src:      './app',
   css:      build_dir + '/css',
   assets:   build_dir + '/assets',
