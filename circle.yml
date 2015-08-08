@@ -19,3 +19,5 @@ test:
   pre:
     - git config --global user.name 'deploy'
     - git config --global user.email 'devs@womply.com'
+  override:
+    - gulp test:karma:dev
