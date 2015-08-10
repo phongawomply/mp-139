@@ -20,4 +20,7 @@ test:
     - git config --global user.name 'deploy'
     - git config --global user.email 'devs@womply.com'
   override:
+    - gulp blueprints:
+        backgroud: true
     - gulp test:karma:dev
+    - gulp protractor
