@@ -4,8 +4,8 @@ exports.config = {
   // seleniumAddress: 'http://localhost:4444/wd/hub',
   // Comment out 2 browsers to speed up testing
   multiCapabilities: [
-    { 'browserName': 'chrome' },
-    //{ 'browserName': 'firefox' }
+    //{ 'browserName': 'chrome' },
+    { 'browserName': 'firefox' }
     //{ 'browserName': 'safari' } //Please note that Safari driver doesn't currently run the tests properly.
   ],
 
