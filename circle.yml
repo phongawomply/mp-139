@@ -2,6 +2,7 @@ machine:
   post:
     - npm install -g gulp
     - npm install -g protractor
+    - npm install -g codeclimate-test-reporter
 
 dependencies:
   pre:
@@ -24,3 +25,4 @@ test:
         backgroud: true
     - gulp test:karma:dev
     - gulp protractor
+    - codeclimate-test-reporter < ./coverage/lcov.info
