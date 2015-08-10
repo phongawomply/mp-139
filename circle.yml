@@ -22,7 +22,7 @@ test:
     - git config --global user.email 'devs@womply.com'
   override:
     - gulp blueprints:
-        backgroud: true
+        background: true
     - gulp test:karma:dev
     - gulp protractor
     - codeclimate-test-reporter < ./coverage/lcov.info
