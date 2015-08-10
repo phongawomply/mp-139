@@ -24,5 +24,7 @@ test:
     - gulp blueprints:
         background: true
     - gulp test:karma:dev
+    - gulp serve:
+        background: true
     - gulp protractor
     - codeclimate-test-reporter < ./coverage/lcov.info
