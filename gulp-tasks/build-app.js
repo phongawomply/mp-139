@@ -22,14 +22,14 @@ gulp.task('build:html', function() {
 });
 
 gulp.task('build:css', function() {
-  return gulp.src([directories.src + '/**/*.scss'])
+  return gulp.src([directories.src + '/**/*.sass'])
     .pipe(sass({indentedSyntax: true}).on('error', sass.logError))
-    .pipe(concat('styles.min.js'))
+    .pipe(concat('app-styles.css'))
     .pipe(gulp.dest(directories.css));
 });
 
 gulp.task('build:watch', function() {
   gulp.watch(directories.src + '/**/*.js', ['build:js']);
   gulp.watch(directories.src + '/**/*.html', ['build:html']);
-  gulp.watch(directories.src + '/**/*.scss', ['build:css']);
+  gulp.watch(directories.src + '/**/*.sass', ['build:css']);
 });
