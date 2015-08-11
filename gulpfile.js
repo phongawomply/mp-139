@@ -1,3 +1,4 @@
+
 var gulp        = require('gulp'),
     del         = require('del'),
     require_dir = require('require-dir'),
@@ -21,7 +22,12 @@ gulp.task('asset', ['gc', 'sg']);
 /**
  * Copy all third party libraries
  */
-gulp.task('libraries', ['library:angular', 'library:angular-route', 'library:angular-material', 'library:underscore']);
+gulp.task('libraries', ['library:angular',
+                        'library:angular-route',
+                        'library:angular-aria',
+                        'library:angular-animate',
+                        'library:angular-material',
+                        'library:underscore']);
 /**
  * Clean up the build directories
  */
