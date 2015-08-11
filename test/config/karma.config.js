@@ -6,6 +6,8 @@ module.exports = function(config) {
       'build/lib/angular.min.js',
       'build/lib/angular-material.min.js',
       'build/lib/angular-route.min.js',
+      'build/lib/angular-aria.min.js',
+      'build/lib/angular-animate.min.js',
       'build/lib/global-components-ui.js',
       'build/lib/underscore-min.js',
       'build/html/**/*.html',
