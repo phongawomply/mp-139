@@ -1,1 +1,1 @@
-angular.module('womply', ['ngRoute']);
+angular.module('womply', ['ngRoute', 'ngMaterial']);
