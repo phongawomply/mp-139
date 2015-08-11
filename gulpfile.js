@@ -32,7 +32,14 @@ gulp.task('libraries', ['library:angular',
  * Clean up the build directories
  */
 gulp.task('clean', function() {
-  return gulp.src([directories.build, directories.coverage])
+  return gulp.src([directories.build])
+    .pipe(vinyl_paths(del));
+});
+/**
+ * Clean the coverage report directory
+ */
+gulp.task('clean:coverage', function() {
+  return gulp.src([directories.coverage])
     .pipe(vinyl_paths(del));
 });
 /**
@@ -47,7 +54,7 @@ gulp.task('build', ['build:js', 'build:html', 'build:css']);
  * Setup the test environment
  */
 gulp.task('test:karma:setup', function(cb) {
-  sequence('clean', 'build', 'gc', 'libraries', 'library:angular-mocks', cb);
+  sequence('clean', 'clean:coverage', 'build', 'gc', 'libraries', 'library:angular-mocks', cb);
 });
 /**
  * Test the files for development
