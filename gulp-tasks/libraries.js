@@ -11,6 +11,16 @@ gulp.task('library:angular-route', function() {
     .pipe(gulp.dest(directories.lib));
 });
 
+gulp.task('library:angular-aria', function() {
+  return gulp.src('./node_modules/angular-aria/angular-aria.min.js')
+    .pipe(gulp.dest(directories.lib));
+});
+
+gulp.task('library:angular-animate', function() {
+  return gulp.src('./node_modules/angular-animate/angular-animate.min.js')
+    .pipe(gulp.dest(directories.lib));
+});
+
 gulp.task('library:angular-material:js', function() {
   return gulp.src('./node_modules/angular-material/angular-material.min.js')
     .pipe(gulp.dest(directories.lib));
