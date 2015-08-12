@@ -8,12 +8,15 @@
   </head>
   <body data-ng-app="womply" data-ng-controller="AppController as app">
 
-    <top-bar
-        data-application-id="{{app.applicationId}}"
-        data-user-menu-links="app.userMenuLinks"></top-bar>
+    <div class="layout-container">
 
-    <side-bar data-navigation-links="app.navigationLinks" data-navigation-selected="app.navigationSelected"></side-bar>
-    <div class="main-section view-layout" ng-view></div>
+      <top-bar
+          data-application-id="{{app.applicationId}}"
+          data-user-menu-links="app.userMenuLinks"></top-bar>
+
+      <side-bar data-navigation-links="app.navigationLinks" data-navigation-selected="app.navigationSelected"></side-bar>
+      <div class="main-section view-layout" ng-view></div>
+    </div>
 
     <!-- script tags -->
     <script src="/lib/underscore-min.js"></script>
