@@ -57,32 +57,25 @@ angular.module('womply')
 
         // Set the location menu
         var _locationChangeCallback = function(slug) {
-          Context.getMerchantLocations().then(function(locations) {
-            var location = _.find(locations, function(loc) {
-              return loc.slug == slug || loc.id == slug;
-            });
-
-            if(_.isString(location.partner_slug)) {
-              $document[0].body.id = location.partner_slug.toLowerCase();
-            }
-
-            $location.path('/' + slug + '/summary');
-          });
+          $location.path('/' + slug);
         };
 
-        Context.getMerchantLocations().then(function(locations) {
-          var merchants = _.map(locations, function(location) {
-            return {
-              name: location.name,
-              href: '#',
-              slug: location.slug,
-              description: location.address1 + ' ' + location.city,
-              selected: location.id == '197330'
-            };
-          });
+        Context.initialized(function(data) {
+          var locations = data.merchant_locations;
+          Context.getCurrentMerchantLocation().then(function(slug) {
+            var merchants = _.map(locations, function(location) {
+              return {
+                name: location.name,
+                href: '#',
+                slug: location.slug,
+                description: location.address1 + ' ' + location.city,
+                selected: location.id == slug || location.slug == slug
+              };
+            });
 
-          var locationMenu = new womply.ui.LocationMenu(womply.ui.util.getId('gc-location-menu-list'), _locationChangeCallback, null);
-          locationMenu.updateLocations(merchants);
+            var locationMenu = new womply.ui.LocationMenu(womply.ui.util.getId('gc-location-menu-list'), _locationChangeCallback, null);
+            locationMenu.updateLocations(merchants);
+          });
         });
 
         // Set the user menu
