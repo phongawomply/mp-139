@@ -77,14 +77,63 @@ describe('Context', function() {
     expect(spy).toHaveBeenCalledWith(user);
   });
 
-  it('gets the current merchant slug', inject(function($location) {
-    $location.path('/1111');
-    rootScope.$broadcast('$locationChangeStart');
-    rootScope.$digest();
+  describe('initialize', function() {
+    beforeEach(function() {
+      rootScope.$on('$routeChangeStart', function(evt) {
+        evt.preventDefault();
+      });
+    });
 
-    var spy = jasmine.createSpy('slug');
-    service.getCurrentMerchantLocation().then(spy);
-    rootScope.$digest();
-    expect(spy).toHaveBeenCalledWith('1111');
-  }));
+    it('gets the current merchant slug', inject(function($httpBackend, $location) {
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1111').respond(200);
+
+      $location.path('/1111');
+      rootScope.$broadcast('$locationChangeStart');
+      rootScope.$digest();
+
+      var spy = jasmine.createSpy('slug');
+      service.getCurrentMerchantLocation().then(spy);
+      rootScope.$digest();
+      expect(spy).toHaveBeenCalledWith('1111');
+    }));
+
+    it('calls initialize when slug changes', inject(function($httpBackend, $location) {
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1111').respond(200);
+
+      $location.path('/1111');
+      rootScope.$broadcast('$locationChangeStart');
+      rootScope.$digest();
+
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=2222').respond(200);
+      $location.path('/2222');
+      rootScope.$broadcast('$locationChangeStart');
+      rootScope.$digest();
+
+      $httpBackend.verifyNoOutstandingExpectation();
+    }));
+
+    it('executes callback on initialized', inject(function($httpBackend) {
+      var spy = jasmine.createSpy('initialized');
+      var multiSpy = jasmine.createSpy();
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({
+        data: {
+          merchant_locations: merchantLocations,
+          user: user
+        }
+      });
+
+      service.initialized(spy);
+      service.initialized(multiSpy);
+
+      service.initialize();
+      $httpBackend.flush();
+      rootScope.$digest();
+
+      expect(spy).toHaveBeenCalledWith({
+        merchant_locations: merchantLocations,
+        user: user
+      });
+      expect(multiSpy).toHaveBeenCalled();
+    }));
+  });
 });

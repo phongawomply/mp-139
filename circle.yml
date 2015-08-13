@@ -21,9 +21,11 @@ test:
     - git config --global user.name 'deploy'
     - git config --global user.email 'devs@womply.com'
   override:
+    - gulp test:karma:dev
+    - codeclimate-test-reporter < ./coverage/lcov.info
     - gulp blueprints:
         background: true
     - gulp serve:
         background: true
-    - gulp test:karma:dev
-    - codeclimate-test-reporter < ./coverage/lcov.info
+    - sleep 5
+    - gulp protractor

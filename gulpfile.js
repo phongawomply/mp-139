@@ -84,7 +84,7 @@ gulp.task('blueprints', ['serve:blueprints']);
  * Setup the serve tasks
  */
 gulp.task('serve:setup', function(cb) {
-  sequence('clean', 'asset', 'build', 'libraries', cb);
+  sequence('asset', 'build', 'libraries', cb);
 });
 /**
  * Serve the files

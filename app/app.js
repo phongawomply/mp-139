@@ -13,12 +13,6 @@ angular.module('womply')
       });
   })
   /**
-   * Initialize the context
-   */
-  .run(['Context', function(Context) {
-    Context.initialize();
-  }])
-  /**
    * Main application controller which initialize the configuration and sets the
    * controller values
    */
@@ -32,19 +26,24 @@ angular.module('womply')
         self.navigationSelected = config.NavigationSelected;
       });
 
-    Context.getCurrentMerchantLocation()
-      .then(function(slug) {
-        self.slug = slug;
-        return self.slug;
-      })
-      .then(Context.getMerchantLocations)
-      .then(function(locations) {
-        var location = _.find(locations, function(loc) {
-          return loc.slug == self.slug || loc.id == self.slug;
+    Context.initialized(function(data) {
+      Context.getCurrentMerchantLocation()
+        .then(function(slug) {
+          self.slug = slug;
+          return self.slug;
+        })
+        .then(function(slug) {
+          var location = _.find(data.merchant_locations, function(loc) {
+            return loc.slug == self.slug || loc.id == self.slug;
+          });
+
+          if(location && _.isString(location.partner_slug)) {
+            $document[0].body.id = location.partner_slug.toLowerCase();
+            $document[0].title = location.partner_name + " " + location.product_name + " - " + location.name;
+          }
         });
 
-        if(location && _.isString(location.partner_slug)) {
-          $document[0].body.id = location.partner_slug.toLowerCase();
-        }
-      });
+    });
+
+    Context.initialize();
   }]);
