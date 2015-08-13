@@ -86,7 +86,8 @@ describe('TopBar', function() {
     expect(updateLocationSpy).toHaveBeenCalled();
   });
 
-  it('sets the url on location change', inject(function($rootScope, $document, $location) {
+  it('sets the url on location change', inject(function($rootScope, $document, $location, $httpBackend) {
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=test').respond(200);
     spyOn($location, 'path').and.callThrough();
 
     locationMenuCallback('test');
