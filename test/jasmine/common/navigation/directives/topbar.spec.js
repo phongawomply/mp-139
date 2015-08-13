@@ -82,19 +82,25 @@ describe('TopBar', function() {
     expect(businessMenuRenderSpy).toHaveBeenCalled();
   });
 
-  it('renders the location menu', function() {
+  it('renders the location menu', inject(function($rootScope, $httpBackend, Context) {
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {}});
+    Context.initialize();
+    $rootScope.$digest();
+    $httpBackend.flush();
     expect(updateLocationSpy).toHaveBeenCalled();
-  });
+  }));
 
-  it('sets the url on location change', inject(function($rootScope, $document, $location, $httpBackend) {
-    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=test').respond(200);
+  it('sets the url on location change', inject(function($rootScope, $document, $location, $httpBackend, Context) {
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {}});
     spyOn($location, 'path').and.callThrough();
+
+    Context.initialize();
+
+    $rootScope.$digest();
+    $httpBackend.flush();
 
     locationMenuCallback('test');
 
-    $rootScope.$digest();
-
-    expect($document[0].body.id).toEqual('slug');
     expect($location.path).toHaveBeenCalled();
   }));
 
