@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# TODO: This needs to be changed to the name of your fork's S3 bucket.
+APP_S3_BUCKET=""
+
+# TODO: This is optional and can be used to add path components to the S3 URL
+#       the code gets deployed to. For example, reputation-defense-ui would
+#       have this variable set to "dashboard" and the reputation-defense-admin
+#       would have it set to "admin".
+ADDITIONAL_S3_PATH=""
+
+PROJECT_ARTIFACTS_PATH="build"
+APP_S3_BASE_URL="s3://$APP_S3_BUCKET"
+COMMON_SYNC_OPTS="--acl public-read --cache-control s-maxage=300"
+
+print_usage() {
+  echo "usage: $0 [-d] <BRANCH>"
+  echo
+  echo "  -d     : dry run, just output commands, don't run them"
+  echo "  branch : branch name we're deploying"
+  exit 1
+}
+
+deploy_to_s3() {
+  ACCESS_KEY_VAR_NAME="$1"
+  SECRET_ACCESS_KEY_VAR_NAME="$2"
+  S3_URL="$3"
+  SYNC_OPTS="$4"
+
+  ACCESS_KEY=${!ACCESS_KEY_VAR_NAME}
+  SECRET_ACCESS_KEY=${!SECRET_ACCESS_KEY_VAR_NAME}
+
+  if [ -z "$ACCESS_KEY" ]; then
+    echo "An environment variable named ${ACCESS_KEY_VAR_NAME} must be set!"
+    exit 1
+  fi
+
+  if [ -z "$SECRET_ACCESS_KEY" ]; then
+    echo "An environment variable named ${SECRET_ACCESS_KEY_VAR_NAME} must be set!"
+    exit 1
+  fi
+
+  export AWS_ACCESS_KEY_ID="$ACCESS_KEY"
+  export AWS_SECRET_ACCESS_KEY="$SECRET_ACCESS_KEY"
+
+  COMMAND="aws s3 sync \"$ABSOLUTE_ARTIFACTS_PATH\" \"$S3_URL\" $SYNC_OPTS"
+  echo "-------------------------------"
+  echo "Executing Command:"
+  echo "$COMMAND"
+  echo "-------------------------------"
+
+  if [ $DRY_RUN != 1 ]; then
+    eval $COMMAND
+    RESULT=$?
+    if [ $RESULT -ne 0 ]; then
+      echo "Error running: $COMMAND"
+      exit $RESULT
+    fi
+  fi
+}
+
+function parse_opts() {
+  DRY_RUN=0
+  if [ "$#" == 1 ]; then
+    BRANCH="$1"
+  elif [ "$#" == 2 ]; then
+    if [ "$1" != "-d" ]; then
+      print_usage
+      exit 1
+    fi
+    DRY_RUN=1
+    BRANCH="$2"
+  else
+    print_usage
+    exit 1
+  fi
+}
+
+if [ -z "$APP_S3_BUCKET" ]; then
+  echo "You must set the APP_S3_BUCKET variable in $0."
+  exit 1
+fi
+
+ABSOLUTE_ARTIFACTS_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../$PROJECT_ARTIFACTS_PATH" && pwd )
+
+parse_opts $@
+
+if [ "$BRANCH" == "master" ]; then
+  deploy_to_s3 "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY" \
+    "$APP_S3_BASE_URL/production/$ADDITIONAL_S3_PATH" "$COMMON_SYNC_OPTS"
+elif [ "$BRANCH" == "develop" ]; then
+  deploy_to_s3 "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY" \
+    "$APP_S3_BASE_URL/testing/$ADDITIONAL_S3_PATH" "$COMMON_SYNC_OPTS"
+else
+  echo "Branch must be one of \"master\" or \"develop\" but was \"$BRANCH\". Skipping deployment."
+  exit 1
+fi
