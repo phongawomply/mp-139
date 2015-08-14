@@ -80,6 +80,20 @@ angular.module('womply')
   }]);
 ```
 
+#### Deployment Setup
+
+Forks of this template can be configured to automatically deploy to S3/nginx. To enable automatic deployment:
+
+1. Issue a request to Devops to create a new S3 bucket for your app and proxy it via a new domain hosted by nginx.
+
+2. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables to the CircleCI build for your forked repo.
+
+3. Edit the `APP_S3_BUCKET` and `ADDITIONAL_S3_PATH` variables in `bin/deploy`.
+
+4. Uncomment the `deployment` section in `circle.yml`.
+
+5. Merge your changes for steps 3-4 to your develop branch which will cause CircleCI to automatically deploy to your testing S3 bucket. Rinse and repeat for your master branch.
+
 #### Gulp Tasks
 ##### serve:livereload
 ```js
