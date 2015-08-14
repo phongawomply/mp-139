@@ -29,3 +29,13 @@ test:
         background: true
     - sleep 5
     - gulp protractor
+
+# TODO: Uncomment the deployment stanza below to get CircleCI deploys working.
+#
+# deployment:
+#   everywhere:
+#     branch: /(master|develop)/
+#     commands:
+#       - gulp build
+#       - sudo pip install --upgrade awscli
+#       - bin/deploy $CIRCLE_BRANCH

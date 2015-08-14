@@ -16,7 +16,8 @@ module.exports = function(config) {
       'app/**/*.js',
       'test/jasmine/disable_module_run.js',
       'test/lib/angular-mocks.js',
-      'test/jasmine/**/*spec.js'
+      'test/jasmine/**/chart_config_service.spec.js',
+      'test/jasmine/**/chart_api_service.spec.js'
     ],
     exclude: [
     ],

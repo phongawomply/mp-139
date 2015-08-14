@@ -6,7 +6,8 @@ angular.module('womply')
     $httpProvider.defaults.withCredentials = true;
     $routeProvider
       .when('/:slug/nav1', {
-        template: '<p>Nav 1</p>'
+        template: '<p>Nav 1</p><chart data-chart-id="myId"></chart>',
+        controller: 'ChartController'
       })
       .when('/:slug/nav2', {
         template: '<p>Nav 2</p>'
@@ -46,4 +47,9 @@ angular.module('womply')
     });
 
     Context.initialize();
+  }])
+  .controller('ChartController', ['ChartAPIService', function(ChartAPIService) {
+    var api = ChartAPIService.getAPI('myId');
+    api.setTitle('Yay Chart').setType('column').setXAxis(['Jan', 'Feb', 'Mar']);
+    api.setSeriesData({name: 'Customers', data: [10, 20, 30]});
   }]);
