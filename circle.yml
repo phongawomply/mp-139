@@ -27,3 +27,13 @@ test:
         background: true
     - gulp test:karma:dev
     - codeclimate-test-reporter < ./coverage/lcov.info
+
+# TODO: Uncomment the deployment stanza below to get CircleCI deploys working.
+#
+# deployment:
+#   everywhere:
+#     branch: /(master|develop)/
+#     commands:
+#       - gulp build
+#       - sudo pip install --upgrade awscli
+#       - bin/deploy $CIRCLE_BRANCH
