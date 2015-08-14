@@ -26,6 +26,7 @@ test:
     - gulp serve:
         background: true
     - gulp test:karma:dev
+    - gulp protractor
     - codeclimate-test-reporter < ./coverage/lcov.info
 
 # TODO: Uncomment the deployment stanza below to get CircleCI deploys working.
