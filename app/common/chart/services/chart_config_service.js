@@ -16,6 +16,8 @@ angular.module('womply')
         if (!_.contains(config[name].categories, category)) {
           config[name].categories.push(category);
         }
+
+        return this;
       }
     };
     /**
@@ -39,6 +41,20 @@ angular.module('womply')
        */
       this.toJSON = function() {
         return config;
+      };
+      /**
+       * Getter and Setter for the title
+       * @param title
+       */
+      this.title = function(title) {
+        if (_.isUndefined(title)) {
+          return config.title.text;
+        }
+
+        config['title'] = config['title'] || {};
+        config['title'].text = title;
+
+        return this;
       };
       /**
        * Set the render to

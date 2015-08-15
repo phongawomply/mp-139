@@ -26,14 +26,17 @@ describe('ChartAPIService', function() {
       api = service.getAPI('myId');
     });
 
-    it('sets the chart options', function() {
+    it('sets the chart options', inject(function($rootScope) {
       var options = {
         hello: 'world'
       };
 
       api.setOptions(options);
-      expect(api.getOptions()).toEqual(options);
-    });
+      var optionSpy = jasmine.createSpy();
+      api.getOptions().then(optionSpy);
+      $rootScope.$digest();
+      expect(optionSpy).toHaveBeenCalledWith(options);
+    }));
 
     it('sets the chart instance', function() {
       expect(_.isFunction(api.setChart)).toBeTruthy();

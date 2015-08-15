@@ -1,35 +1,37 @@
 angular.module('womply')
-  .service('ChartAPIService', function() {
+  .service('ChartAPIService', function($q) {
 
     var apis = {};
 
     var ChartAPI = function() {
       var chart = null;
-      var options = {
-        chart: {
-          renderTo: null,
-          type: null
-        },
-        title: {
-          text: null
-        },
-        xAxis: {
-          categories: null
-        },
-        series: []
-      };
+      var optionDefer = $q.defer();
+      var options = null;
+      var pendingData = null;
+      var pendingSeriesData = null;
+      var pendingSeries = null;
       /**
        * Set the chart instance
        * @param {HighChart.Chart} chrt - the high chart instance
        */
-      this.setChart = function() {
+      this.setChart = function(chrt) {
         /**
         * NOTE: Idea: Check if the chart is capable of being setup by checking
         * the config object for completeness.  Generally attempt to make chart
         * creation independent of timing issues in controllers or directives
         **/
 
-        chart = new Highcharts.Chart(options);
+        chart = chrt;
+        if (this.hasPendingData()) {
+          updateData(pendingData);
+          pendingData = null;
+        }
+
+        if (this.hasPendingSeriesData()) {
+          this.setSeriesData(pendingSeriesData, pendingSeries);
+          pendingSeriesData = null;
+          pendingSeries = null;
+        }
       };
       /**
        * Setter for the options value
@@ -38,13 +40,14 @@ angular.module('womply')
        */
       this.setOptions = function(opts) {
         options = opts;
+        optionDefer.resolve(options);
       };
       /**
        * Get the options value
        * @returns {*}
        */
       this.getOptions = function() {
-        return options;
+        return optionDefer.promise;
       };
       /**
        * Check if the chart has pending data
@@ -53,20 +56,27 @@ angular.module('womply')
       this.hasPendingData = function() {
         return !_.isNull(pendingData);
       };
+      /**
+       * Check if the chart has series pending data
+       * @returns {boolean}
+       */
       this.hasPendingSeriesData = function() {
         return !_.isNull(pendingSeriesData);
-      }
+      };
       /**
        * Set the series data
        *
        * @param {Array} data - the data array to set on the series
        * @param {Number} series - the series to update
        */
-      this.setSeriesData = function(data) {
+      this.setSeriesData = function(data, series) {
+        series = series || 1;
         if (_.isNull(chart)) {
-          options.series.push(data);
+          pendingSeriesData = data;
+          pendingSeries = series;
         } else {
-          updateSeriesData(data);
+          series -= 1;
+          updateSeriesData(data, series);
         }
         return this;
       };
@@ -83,55 +93,19 @@ angular.module('womply')
         return this;
       };
 
-      /**
-       * Set the target element for Highcharts config
-       * @param {DOMElement} target - target DOM node
-       */
-      this.setRenderTo = function(target) {
-        options.chart.renderTo = target;
-        return this;
-      };
-
-      /**
-       * Set the title for the Highcharts config
-       * @param {String} chartTitle - string for the chart title
-       */
-      this.setTitle = function(chartTitle) {
-        options.title.text = chartTitle;
-        return this;
-      };
-
-      /**
-       * Set the type of chart in Highcharts config
-       * @param {String} chartType - string for the chart type
-       */
-      this.setType = function(chartType) {
-        options.chart.type = chartType;
-        return this;
-      };
-
-      /**
-       * Set the xAxis information in Highcharts config
-       * @param {Array<Labels> chartXAxis an array of xAxis labels
-       */
-      this.setXAxis = function(chartXAxis) {
-        options.xAxis.categories = chartXAxis;
-        return this;
-      };
-
       var updateData = function(data) {
-        _.each(data, function(datum) {
+        _.each(data, function(datum, index) {
           if (_.isObject(datum)) {
-            updateSeriesData(datum);
+            updateSeriesData(datum, index);
           }
         });
       };
 
-      var updateSeriesData = function(data) {
-        if (!_.isUndefined(chart)) {
+      var updateSeriesData = function(data, series) {
+        if (_.isUndefined(chart.series) || _.isUndefined(chart.series[series])) {
           chart.addSeries(data);
         } else {
-          options.series.push(data);
+          chart.series[series].setData(data);
         }
       };
     };

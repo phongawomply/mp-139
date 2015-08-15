@@ -48,8 +48,14 @@ angular.module('womply')
 
     Context.initialize();
   }])
-  .controller('ChartController', ['ChartAPIService', function(ChartAPIService) {
+  .controller('ChartController', ['ChartConfigService', 'ChartAPIService', 'CHART_TYPE', function(ChartConfigService, ChartAPIService, CHART_TYPE) {
     var api = ChartAPIService.getAPI('myId');
-    api.setTitle('Yay Chart').setType('column').setXAxis(['Jan', 'Feb', 'Mar']);
+
+    var config = ChartConfigService.create(CHART_TYPE.COLUMN);
+    config.title('Yay Chart');
+    config.getXAxis().setCategory('Jan').setCategory('Feb').setCategory('Mar');
+
+    api.setOptions(config.toJSON());
+    //api.setTitle('Yay Chart').setType('column').setXAxis(['Jan', 'Feb', 'Mar']);
     api.setSeriesData({name: 'Customers', data: [10, 20, 30]});
   }]);

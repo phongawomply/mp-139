@@ -9,7 +9,12 @@ angular.module('womply')
       link: function($scope, $ele, $attr) {
         $attr.$observe('chartId', function() {
           var target = $ele[0].children[0];
-          ChartAPIService.register($attr.chartId, target);
+          var api = ChartAPIService.getAPI($attr.chartId);
+          api.getOptions().then(function(options) {
+            options.chart.renderTo = target;
+            var chart = new Highcharts.Chart(options);
+            api.setChart(chart);
+          });
         });
       }
     }

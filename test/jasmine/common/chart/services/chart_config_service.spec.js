@@ -42,6 +42,11 @@ describe('ChartConfigService', function() {
       config.renderTo('myId');
       expect(config.toJSON().chart.renderTo).toEqual('myId');
     });
+
+    it('sets the title', function() {
+      config.title('hello world');
+      expect(config.toJSON().title.text).toEqual('hello world');
+    });
   });
 
   describe('x-axis', function() {
