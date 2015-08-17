@@ -1,5 +1,5 @@
 angular.module('womply')
-  .service('ChartAPIService', function($q) {
+  .service('ChartAPIService', ['$q', 'ChartConfigService', function($q, ChartConfigService) {
 
     var apis = {};
 
@@ -10,6 +10,7 @@ angular.module('womply')
       var pendingData = null;
       var pendingSeriesData = null;
       var pendingSeries = null;
+      var config = null;
       /**
        * Set the chart instance
        * @param {HighChart.Chart} chrt - the high chart instance
@@ -22,25 +23,18 @@ angular.module('womply')
         **/
 
         chart = chrt;
-        if (this.hasPendingData()) {
-          updateData(pendingData);
-          pendingData = null;
-        }
-
-        if (this.hasPendingSeriesData()) {
-          this.setSeriesData(pendingSeriesData, pendingSeries);
-          pendingSeriesData = null;
-          pendingSeries = null;
-        }
       };
       /**
-       * Setter for the options value
-       *
-       * @param {object} opts - the chart options
+       * Getter and setter for the configuration object
+       * @param {string} type - the chart type
        */
-      this.setOptions = function(opts) {
-        options = opts;
-        optionDefer.resolve(options);
+      this.config = function(type) {
+        if (!_.isUndefined(type)) {
+          config = ChartConfigService.create(type);
+          optionDefer.resolve(config.toJSON());
+        }
+
+        return config;
       };
       /**
        * Get the options value
@@ -48,20 +42,6 @@ angular.module('womply')
        */
       this.getOptions = function() {
         return optionDefer.promise;
-      };
-      /**
-       * Check if the chart has pending data
-       * @returns {boolean}
-       */
-      this.hasPendingData = function() {
-        return !_.isNull(pendingData);
-      };
-      /**
-       * Check if the chart has series pending data
-       * @returns {boolean}
-       */
-      this.hasPendingSeriesData = function() {
-        return !_.isNull(pendingSeriesData);
       };
       /**
        * Set the series data
@@ -72,8 +52,10 @@ angular.module('womply')
       this.setSeriesData = function(data, series) {
         series = series || 1;
         if (_.isNull(chart)) {
-          pendingSeriesData = data;
-          pendingSeries = series;
+          if (_.isNull(config)) {
+            throw new Error('Configuration must be set via config().');
+          }
+          config.seriesData(data);
         } else {
           series -= 1;
           updateSeriesData(data, series);
@@ -86,7 +68,10 @@ angular.module('womply')
        */
       this.setData = function(data) {
         if (_.isNull(chart)) {
-          pendingData = data;
+          if (_.isNull(config)) {
+            throw new Error('Configuration must be set via config().');
+          }
+          config.data(data);
         } else {
           updateData(data);
         }
@@ -123,14 +108,7 @@ angular.module('womply')
         }
 
         return apis[chartId];
-      },
-      register: function(chartId, target) {
-        if (!_.has(apis, chartId)) {
-          apis[chartId] = new ChartAPI().setRenderTo(target);
-        } else {
-          apis[chartId].setRenderTo(target);
-        }
-          apis[chartId].setChart();
       }
     }
-  });
+  }
+]);

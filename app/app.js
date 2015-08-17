@@ -51,11 +51,75 @@ angular.module('womply')
   .controller('ChartController', ['ChartConfigService', 'ChartAPIService', 'CHART_TYPE', function(ChartConfigService, ChartAPIService, CHART_TYPE) {
     var api = ChartAPIService.getAPI('myId');
 
-    var config = ChartConfigService.create(CHART_TYPE.COLUMN);
-    config.title('Yay Chart');
-    config.getXAxis().setCategory('Jan').setCategory('Feb').setCategory('Mar');
+    api.config(CHART_TYPE.COLUMN)
+      .title('YAY!').hideLegend();
 
-    api.setOptions(config.toJSON());
-    //api.setTitle('Yay Chart').setType('column').setXAxis(['Jan', 'Feb', 'Mar']);
-    api.setSeriesData({name: 'Customers', data: [10, 20, 30]});
+    var xAxis = api.config().getXAxis().hideTicks().color('#000');
+    var yAxis = api.config().getYAxis()
+      .guideLineWidth(0)
+      .color('#000')
+      .tickWidth(0).hideLabels().title().horizontal().margin(0).text('Visits')
+      .style({
+        fontWeight: 'bold',
+        fontSize: '16px'
+      })
+      .x(0);
+
+    var customers = [{
+      "customerCount": 23,
+      "customerType": "+",
+      "revenuePerVisit": 39.17,
+      "week": 1,
+      "revenue": 1136.00,
+      "visitCount": 29,
+      "startDate": 1437091200000
+    }, {
+      "customerCount": 19,
+      "customerType": "+",
+      "revenuePerVisit": 36.29,
+      "week": 2,
+      "revenue": 762.00,
+      "visitCount": 21,
+      "startDate": 1437696000000
+    }, {
+      "customerCount": 24,
+      "customerType": "+",
+      "revenuePerVisit": 31.67,
+      "week": 3,
+      "revenue": 1140.00,
+      "visitCount": 36,
+      "startDate": 1438300800000
+    }, {
+      "customerCount": 22,
+      "customerType": "+",
+      "revenuePerVisit": 41.34,
+      "week": 4,
+      "revenue": 1323.00,
+      "visitCount": 32,
+      "startDate": 1438905600000
+    }];
+
+    var visits = {
+      name: 'Visits',
+      dataLabels: {
+        enabled: true,
+        style: {
+          fontSize: '14px'
+        },
+        y: 0
+      },
+      data: []
+    };
+
+    _.each(customers, function(customer) {
+      var start = moment(customer.startDate).startOf('day');
+      var startString = start.format('MMM') + ' ' + start.format('D') + '<br>';
+      start.add(7, 'days');
+      var endString = start.format('MMM') + ' ' + start.format('D');
+      var cat = startString + endString;
+      xAxis.setCategory(cat);
+      visits.data.push(customer.visitCount);
+    });
+
+    api.setData([visits]);
   }]);

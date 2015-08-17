@@ -26,29 +26,43 @@ describe('ChartAPIService', function() {
       api = service.getAPI('myId');
     });
 
-    it('sets the chart options', inject(function($rootScope) {
-      var options = {
-        hello: 'world'
-      };
-
-      api.setOptions(options);
-      var optionSpy = jasmine.createSpy();
-      api.getOptions().then(optionSpy);
-      $rootScope.$digest();
-      expect(optionSpy).toHaveBeenCalledWith(options);
-    }));
-
     it('sets the chart instance', function() {
       expect(_.isFunction(api.setChart)).toBeTruthy();
     });
 
+    describe('config', function() {
+      it('gets config data', function() {
+        var config = api.config();
+
+        expect(config).toBeDefined();
+      });
+
+      it('gets the option JSON', inject(function($rootScope) {
+        var config = api.config('column');
+        var spy = jasmine.createSpy();
+
+        api.getOptions().then(spy);
+        $rootScope.$digest();
+        expect(spy).toHaveBeenCalledWith(config.toJSON());
+      }));
+    });
+
     describe('series data', function() {
+      it('throws an error if config not set without chart', function() {
+        expect(function() {
+          expect(api.setSeriesData([1,2,3]));
+        }).toThrowError('Configuration must be set via config().');
+      });
+
       it('sets the data as pending without a chart instance', function() {
-        api.setSeriesData({series1: [1, 2, 3]});
-        expect(api.hasPendingSeriesData()).toBeTruthy();
+        api.config('column');
+        var data = {series1: [1, 2, 3]};
+        api.setSeriesData(data);
+        expect(api.config().data()).toEqual([data])
       });
 
       it('sets data on chart instance', function() {
+        api.config('column');
         var series1 = {
           setData: jasmine.createSpy()
         };
@@ -63,6 +77,7 @@ describe('ChartAPIService', function() {
       });
 
       it('sets data on the specific series', function() {
+        api.config('column');
         var series1 = {
           setData: jasmine.createSpy()
         };
@@ -79,26 +94,18 @@ describe('ChartAPIService', function() {
         api.setSeriesData([], 2);
         expect(series2.setData).toHaveBeenCalled();
       });
-
-      it('sets pending data on chart instance', function() {
-        api.setSeriesData([]);
-
-        var series1 = {
-          setData: jasmine.createSpy()
-        };
-
-        var chart = {
-          series: [series1]
-        };
-
-        api.setChart(chart);
-        expect(series1.setData).toHaveBeenCalled();
-        expect(api.hasPendingSeriesData()).toEqual(false);
-      });
     });
 
     describe('data', function() {
+
+      it('throws an error if config and chart not set', function() {
+        expect(function() {
+          api.setData([1,2,3]);
+        }).toThrowError('Configuration must be set via config().');
+      });
+
       it('sets data', function() {
+        api.config('column');
         var series1 = {
           setData: jasmine.createSpy()
         };
@@ -119,29 +126,18 @@ describe('ChartAPIService', function() {
       });
 
       it('sets pending data', function() {
-        api.setData([{data: []}, {data: []}]);
+        api.config('column');
 
-        var series1 = {
-          setData: jasmine.createSpy()
-        };
+        var data = [{data: []}, {data: []}];
+        api.setData(data);
 
-        var series2 = {
-          setData: jasmine.createSpy()
-        };
-
-        var chart = {
-          series: [series1, series2]
-        };
-
-        expect(series1.setData).not.toHaveBeenCalled();
-        expect(series2.setData).not.toHaveBeenCalled();
-
-        api.setChart(chart);
-        expect(series1.setData).toHaveBeenCalled();
-        expect(series2.setData).toHaveBeenCalled();
+        expect(api.config().data()).toBeDefined();
+        expect(api.config().data()).toEqual(data);
       });
 
       it('adds series data', function() {
+        api.config('column');
+
         var chart = {
           addSeries: jasmine.createSpy()
         };
