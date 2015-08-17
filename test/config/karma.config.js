@@ -14,6 +14,7 @@ module.exports = function(config) {
       'app/*.module.js',
       'app/*.js',
       'app/**/*.js',
+      'test/jasmine/spec_helper.js',
       'test/jasmine/disable_module_run.js',
       'test/lib/angular-mocks.js',
       'test/jasmine/**/*spec.js'

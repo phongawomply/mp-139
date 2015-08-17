@@ -57,22 +57,47 @@ describe('Environment', function() {
   });
 
   describe('getInsightsPath', function() {
-    it('gets the develop api path', inject(function($location, ConfigLoader) {
+    it('gets the develop api path', inject(function($rootScope, $location, ConfigLoader) {
       var defer = q.defer();
       defer.resolve({});
       spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
 
       spyOn($location, 'host').and.returnValue('localhost');
 
-      expect(service.getInsightsPath()).toEqual('http://local.womply.com:5000');
+      var spy = jasmine.createSpy('insights');
+      service.getInsightsPath().then(spy);
+      $rootScope.$digest();
+
+      expect(spy).toHaveBeenCalledWith('http://local.womply.com:5000');
     }));
 
-    it('gets the production insights path', inject(function($location, ConfigLoader) {
+    it('gets the production insights path', inject(function($rootScope, $location, ConfigLoader) {
       var defer = q.defer();
       defer.resolve({});
       spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
 
-      expect(service.getInsightsPath()).toEqual('http://womply.com');
+      spyOn($location, 'host').and.returnValue('hello');
+      spyOn($location, 'port').and.returnValue('');
+
+      var spy = jasmine.createSpy('insights');
+      service.getInsightsPath().then(spy);
+      $rootScope.$digest();
+
+      expect(spy).toHaveBeenCalledWith('http://hello');
+    }));
+
+    it('gets the url from app config', inject(function($rootScope, ConfigLoader) {
+      var defer = q.defer();
+      defer.resolve({
+        InsightsBase: 'http://mybase.com'
+      });
+      spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
+
+      var spy = jasmine.createSpy('insights');
+      service.getInsightsPath().then(spy);
+      $rootScope.$digest();
+
+      expect(spy).toHaveBeenCalledWith('http://mybase.com');
     }));
   });
 });
