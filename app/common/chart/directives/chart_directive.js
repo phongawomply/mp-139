@@ -17,9 +17,9 @@ angular.module('womply')
         $attr.$observe('chartId', function() {
           var target = $ele[0].children[0];
           var api = ChartAPIService.getAPI($attr.chartId);
-          api.getOptions().then(function(options) {
-            options.chart.renderTo = target;
-            var chart = new Highcharts.Chart(options);
+          api.getConfig().then(function(config) {
+            config.renderTo(target);
+            var chart = new Highcharts.Chart(config.toJSON());
             api.setChart(chart);
           });
         });

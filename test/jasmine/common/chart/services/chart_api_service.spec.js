@@ -37,13 +37,13 @@ describe('ChartAPIService', function() {
         expect(config).toBeDefined();
       });
 
-      it('gets the option JSON', inject(function($rootScope) {
+      it('gets the config object', inject(function($rootScope) {
         var config = api.config('column');
         var spy = jasmine.createSpy();
 
-        api.getOptions().then(spy);
+        api.getConfig().then(spy);
         $rootScope.$digest();
-        expect(spy).toHaveBeenCalledWith(config.toJSON());
+        expect(spy).toHaveBeenCalledWith(config);
       }));
     });
 

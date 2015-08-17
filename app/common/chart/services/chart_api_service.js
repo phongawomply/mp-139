@@ -5,11 +5,7 @@ angular.module('womply')
 
     var ChartAPI = function() {
       var chart = null;
-      var optionDefer = $q.defer();
-      var options = null;
-      var pendingData = null;
-      var pendingSeriesData = null;
-      var pendingSeries = null;
+      var configDefer = $q.defer();
       var config = null;
       /**
        * Set the chart instance
@@ -31,17 +27,19 @@ angular.module('womply')
       this.config = function(type) {
         if (!_.isUndefined(type)) {
           config = ChartConfigService.create(type);
-          optionDefer.resolve(config.toJSON());
+          configDefer.resolve(config);
         }
 
         return config;
       };
       /**
-       * Get the options value
+       * Get the config promise
+       * This should only be used by the directive as
+       * it impicitly waits for the config to be setup first
        * @returns {*}
        */
-      this.getOptions = function() {
-        return optionDefer.promise;
+      this.getConfig = function() {
+        return configDefer.promise;
       };
       /**
        * Set the series data
