@@ -1,5 +1,15 @@
 angular.module('womply')
-  .service('ChartAPIService', ['$q', 'ChartConfigService', function($q, ChartConfigService) {
+  .service('ChartAPIService', ['$q', '$rootScope', 'ChartConfigService', function($q, $rootScope, ChartConfigService) {
+
+    /**
+    * On route change make sure we clean the current page apis
+    **/
+    $rootScope.$on('$locationChangeStart', function() {
+      _.each(apis, function(api) {
+        api.clean();
+      });
+      apis = {};
+    });
 
     var apis = {};
 
@@ -7,6 +17,15 @@ angular.module('womply')
       var chart = null;
       var configDefer = $q.defer();
       var config = null;
+      /**
+       * Clean the chart instance
+       */
+      this.clean = function() {
+        if(chart) {
+          chart.destroy();
+        }
+      };
+
       /**
        * Set the chart instance
        * @param {HighChart.Chart} chrt - the high chart instance

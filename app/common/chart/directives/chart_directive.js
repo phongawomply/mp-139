@@ -17,6 +17,7 @@ angular.module('womply')
         $attr.$observe('chartId', function() {
           var target = $ele[0].children[0];
           var api = ChartAPIService.getAPI($attr.chartId);
+          // Get the configuration and render the chart
           api.getConfig().then(function(config) {
             config.renderTo(target);
             var chart = new Highcharts.Chart(config.toJSON());

@@ -18,6 +18,7 @@ describe('ChartAPIService', function() {
 
       expect(api1).toBe(api2);
     });
+
   });
 
   describe('chart api', function() {
@@ -160,7 +161,26 @@ describe('ChartAPIService', function() {
 
         expect(chart.addSeries).toHaveBeenCalled();
       });
+    });
 
+    describe('route change', function() {
+      var rootScope;
+      beforeEach(inject(function($rootScope) {
+        rootScope = $rootScope;
+      }));
+
+      it('removes all apis and deletes on route change', function() {
+        api.config('column');
+
+        var chart = {
+          addSeries: jasmine.createSpy(),
+        };
+
+        spyOn(api, 'clean');
+
+        rootScope.$broadcast('$locationChangeStart');
+        expect(api.clean).toHaveBeenCalled();
+      });
     });
   });
 });
