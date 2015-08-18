@@ -134,6 +134,7 @@ angular.module('womply')
        */
       removeAPI: function(chartId) {
         if (_.has(apis, chartId)) {
+          apis[chartId].clean();
           delete apis[chartId];
         }
       }

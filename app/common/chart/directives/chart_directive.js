@@ -21,8 +21,12 @@ angular.module('womply')
           // Get the configuration and render the chart
           api.getConfig().then(function(config) {
             config.renderTo(target);
-            chart = new Highcharts.Chart(config.toJSON());
+            var chart = new Highcharts.Chart(config.toJSON());
             api.setChart(chart);
+          });
+
+          $scope.$on('$destroy', function() {
+            ChartAPIService.removeAPI($attr.chartId);
           });
         });
       }

@@ -19,6 +19,15 @@ describe('ChartAPIService', function() {
       expect(api1).toBe(api2);
     });
 
+    it('removes the API', function() {
+      var api = service.getAPI('myId');
+      spyOn(api, 'clean');
+
+      service.removeAPI('myId');
+      expect(api.clean).toHaveBeenCalled();
+      expect(service.getAPI('myId')).not.toBe(api);
+    });
+
   });
 
   describe('chart api', function() {
@@ -29,6 +38,16 @@ describe('ChartAPIService', function() {
 
     it('sets the chart instance', function() {
       expect(_.isFunction(api.setChart)).toBeTruthy();
+    });
+
+    it('cleans by destroying the chart', function() {
+      var chart = {
+        destroy: jasmine.createSpy()
+      };
+
+      api.setChart(chart);
+      api.clean();
+      expect(chart.destroy).toHaveBeenCalled();
     });
 
     describe('config', function() {
@@ -173,7 +192,7 @@ describe('ChartAPIService', function() {
         api.config('column');
 
         var chart = {
-          addSeries: jasmine.createSpy(),
+          addSeries: jasmine.createSpy()
         };
 
         spyOn(api, 'clean');

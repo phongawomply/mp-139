@@ -1,7 +1,7 @@
 describe('Directive: Chart', function() {
   beforeEach(module('womply'));
 
-  var rootScope, configDefer, setChartSpy, apiService;
+  var rootScope, configDefer, setChartSpy, apiService, scope;
   beforeEach(inject(function($rootScope, $compile, $q, ChartAPIService) {
     configDefer = $q.defer();
     setChartSpy = jasmine.createSpy('setChart');
@@ -17,6 +17,7 @@ describe('Directive: Chart', function() {
     $rootScope.$digest();
     rootScope = $rootScope;
     apiService = ChartAPIService;
+    scope = element.isolateScope();
   }));
 
   it('gets the chart api from the service', function() {
@@ -65,12 +66,9 @@ describe('Directive: Chart', function() {
     configDefer.resolve(config);
     rootScope.$digest();
 
-    rootScope.$broadcast('$destroy');
+    scope.$destroy();
     rootScope.$digest();
 
-    expect(destroy).toHaveBeenCalled();
     expect(apiService.removeAPI).toHaveBeenCalledWith('myId');
-
-
   });
 });
