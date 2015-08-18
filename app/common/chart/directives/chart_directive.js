@@ -17,10 +17,20 @@ angular.module('womply')
         $attr.$observe('chartId', function() {
           var target = $ele[0].children[0];
           var api = ChartAPIService.getAPI($attr.chartId);
+          var chart = null;
+          // Get the configuration and render the chart
           api.getConfig().then(function(config) {
             config.renderTo(target);
-            var chart = new Highcharts.Chart(config.toJSON());
+            chart = new Highcharts.Chart(config.toJSON());
             api.setChart(chart);
+          });
+
+          // When destroyed, clean up the API and the chart
+          $scope.$on('$destroy', function() {
+            ChartAPIService.removeAPI($attr.chartId);
+            if (chart) {
+              chart.destroy();
+            }
           });
         });
       }

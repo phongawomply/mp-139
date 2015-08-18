@@ -18,6 +18,15 @@ describe('ChartAPIService', function() {
 
       expect(api1).toBe(api2);
     });
+
+    it('removes the chart api', function() {
+      var api = service.getAPI('myId');
+
+      service.removeAPI('myId');
+
+      expect(api).not.toBe(service.getAPI('myId'));
+
+    });
   });
 
   describe('chart api', function() {

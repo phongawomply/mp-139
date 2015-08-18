@@ -108,6 +108,15 @@ angular.module('womply')
         }
 
         return apis[chartId];
+      },
+      /**
+       * Remove the API for the chart
+       * @param chartId
+       */
+      removeAPI: function(chartId) {
+        if (_.has(apis, chartId)) {
+          delete apis[chartId];
+        }
       }
     }
   }
