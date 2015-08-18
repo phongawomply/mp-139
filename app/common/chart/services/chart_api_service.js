@@ -27,7 +27,9 @@ angular.module('womply')
       this.config = function(type) {
         if (!_.isUndefined(type)) {
           config = ChartConfigService.create(type);
-          configDefer.resolve(config);
+          config.saved(function() {
+            configDefer.resolve(config);
+          });
         }
 
         return config;

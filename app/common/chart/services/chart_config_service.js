@@ -200,6 +200,24 @@ angular.module('womply')
 
       var xAxis = new Axis('xAxis', config);
       var yAxis = new Axis('yAxis', config);
+      var savedCallback = [];
+
+      /**
+       * Attach a callback when config saved
+       * @param fn
+       */
+      this.saved = function(fn) {
+        savedCallback.push(fn);
+      };
+      /**
+       * Save the config
+       */
+      this.save = function() {
+        var self = this;
+        _.each(savedCallback, function(fn) {
+          fn.call(self);
+        });
+      };
       /**
        * Get the configuration object representation
        * @returns {object}

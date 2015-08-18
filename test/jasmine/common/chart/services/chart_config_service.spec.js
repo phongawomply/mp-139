@@ -30,6 +30,14 @@ describe('ChartConfigService', function() {
       expect(config.toJSON()).toBeDefined();
       expect(config.toJSON().chart.type).toEqual('column');
     });
+
+    it('should save', function() {
+      var config = service.create('column');
+      var spy = jasmine.createSpy();
+      config.saved(spy);
+      config.save();
+      expect(spy).toHaveBeenCalled();
+    });
   });
 
   describe('chart', function() {

@@ -37,11 +37,24 @@ describe('ChartAPIService', function() {
         expect(config).toBeDefined();
       });
 
-      it('gets the config object', inject(function($rootScope) {
+      it('does not get the config object if not saved', inject(function($rootScope) {
         var config = api.config('column');
         var spy = jasmine.createSpy();
 
         api.getConfig().then(spy);
+        $rootScope.$digest();
+        expect(spy).not.toHaveBeenCalledWith();
+      }));
+
+      it('gets the config object only saved', inject(function($rootScope) {
+        var config = api.config('column');
+        var spy = jasmine.createSpy();
+
+        api.getConfig().then(spy);
+        $rootScope.$digest();
+        expect(spy).not.toHaveBeenCalledWith(config);
+
+        config.save();
         $rootScope.$digest();
         expect(spy).toHaveBeenCalledWith(config);
       }));

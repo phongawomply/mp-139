@@ -48,10 +48,10 @@ angular.module('womply')
 
     Context.initialize();
   }])
-  .controller('ChartController', ['ChartConfigService', 'ChartAPIService', 'CHART_TYPE', function(ChartConfigService, ChartAPIService, CHART_TYPE) {
+  .controller('ChartController', ['$timeout', 'ChartConfigService', 'ChartAPIService', 'CHART_TYPE', function($timeout, ChartConfigService, ChartAPIService, CHART_TYPE) {
     var api = ChartAPIService.getAPI('myId');
 
-    api.config(CHART_TYPE.COLUMN)
+    var config = api.config(CHART_TYPE.COLUMN)
       .title('YAY!').hideLegend();
 
     var xAxis = api.config().getXAxis().hideTicks().color('#000');
@@ -65,61 +65,67 @@ angular.module('womply')
       })
       .x(0);
 
-    var customers = [{
-      "customerCount": 23,
-      "customerType": "+",
-      "revenuePerVisit": 39.17,
-      "week": 1,
-      "revenue": 1136.00,
-      "visitCount": 29,
-      "startDate": 1437091200000
-    }, {
-      "customerCount": 19,
-      "customerType": "+",
-      "revenuePerVisit": 36.29,
-      "week": 2,
-      "revenue": 762.00,
-      "visitCount": 21,
-      "startDate": 1437696000000
-    }, {
-      "customerCount": 24,
-      "customerType": "+",
-      "revenuePerVisit": 31.67,
-      "week": 3,
-      "revenue": 1140.00,
-      "visitCount": 36,
-      "startDate": 1438300800000
-    }, {
-      "customerCount": 22,
-      "customerType": "+",
-      "revenuePerVisit": 41.34,
-      "week": 4,
-      "revenue": 1323.00,
-      "visitCount": 32,
-      "startDate": 1438905600000
-    }];
+    $timeout(function() {
+      var customers = [{
+        "customerCount": 23,
+        "customerType": "+",
+        "revenuePerVisit": 39.17,
+        "week": 1,
+        "revenue": 1136.00,
+        "visitCount": 29,
+        "startDate": 1437091200000
+      }, {
+        "customerCount": 19,
+        "customerType": "+",
+        "revenuePerVisit": 36.29,
+        "week": 2,
+        "revenue": 762.00,
+        "visitCount": 21,
+        "startDate": 1437696000000
+      }, {
+        "customerCount": 24,
+        "customerType": "+",
+        "revenuePerVisit": 31.67,
+        "week": 3,
+        "revenue": 1140.00,
+        "visitCount": 36,
+        "startDate": 1438300800000
+      }, {
+        "customerCount": 22,
+        "customerType": "+",
+        "revenuePerVisit": 41.34,
+        "week": 4,
+        "revenue": 1323.00,
+        "visitCount": 32,
+        "startDate": 1438905600000
+      }];
 
-    var visits = {
-      name: 'Visits',
-      dataLabels: {
-        enabled: true,
-        style: {
-          fontSize: '14px'
+      var visits = {
+        name: 'Visits',
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: '14px'
+          },
+          y: 0
         },
-        y: 0
-      },
-      data: []
-    };
+        data: []
+      };
 
-    _.each(customers, function(customer) {
-      var start = moment(customer.startDate).startOf('day');
-      var startString = start.format('MMM') + ' ' + start.format('D') + '<br>';
-      start.add(7, 'days');
-      var endString = start.format('MMM') + ' ' + start.format('D');
-      var cat = startString + endString;
-      xAxis.setCategory(cat);
-      visits.data.push(customer.visitCount);
-    });
+      _.each(customers, function(customer) {
+        var start = moment(customer.startDate).startOf('day');
+        var startString = start.format('MMM') + ' ' + start.format('D') + '<br>';
+        start.add(7, 'days');
+        var endString = start.format('MMM') + ' ' + start.format('D');
+        var cat = startString + endString;
+        xAxis.setCategory(cat);
+        visits.data.push(customer.visitCount);
+      });
 
-    api.setData([visits]);
+      api.setData([visits]);
+
+      config.save();
+    }, 1000);
+
+
   }]);
