@@ -42,4 +42,35 @@ describe('Directive: Chart', function() {
     expect(config.chart.renderTo).toBeDefined();
     expect(setChartSpy).toHaveBeenCalled();
   });
+
+  it('destroys the chart on scope destroy', function() {
+    var destroy = jasmine.createSpy();
+    window.Highcharts = {
+      Chart: function() {
+        this.destroy = destroy;
+      }
+    };
+
+    spyOn(apiService, 'removeAPI').and.returnValue();
+
+    var config = {
+      renderTo: function() {
+        this.chart.renderTo = 'element';
+      },
+      toJSON: function() {
+      },
+      chart: {}
+    };
+
+    configDefer.resolve(config);
+    rootScope.$digest();
+
+    rootScope.$broadcast('$destroy');
+    rootScope.$digest();
+
+    expect(destroy).toHaveBeenCalled();
+    expect(apiService.removeAPI).toHaveBeenCalledWith('myId');
+
+
+  });
 });
