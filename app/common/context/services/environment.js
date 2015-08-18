@@ -30,12 +30,15 @@ angular.module('womply')
        * @returns {string} - the insights path
        */
       getInsightsPath: function() {
-        var path = 'http://local.womply.com:5000';
-        if (!isDevelopmentServer()) {
-          path = 'http://womply.com';
-        }
+        return ConfigLoader.initialize()
+          .then(function(config) {
+            var path = 'http://local.womply.com:5000';
+            if (!isDevelopmentServer()) {
+              path = config.InsightsBase || $location. protocol() + '://' + $location.host() + ($location.port() ? ':' + $location.port() : '');
+            }
 
-        return path;
+            return path;
+          });
       }
     }
   }]);

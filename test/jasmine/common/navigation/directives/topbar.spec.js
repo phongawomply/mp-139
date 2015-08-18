@@ -2,6 +2,7 @@ describe('TopBar', function() {
   beforeEach(module('templates'));
   disableModuleRun('womply');
   beforeEach(module('womply'));
+  setApiPathLocal();
 
   var businessMenuRenderSpy = null;
 
