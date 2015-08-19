@@ -10,6 +10,7 @@ module.exports = function(config) {
       'build/lib/angular-animate.min.js',
       'build/lib/global-components-ui.js',
       'build/lib/underscore-min.js',
+      'build/lib/moment.min.js',
       'build/html/**/*.html',
       'app/*.module.js',
       'app/*.js',

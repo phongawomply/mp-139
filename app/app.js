@@ -47,7 +47,8 @@ angular.module('womply')
     });
 
     Context.initialize();
-  }])
+  }]);
+  /* Sample controller for charts
   .controller('ChartController', ['$timeout', 'ChartConfigService', 'ChartAPIService', 'CHART_TYPE', function($timeout, ChartConfigService, ChartAPIService, CHART_TYPE) {
     var api = ChartAPIService.getAPI('myId');
 
@@ -129,3 +130,4 @@ angular.module('womply')
 
 
   }]);
+  */

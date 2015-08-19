@@ -42,7 +42,7 @@ gulp.task('serve:blueprints', function () {
   });
   mockServer.app.all('*', function(req, res, next){
     if (!req.get('Origin')) return next();
-    res.set('Access-Control-Allow-Origin', 'http://localhost:9999');
+    res.set('Access-Control-Allow-Origin', 'http://local.womply.com:9999');
     res.set('Access-Control-Allow-Methods', 'GET, POST');
     res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
     res.set('Access-Control-Allow-Credentials', 'true');
