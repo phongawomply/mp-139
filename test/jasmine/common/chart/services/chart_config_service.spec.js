@@ -51,6 +51,26 @@ describe('ChartConfigService', function() {
       expect(config.toJSON().chart.renderTo).toEqual('myId');
     });
 
+    it('sets the margin left', function() {
+      config.marginLeft(20);
+      expect(config.toJSON().chart.marginLeft).toEqual(20);
+    });
+
+    it('sets the margin right', function() {
+      config.marginRight(20);
+      expect(config.toJSON().chart.marginRight).toEqual(20);
+    });
+
+    it('sets the margin top', function() {
+      config.marginTop(20);
+      expect(config.toJSON().chart.marginTop).toEqual(20);
+    });
+
+    it('sets the margin bottom', function() {
+      config.marginBottom(20);
+      expect(config.toJSON().chart.marginBottom).toEqual(20);
+    });
+
     it('sets the title', function() {
       config.title('hello world');
       expect(config.toJSON().title.text).toEqual('hello world');

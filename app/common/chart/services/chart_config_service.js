@@ -248,6 +248,45 @@ angular.module('womply')
         return this;
       };
       /**
+       * Sets the margin left
+       *
+       * @param margin
+       * @returns {ChartConfig}
+       */
+      this.marginLeft = function(margin) {
+        config.chart.marginLeft = margin;
+        return this;
+      };
+      /**
+       * Sets the margin right
+       *
+       * @param margin
+       * @returns {ChartConfig}
+       */
+      this.marginRight = function(margin) {
+        config.chart.marginRight = margin;
+        return this;
+      };
+      /**
+       * Sets the margin top
+       * @param margin
+       * @returns {ChartConfig}
+       */
+      this.marginTop = function(margin) {
+        config.chart.marginTop = margin;
+        return this;
+      };
+      /**
+       * Sets the margin bottom
+       *
+       * @param margin
+       * @returns {ChartConfig}
+       */
+      this.marginBottom = function(margin) {
+        config.chart.marginBottom = margin;
+        return this;
+      };
+      /**
        * Get the xAxis configuration object
        * @returns {Axis}
        */
