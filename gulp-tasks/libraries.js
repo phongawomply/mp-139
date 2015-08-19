@@ -38,6 +38,11 @@ gulp.task('library:underscore', function() {
     .pipe(gulp.dest(directories.lib));
 });
 
+gulp.task('library:moment', function() {
+  return gulp.src('./node_modules/moment/min/moment.min.js')
+    .pipe(gulp.dest(directories.lib));
+});
+
 gulp.task('library:angular-mocks', function() {
   return gulp.src('./node_modules/angular-mocks/angular-mocks.js')
     .pipe(gulp.dest(directories.test_lib));

@@ -27,7 +27,8 @@ gulp.task('libraries', ['library:angular',
                         'library:angular-aria',
                         'library:angular-animate',
                         'library:angular-material',
-                        'library:underscore']);
+                        'library:underscore',
+                        'library:moment']);
 /**
  * Clean up the build directories
  */
