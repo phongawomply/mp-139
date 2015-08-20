@@ -4,7 +4,7 @@ angular.module('womply')
    *
    * @directive
    */
-  .directive('topBar', ['$document', '$location', 'Context', function($document, $location, Context) {
+  .directive('topBar', ['$rootScope', '$document', '$location', 'Context', function($rootScope, $document, $location, Context) {
     return {
       restrict: 'E',
       scope: {
@@ -57,7 +57,9 @@ angular.module('womply')
 
         // Set the location menu
         var _locationChangeCallback = function(slug) {
-          $location.path('/' + slug);
+          $rootScope.$apply(function() {
+            $location.path('/' + slug);
+          });
         };
 
         Context.initialized(function(data) {
