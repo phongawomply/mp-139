@@ -36,14 +36,18 @@ angular.module('womply')
       },
       templateUrl: '/html/common/navigation/directives/topbar.html',
       link: function ($scope, $element, $attr) {
-        // Initialize the global component application launcher
-        var appLauncher = new womply.ui.ApplicationLauncher(
-          womply.ui.util.getId('gc-app-launcher-toggle'),
-          womply.ui.util.getId('gc-app-launcher-overlay'),
-          $attr.applicationId
-        );
 
-        appLauncher.render();
+        $attr.$observe('applicationId', function() {
+          // Initialize the global component application launcher
+          var appLauncher = new womply.ui.ApplicationLauncher(
+            womply.ui.util.getId('gc-app-launcher-toggle'),
+            womply.ui.util.getId('gc-app-launcher-overlay'),
+            $attr.applicationId
+          );
+
+          appLauncher.render();
+        });
+
 
         // Initialize the business links
         var businessMenuDeregister = $scope.$watch('businessMenuLinks', function(value) {
@@ -64,20 +68,19 @@ angular.module('womply')
 
         Context.initialized(function(data) {
           var locations = data.merchant_locations;
-          Context.getCurrentMerchantLocation().then(function(slug) {
-            var merchants = _.map(locations, function(location) {
-              return {
-                name: location.name,
-                href: '#',
-                slug: location.slug,
-                description: location.address1 + ' ' + location.city,
-                selected: location.id == slug || location.slug == slug
-              };
-            });
-
-            var locationMenu = new womply.ui.LocationMenu(womply.ui.util.getId('gc-location-menu-list'), _locationChangeCallback, null);
-            locationMenu.updateLocations(merchants);
+          var slug = Context.getCurrentMerchantSlug();
+          var merchants = _.map(locations, function(location) {
+            return {
+              name: location.name,
+              href: '#',
+              slug: location.slug,
+              description: location.address1 + ' ' + location.city,
+              selected: location.id == slug || location.slug == slug
+            };
           });
+
+          var locationMenu = new womply.ui.LocationMenu(womply.ui.util.getId('gc-location-menu-list'), _locationChangeCallback, null);
+          locationMenu.updateLocations(merchants);
         });
 
         // Set the user menu

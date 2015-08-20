@@ -30,17 +30,24 @@ describe("AppController", function() {
     spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
 
     var slug = $q.defer();
-    slug.resolve('1111');
+    slug.resolve({
+      id: 1,
+      slug: '1111',
+      partner_slug: 'partner'
+    });
     spyOn(Context, 'getCurrentMerchantLocation').and.returnValue(slug.promise);
 
     var locations = $q.defer();
     locations.resolve([
       {
+        id: 1,
         slug: '1111',
         partner_slug: 'partner'
       }
     ]);
     spyOn(Context, 'getMerchantLocations').and.returnValue(locations.promise);
+
+    spyOn(Context, 'getCurrentMerchantSlug').and.returnValue('1111');
   }));
 
 
