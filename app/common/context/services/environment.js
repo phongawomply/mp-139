@@ -27,18 +27,16 @@ angular.module('womply')
       /**
        * Get the insights path
        *
+       * @param {string} base - the base url
        * @returns {string} - the insights path
        */
-      getInsightsPath: function() {
-        return ConfigLoader.initialize()
-          .then(function(config) {
-            var path = 'http://local.womply.com:5000';
-            if (!isDevelopmentServer()) {
-              path = config.InsightsBase || $location. protocol() + '://' + $location.host() + ($location.port() ? ':' + $location.port() : '');
-            }
+      getInsightsPath: function(base) {
+        var path = 'http://local.womply.com:5000';
+        if (!isDevelopmentServer()) {
+          path = base || $location. protocol() + '://' + $location.host() + ($location.port() ? ':' + $location.port() : '');
+        }
 
-            return path;
-          });
+        return path;
       }
     }
   }]);

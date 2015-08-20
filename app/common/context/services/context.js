@@ -60,11 +60,19 @@ angular.module('womply')
        * @returns {Q.Promise}
        */
       getCurrentMerchantLocation: function() {
-        var defer = $q.defer();
-
-        defer.resolve(merchantSlug);
-
-        return defer.promise;
+        return this.getMerchantLocations()
+          .then(function(locations) {
+            return _.find(locations, function (l) {
+              return l.id == merchantSlug || l.slug == merchantSlug;
+            });
+          });
+      },
+      /**
+       * Get the current merchant slug
+       * @returns {*}
+       */
+      getCurrentMerchantSlug: function() {
+        return merchantSlug;
       },
       /**
        * Get the user data

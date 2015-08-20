@@ -6,8 +6,8 @@ angular.module('womply')
     $httpProvider.defaults.withCredentials = true;
     $routeProvider
       .when('/:slug/nav1', {
-        template: '<p>Nav 1</p><chart data-chart-id="myId"></chart>',
-        controller: 'ChartController'
+        template: '<p>Nav 1</p><chart data-chart-id="myId"></chart>'
+        //, controller: 'ChartController'
       })
       .when('/:slug/nav2', {
         template: '<p>Nav 2</p>'
@@ -28,22 +28,15 @@ angular.module('womply')
       });
 
     Context.initialized(function(data) {
-      Context.getCurrentMerchantLocation()
-        .then(function(slug) {
-          self.slug = slug;
-          return self.slug;
-        })
-        .then(function(slug) {
-          var location = _.find(data.merchant_locations, function(loc) {
-            return loc.slug == self.slug || loc.id == self.slug;
-          });
+      self.slug = Context.getCurrentMerchantSlug();
+      var location = _.find(data.merchant_locations, function(loc) {
+        return loc.slug == self.slug || loc.id == self.slug;
+      });
 
-          if(location && _.isString(location.partner_slug)) {
-            $document[0].body.id = location.partner_slug.toLowerCase();
-            $document[0].title = location.partner_name + " " + location.product_name + " - " + location.name;
-          }
-        });
-
+      if(location && _.isString(location.partner_slug)) {
+        $document[0].body.id = location.partner_slug.toLowerCase();
+        $document[0].title = location.partner_name + " " + location.product_name + " - " + location.name;
+      }
     });
 
     Context.initialize();

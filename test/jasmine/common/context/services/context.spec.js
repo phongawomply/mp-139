@@ -4,7 +4,7 @@ describe('Context', function() {
   disableModuleRun('womply');
   beforeEach(module('womply'));
 
-  var merchantLocations = [{slug:'x', partner_slug:'x'}];
+  var merchantLocations = [{id: 1, slug:'x', partner_slug:'x'}];
   var user = {id: 1};
   var rootScope, httpBackend, q;
   beforeEach(inject(function($rootScope, $q, $httpBackend, Context, Environment) {
@@ -91,10 +91,47 @@ describe('Context', function() {
       rootScope.$broadcast('$locationChangeStart');
       rootScope.$digest();
 
-      var spy = jasmine.createSpy('slug');
-      service.getCurrentMerchantLocation().then(spy);
+      expect(service.getCurrentMerchantSlug()).toEqual('1111');
+    }));
+
+    it('gets the current merchant location by id', inject(function($httpBackend, $location) {
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
+        data: {
+          merchant_locations: merchantLocations,
+          user: user
+        }
+      });
+
+      $location.path('/1');
+      rootScope.$broadcast('$locationChangeStart');
+      $httpBackend.flush();
       rootScope.$digest();
-      expect(spy).toHaveBeenCalledWith('1111');
+
+      var spy = jasmine.createSpy();
+      service.getCurrentMerchantLocation().then(spy);
+
+      rootScope.$digest();
+      expect(spy).toHaveBeenCalledWith(merchantLocations[0]);
+    }));
+
+    it('gets the current merchant location by slug', inject(function($httpBackend, $location) {
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=x').respond({
+        data: {
+          merchant_locations: merchantLocations,
+          user: user
+        }
+      });
+
+      $location.path('/x');
+      rootScope.$broadcast('$locationChangeStart');
+      $httpBackend.flush();
+      rootScope.$digest();
+
+      var spy = jasmine.createSpy();
+      service.getCurrentMerchantLocation().then(spy);
+
+      rootScope.$digest();
+      expect(spy).toHaveBeenCalledWith(merchantLocations[0]);
     }));
 
     it('calls initialize when slug changes', inject(function($httpBackend, $location) {
