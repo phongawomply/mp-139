@@ -100,6 +100,7 @@ describe('TopBar', function() {
     $rootScope.$digest();
     $httpBackend.flush();
 
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=test').respond({data: {}});
     locationMenuCallback('test');
 
     expect($location.path).toHaveBeenCalled();
