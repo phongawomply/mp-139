@@ -39,11 +39,11 @@ angular.module('womply')
 
         $attr.$observe('applicationId', function() {
           // Initialize the global component application launcher
-          var appLauncher = new womply.ui.ApplicationLauncher(
-            womply.ui.util.getId('gc-app-launcher-toggle'),
-            womply.ui.util.getId('gc-app-launcher-overlay'),
-            $attr.applicationId
-          );
+          var appLauncher = new womply.ui.ApplicationLauncher({
+              element: womply.ui.util.getId('gc-app-launcher-toggle'),
+              overlay: womply.ui.util.getId('gc-app-launcher-overlay'),
+              app: $attr.applicationId
+          });
 
           appLauncher.render();
         });
@@ -52,8 +52,12 @@ angular.module('womply')
         // Initialize the business links
         var businessMenuDeregister = $scope.$watch('businessMenuLinks', function(value) {
           if (!_.isEmpty(value)) {
-            var business = womply.ui.BusinessMenu(womply.ui.util.getId('gc-business-menu'), value);
-            business.setId('gc-business-menu-toggle').render();
+            var business = new womply.ui.ListMenu({
+              type: 'business-menu',
+              element: womply.ui.util.getId('gc-business-menu'),
+              links: value
+            });
+            business.render();
 
             businessMenuDeregister();
           }
@@ -62,7 +66,7 @@ angular.module('womply')
         // Set the location menu
         var _locationChangeCallback = function(slug) {
           $rootScope.$apply(function() {
-            $location.path('/' + slug);
+            $location.path('/' + slug.id);
           });
         };
 
@@ -71,25 +75,37 @@ angular.module('womply')
           var slug = Context.getCurrentMerchantSlug();
           var merchants = _.map(locations, function(location) {
             return {
-              name: location.name,
+              id: location.slug,
+              text: location.name,
               href: '#',
               slug: location.slug,
-              description: location.address1 + ' ' + location.city,
+              subtext: location.address1 + ' ' + location.city,
               selected: location.id == slug || location.slug == slug
             };
           });
 
-          var locationMenu = new womply.ui.LocationMenu(womply.ui.util.getId('gc-location-menu-list'), _locationChangeCallback, null);
-          locationMenu.updateLocations(merchants);
+          var locationMenu = new womply.ui.SelectMenu({
+            type: 'location-menu',
+            element: womply.ui.util.getId('gc-location-menu-list'),
+            changeCallback: _locationChangeCallback,
+            collection: merchants
+          });
+
+          locationMenu.render();
         });
 
         // Set the user menu
         var deregister = $scope.$watch('userMenuLinks', function(value) {
           if (!_.isEmpty(value)) {
             Context.getUser().then(function(user) {
-              var UserMenu = new womply.ui.UserMenu(womply.ui.util.getId('gc-user-menu'), value);
+              var UserMenu = new womply.ui.ListMenu({
+                type: 'user-menu',
+                element: womply.ui.util.getId('gc-user-menu'),
+                links: value,
+                title: true
+              });
               UserMenu.render();
-              UserMenu.setUsername(user.name);
+              UserMenu.updateTitle(user.name);
             });
 
             deregister();

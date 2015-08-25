@@ -57,7 +57,7 @@ angular.module('womply')
             return nav.route == route;
           });
 
-          navigation.setActive(nav.name);
+          navigation.setActive(nav.text);
         };
         /**
          * Watch the navigation links and selection function
@@ -75,7 +75,10 @@ angular.module('womply')
               }
 
               // Instantiate and render the navigation
-              var navigation = new womply.ui.Navigation(womply.ui.util.getId('gc-navigation'), $scope.navigationLinks);
+              var navigation = new womply.ui.Navigation({
+                element: womply.ui.util.getId('gc-navigation'),
+                links: $scope.navigationLinks
+              });
               navigation.render();
 
               $rootScope.$on('$locationChangeStart', function () {

@@ -13,6 +13,6 @@ module.exports = function() {
   };
 
   this.getGcSelectedLocation = function() {
-    return element(by.css('#gc-location-menu-list li a'))
+    return element(by.css('#gc-location-menu-list .is-selected'))
   };
 };
