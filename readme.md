@@ -119,3 +119,26 @@ Run karma on the js code for unit testing and to provide a coverage report that 
 	gulp test:karma:prod
 ```
 Run karma on the concatenated js file built with coverage report under the ./coverage directory.
+
+#### Downstream Repository
+##### Initialization
+To use application template in a downstream repository the following steps must be initiated in the application repository (downstream):
+
+1. Add the remote branch: git remote add origin git@github.com:OtoAnalytics/<project name>.git
+2. Add the template remote as "upstream": git remote add upstream git@github.com:OtoAnalytics/app-template-angular.git
+3. git fetch upstream
+4. git checkout -b master upstream/master
+5. git push origin master
+6. set your working copy "master" branch tracking back to origin: git branch master --set-upstream-to origin/master
+7. git checkout -b master upstream/develop
+8. git push origin develop
+9. set your working copy "develop" branch tracking back to origin: git branch develop --set-upstream-to origin/develop
+
+#### Updating
+To update the project repository with the latest template repository:
+
+1. git checkout develop
+2. git pull upstream master
+3. git commit
+
+From this point you can create a PR to merge to master and perform a git rebase to you feature branches.

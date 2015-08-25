@@ -38,6 +38,7 @@ describe('TopBar', function() {
       this.render = userMenuRenderSpy;
       this.setUsername = userSetUsernameSpy;
     };
+
   });
 
   var element, scope, rootScope;
@@ -84,7 +85,11 @@ describe('TopBar', function() {
   });
 
   it('renders the location menu', inject(function($rootScope, $httpBackend, Context) {
-    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {}});
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+      {
+        slug: '1111'
+      }
+    ]}});
     Context.initialize();
     $rootScope.$digest();
     $httpBackend.flush();
@@ -92,7 +97,11 @@ describe('TopBar', function() {
   }));
 
   it('sets the url on location change', inject(function($rootScope, $document, $location, $httpBackend, Context) {
-    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {}});
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+      {
+        slug: '1111'
+      }
+    ]}});
     spyOn($location, 'path').and.callThrough();
 
     Context.initialize();
@@ -100,7 +109,11 @@ describe('TopBar', function() {
     $rootScope.$digest();
     $httpBackend.flush();
 
-    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=test').respond({data: {}});
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=test').respond({data: {merchant_locations: [
+      {
+        slug: '1111'
+      }
+    ]}});
     locationMenuCallback('test');
 
     expect($location.path).toHaveBeenCalled();

@@ -6,29 +6,28 @@ describe('Context', function() {
 
   var merchantLocations = [{id: 1, slug:'x', partner_slug:'x'}];
   var user = {id: 1};
-  var rootScope, httpBackend, q;
-  beforeEach(inject(function($rootScope, $q, $httpBackend, Context, Environment) {
+  var rootScope, httpBackend, q, location;
+  beforeEach(inject(function($rootScope, $q, $httpBackend, $location, Context, Environment) {
     service = Context;
     rootScope = $rootScope;
     httpBackend = $httpBackend;
     q = $q;
+    location = $location;
 
-    var defer = $q.defer();
-    defer.resolve('http://local.womply.com:3000/api/0.1');
-    spyOn(Environment, 'getApiPath').and.returnValue(defer.promise);
+    spyOn(Environment, 'getApiPath').and.returnValue('http://local.womply.com:3000/api/0.1');
   }));
 
   it('initializes', function() {
 
     //Mock the initialize http call
-    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({
+    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
       data: {
         merchant_locations: merchantLocations,
         user: user
       }
     });
 
-    service.initialize();
+    location.path('/1');
     rootScope.$digest();
 
     httpBackend.flush();
@@ -37,16 +36,37 @@ describe('Context', function() {
 
   });
 
-  it('gets merchant locations', function() {
+  it('does not initialize when location does not exist', inject(function(Environment, $window) {
+
+    spyOn($window.location, 'replace').and.returnValue();
+    spyOn(Environment, 'getInsightsPath').and.returnValue('/hello');
+
     //Mock the initialize http call
-    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({
+    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=2').respond({
       data: {
         merchant_locations: merchantLocations,
         user: user
       }
     });
 
-    service.initialize();
+    location.path('/2');
+    rootScope.$digest();
+
+    httpBackend.flush();
+
+    expect($window.location.replace).toHaveBeenCalledWith('/hello');
+  }));
+
+  it('gets merchant locations', function() {
+    //Mock the initialize http call
+    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
+      data: {
+        merchant_locations: merchantLocations,
+        user: user
+      }
+    });
+
+    location.path('/1');
     httpBackend.flush();
     rootScope.$digest();
 
@@ -59,14 +79,14 @@ describe('Context', function() {
 
   it('gets user', function() {
     //Mock the initialize http call
-    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({
+    httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
       data: {
         merchant_locations: merchantLocations,
         user: user
       }
     });
 
-    service.initialize();
+    location.path('/1');
     httpBackend.flush();
     rootScope.$digest();
 
@@ -102,7 +122,7 @@ describe('Context', function() {
         }
       });
 
-      $location.path('/1');
+      location.path('/1');
       rootScope.$broadcast('$locationChangeStart');
       $httpBackend.flush();
       rootScope.$digest();
@@ -152,7 +172,7 @@ describe('Context', function() {
     it('executes callback on initialized', inject(function($httpBackend) {
       var spy = jasmine.createSpy('initialized');
       var multiSpy = jasmine.createSpy();
-      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
         data: {
           merchant_locations: merchantLocations,
           user: user
@@ -162,7 +182,7 @@ describe('Context', function() {
       service.initialized(spy);
       service.initialized(multiSpy);
 
-      service.initialize();
+      location.path('/1');
       $httpBackend.flush();
       rootScope.$digest();
 

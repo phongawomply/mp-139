@@ -18,26 +18,29 @@ describe('Environment', function() {
 
       spyOn($location, 'host').and.returnValue('localhost');
 
-      var spy = jasmine.createSpy('api');
-      service.getApiPath().then(spy);
+      var apiPath = service.getApiPath();
       rootScope.$digest();
 
-      expect(spy).toHaveBeenCalledWith('http://local.womply.com:3000/api/0.1');
+      expect(apiPath).toEqual('http://local.womply.com:3000/api/0.1');
     }));
 
-    it('gets the production api path from the config', inject(function($location, ConfigLoader) {
-      var defer = q.defer();
-      defer.resolve({
-        ApiBase: '/hello/world',
-        ApiPath: '/api/2'
+    it('gets the production api path from the config', inject(function($injector) {
+
+      spyOn($injector, 'has').and.returnValue(true);
+      var iGet = $injector.get;
+
+      spyOn($injector, 'get').and.callFake(function(param) {
+        if (param == 'EnvConfig') {
+          return {
+            ApiBase: '/hello/world',
+            ApiPath: '/api/2'
+          };
+        } else {
+          return iGet(param);
+        }
       });
-      spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
 
-      var spy = jasmine.createSpy('api');
-      service.getApiPath().then(spy);
-      rootScope.$digest();
-
-      expect(spy).toHaveBeenCalledWith('/hello/world/api/2');
+      expect(service.getApiPath()).toEqual('/hello/world/api/2');
     }));
 
     it('gets the production api path', inject(function($location, ConfigLoader) {
@@ -48,30 +51,40 @@ describe('Environment', function() {
       spyOn($location, 'host').and.returnValue('hello');
       spyOn($location, 'port').and.returnValue('');
 
-      var spy = jasmine.createSpy('api');
-      service.getApiPath().then(spy);
       rootScope.$digest();
 
-      expect(spy).toHaveBeenCalledWith('http://hello/api/0.1');
+      expect(service.getApiPath()).toEqual('http://hello/api/0.1');
     }));
   });
 
   describe('getInsightsPath', function() {
-    it('gets the develop api path', inject(function($rootScope, $location, ConfigLoader) {
+    it('gets the develop api path', inject(function($rootScope, $location) {
       spyOn($location, 'host').and.returnValue('localhost');
 
       expect(service.getInsightsPath()).toEqual('http://local.womply.com:5000');
     }));
 
-    it('gets the production insights path', inject(function($rootScope, $location, ConfigLoader) {
+    it('gets the production insights path', inject(function($rootScope, $location) {
      spyOn($location, 'host').and.returnValue('hello');
       spyOn($location, 'port').and.returnValue('');
 
       expect(service.getInsightsPath()).toEqual('http://hello');
     }));
 
-    it('gets the url from passed in param', inject(function($rootScope, ConfigLoader) {
-      expect(service.getInsightsPath('http://mybase.com')).toEqual('http://mybase.com');
+    it('gets the url from override', inject(function($injector) {
+      spyOn($injector, 'has').and.returnValue(true);
+      var iGet = $injector.get;
+
+      spyOn($injector, 'get').and.callFake(function(param) {
+        if (param == 'EnvConfig') {
+          return {
+            InsightsBase: 'http://mybase.com'
+          };
+        } else {
+          return iGet(param);
+        }
+      });
+      expect(service.getInsightsPath()).toEqual('http://mybase.com');
     }));
   });
 });

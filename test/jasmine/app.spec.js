@@ -63,7 +63,11 @@ describe("AppController", function() {
   }));
 
   it('initializes the merchant slug', inject(function($httpBackend) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {}});
+    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+      {
+        slug: '1111'
+      }
+    ]}});
     var controller = $controller('AppController');
     $rootScope.$digest();
     $httpBackend.flush();
@@ -104,5 +108,44 @@ describe("AppController", function() {
     expect($document[0].title).toEqual('Partner template - myLocation');
   }));
 
+  describe('authentication redirect', function() {
+    it('redirects to insights for 401', inject(function($window, $http, $httpBackend, Environment) {
+      $httpBackend.expectGET('/test').respond(401);
 
+      spyOn($window.location, 'replace').and.returnValue();
+
+      spyOn(Environment, 'getInsightsPath').and.returnValue('http://insights');
+
+      $http.get('/test');
+      $httpBackend.flush();
+      expect($window.location.replace).toHaveBeenCalledWith('http://insights');
+    }));
+
+    it('does not redirect to insights', inject(function($window, $http, $httpBackend, Environment) {
+      $httpBackend.expectGET('/test').respond(200);
+
+      spyOn($window.location, 'replace').and.returnValue();
+
+      spyOn(Environment, 'getInsightsPath').and.returnValue('http://insights');
+
+      $http.get('/test');
+      $httpBackend.flush();
+
+      expect($window.location.replace).not.toHaveBeenCalled();
+    }));
+
+    it('does not redirect to insights for other errors', inject(function($window, $http, $httpBackend, Environment) {
+      $httpBackend.expectGET('/test').respond(503);
+
+      spyOn($window.location, 'replace').and.returnValue();
+
+      spyOn(Environment, 'getInsightsPath').and.returnValue('http://insights');
+
+      $http.get('/test');
+      $httpBackend.flush();
+
+      expect($window.location.replace).not.toHaveBeenCalled();
+    }));
+
+  });
 });

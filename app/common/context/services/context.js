@@ -2,7 +2,7 @@ angular.module('womply')
   /**
    * Context service to provide the application with data
    */
-  .factory('Context', ['$rootScope', '$http', '$q', '$route', '$location', 'Environment', function($rootScope, $http, $q, $route, $location, Environment) {
+  .factory('Context', ['$rootScope', '$http', '$q', '$route', '$location', '$window', 'Environment', function($rootScope, $http, $q, $route, $location, $window, Environment) {
 
     var merchantLocationsDefer = $q.defer();
     var userDefer = $q.defer();
@@ -13,22 +13,29 @@ angular.module('womply')
     var initialize = function() {
       merchantLocationsDefer = $q.defer();
       userDefer = $q.defer();
-      return Environment.getApiPath()
-        .then(function(apiPath) {
-          return $http.get(apiPath + '/initialize?id=' + merchantSlug)
-            .then(function(response) {
-              merchantLocationsDefer.resolve(response.data.data.merchant_locations);
-              userDefer.resolve(response.data.data.user);
+      var apiPath = Environment.getApiPath();
+      return $http.get(apiPath + '/initialize?id=' + merchantSlug)
+        .then(function(response) {
 
-              _.each(callbacks, function(cb) {
-                if (_.isFunction(cb)) {
-                  cb({
-                    merchant_locations: response.data.data.merchant_locations,
-                    user: response.data.data.user
-                  })
-                }
-              });
-            });
+          var location = _.find(response.data.data.merchant_locations, function (l) {
+            return l.id == merchantSlug || l.slug == merchantSlug;
+          });
+
+          if (_.isUndefined(location)) {
+            $window.location.replace(Environment.getInsightsPath());
+          }
+
+          merchantLocationsDefer.resolve(response.data.data.merchant_locations);
+          userDefer.resolve(response.data.data.user);
+
+          _.each(callbacks, function(cb) {
+            if (_.isFunction(cb)) {
+              cb({
+                merchant_locations: response.data.data.merchant_locations,
+                user: response.data.data.user
+              })
+            }
+          });
         });
     };
 

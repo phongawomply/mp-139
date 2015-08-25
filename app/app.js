@@ -12,6 +12,19 @@ angular.module('womply')
       .when('/:slug/nav2', {
         template: '<p>Nav 2</p>'
       });
+
+    // Check the response and redirect to
+    $httpProvider.interceptors.push(['$q', '$window', 'Environment', function($q, $window, Environment) {
+      return {
+        responseError: function (resp) {
+          if (resp.status === 401) {
+            $window.location.replace(Environment.getInsightsPath());
+          }
+
+          return $q.reject(resp);
+        }
+      }
+    }]);
   })
   /**
    * Main application controller which initialize the configuration and sets the
