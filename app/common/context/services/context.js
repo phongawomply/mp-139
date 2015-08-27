@@ -9,13 +9,17 @@ angular.module('womply')
 
     var merchantSlug = $location.path().split('/')[1];
     var callbacks = [];
+    var initialized = false;
 
     var initialize = function() {
+      initialized = false;
       merchantLocationsDefer = $q.defer();
       userDefer = $q.defer();
       var apiPath = Environment.getApiPath();
       return $http.get(apiPath + '/initialize?id=' + merchantSlug)
         .then(function(response) {
+
+          initialized = true;
 
           var location = _.find(response.data.data.merchant_locations, function (l) {
             return l.id == merchantSlug || l.slug == merchantSlug;
@@ -94,6 +98,22 @@ angular.module('womply')
        */
       initialized: function(callback) {
         callbacks.push(callback);
+
+        if (initialized) {
+          var user;
+          var self = this;
+          this.getUser()
+            .then(function(u) {
+              user = u;
+              return self.getMerchantLocations();
+            })
+            .then(function(locations) {
+              callback({
+                merchant_locations: locations,
+                user: user
+              })
+            });
+        }
       }
     }
   }]);
