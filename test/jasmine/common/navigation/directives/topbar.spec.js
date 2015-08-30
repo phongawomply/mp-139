@@ -7,36 +7,32 @@ describe('TopBar', function() {
   var businessMenuRenderSpy = null;
 
   var locationMenuCallback = null;
-  var updateLocationSpy = null;
+  var renderLocationSpy = null;
 
-  var userMenuRenderSpy = null;
   var userSetUsernameSpy = null;
+
+  var applicationLauncherRenderSpy = null;
   beforeEach(function() {
     businessMenuRenderSpy = jasmine.createSpy();
 
-    womply.ui.BusinessMenu = function() {
-      return {
-        setId: function() {
-          return {
-            render: businessMenuRenderSpy
-          };
-        }
-      }
+    womply.ui.ListMenu = function() {
+      this.render = businessMenuRenderSpy;
+      this.updateTitle = userSetUsernameSpy;
     };
 
-    updateLocationSpy = jasmine.createSpy();
-    womply.ui.LocationMenu = function(ele, callback) {
-      locationMenuCallback = callback;
+    renderLocationSpy = jasmine.createSpy();
+    womply.ui.SelectMenu = function(params) {
+      locationMenuCallback = params.changeCallback;
 
-      this.updateLocations = updateLocationSpy;
+      this.render = renderLocationSpy;
     };
 
-    userMenuRenderSpy = jasmine.createSpy();
     userSetUsernameSpy = jasmine.createSpy();
 
-    womply.ui.UserMenu = function() {
-      this.render = userMenuRenderSpy;
-      this.setUsername = userSetUsernameSpy;
+    applicationLauncherRenderSpy = jasmine.createSpy();
+
+    womply.ui.ApplicationLauncher = function() {
+      this.render = applicationLauncherRenderSpy;
     };
 
   });
@@ -93,7 +89,7 @@ describe('TopBar', function() {
     Context.initialize();
     $rootScope.$digest();
     $httpBackend.flush();
-    expect(updateLocationSpy).toHaveBeenCalled();
+    expect(renderLocationSpy).toHaveBeenCalled();
   }));
 
   it('sets the url on location change', inject(function($rootScope, $document, $location, $httpBackend, Context) {
@@ -114,13 +110,13 @@ describe('TopBar', function() {
         slug: '1111'
       }
     ]}});
-    locationMenuCallback('test');
+    locationMenuCallback({id: 'test'});
 
     expect($location.path).toHaveBeenCalled();
   }));
 
   it('renders the user menu', function() {
-    expect(userMenuRenderSpy).toHaveBeenCalled();
+    expect(businessMenuRenderSpy).toHaveBeenCalled();
     expect(userSetUsernameSpy).toHaveBeenCalledWith('bob');
   });
 });

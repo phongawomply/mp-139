@@ -7,7 +7,7 @@ angular.module('womply')
       ApplicationId: 'insights',
       UserMenuLinks: [
         {
-          name: 'Logout',
+          text: 'Logout',
           href: Environment.getInsightsPath() + '/users/sign_out'
         }
       ],
@@ -16,13 +16,13 @@ angular.module('womply')
       NavigationLinks: [
         {
           id:     'nav1',
-          name:   'Nav 1',
+          text:   'Nav 1',
           route:  'nav1',
           active: true
         },
         {
           id:     'nav2',
-          name:   'Nav 2',
+          text:   'Nav 2',
           route:  'nav2'
         }
       ],

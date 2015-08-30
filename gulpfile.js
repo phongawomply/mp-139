@@ -99,3 +99,9 @@ gulp.task('serve', function() {
 gulp.task('serve:livereload', function() {
   sequence('serve:setup', 'web-server:livereload', 'watch', 'livereload');
 });
+/**
+ * Deploy the current branch build to testing
+ */
+gulp.task('deploy', function() {
+  sequence('clean', 'build', 'gc', 'libraries', 'aws:deploy');
+});

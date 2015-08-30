@@ -38,6 +38,7 @@ angular.module('womply')
         self.applicationId = config.ApplicationId;
         self.navigationLinks = config.NavigationLinks;
         self.navigationSelected = config.NavigationSelected;
+        self.businessMenuLinks = config.BusinessMenuLinks;
       });
 
     Context.initialized(function(data) {

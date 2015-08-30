@@ -169,28 +169,56 @@ describe('Context', function() {
       $httpBackend.verifyNoOutstandingExpectation();
     }));
 
-    it('executes callback on initialized', inject(function($httpBackend) {
-      var spy = jasmine.createSpy('initialized');
-      var multiSpy = jasmine.createSpy();
-      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
-        data: {
+    describe('callback', function() {
+      it('executes on initialized', inject(function($httpBackend) {
+        var spy = jasmine.createSpy('initialized');
+        var multiSpy = jasmine.createSpy();
+        $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
+          data: {
+            merchant_locations: merchantLocations,
+            user: user
+          }
+        });
+
+        service.initialized(spy);
+        service.initialized(multiSpy);
+
+        location.path('/1');
+        $httpBackend.flush();
+        rootScope.$digest();
+
+        expect(spy).toHaveBeenCalledWith({
           merchant_locations: merchantLocations,
           user: user
-        }
-      });
+        });
+        expect(multiSpy).toHaveBeenCalled();
+      }));
 
-      service.initialized(spy);
-      service.initialized(multiSpy);
+      it('executes if initialized', inject(function($httpBackend) {
+        var spy = jasmine.createSpy('initialized');
+        var multiSpy = jasmine.createSpy();
+        $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
+          data: {
+            merchant_locations: merchantLocations,
+            user: user
+          }
+        });
 
-      location.path('/1');
-      $httpBackend.flush();
-      rootScope.$digest();
+        location.path('/1');
+        $httpBackend.flush();
+        rootScope.$digest();
 
-      expect(spy).toHaveBeenCalledWith({
-        merchant_locations: merchantLocations,
-        user: user
-      });
-      expect(multiSpy).toHaveBeenCalled();
-    }));
+        service.initialized(spy);
+        service.initialized(multiSpy);
+
+        rootScope.$digest();
+
+        expect(spy).toHaveBeenCalledWith({
+          merchant_locations: merchantLocations,
+          user: user
+        });
+        expect(multiSpy).toHaveBeenCalled();
+      }));
+    });
   });
 });
