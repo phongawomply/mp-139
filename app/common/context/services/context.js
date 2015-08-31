@@ -71,10 +71,18 @@ angular.module('womply')
        * @returns {Q.Promise}
        */
       getCurrentMerchantLocation: function() {
+        return this.findMerchantLocation(merchantSlug);
+      },
+      /**
+       * Find the merchant location by id or slug
+       * @param {string|Number} id - the id or slug
+       * @returns {*}
+       */
+      findMerchantLocation: function(id) {
         return this.getMerchantLocations()
           .then(function(locations) {
-            return _.find(locations, function (l) {
-              return l.id == merchantSlug || l.slug == merchantSlug;
+            return _.find(locations, function(l) {
+              return l.id == id || l.slug == id;
             });
           });
       },

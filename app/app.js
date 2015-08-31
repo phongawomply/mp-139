@@ -39,6 +39,7 @@ angular.module('womply')
         self.navigationLinks = config.NavigationLinks;
         self.navigationSelected = config.NavigationSelected;
         self.businessMenuLinks = config.BusinessMenuLinks;
+        self.locationChanged = config.LocationChanged;
       });
 
     Context.initialized(function(data) {
