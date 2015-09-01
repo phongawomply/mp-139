@@ -24,7 +24,8 @@ describe("AppController", function() {
       UserMenuLinks: 'userMenuLinks',
       ApplicationId: 'applicationId',
       NavigationLinks: 'navigationLinks',
-      NavigationSelected: 'navigationSelected'
+      NavigationSelected: 'navigationSelected',
+      LocationChanged: 'locationChanged'
     });
 
     spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
@@ -60,6 +61,7 @@ describe("AppController", function() {
     expect(controller.userMenuLinks).toEqual('userMenuLinks');
     expect(controller.navigationLinks).toEqual('navigationLinks');
     expect(controller.navigationSelected).toEqual('navigationSelected');
+    expect(controller.locationChanged).toEqual('locationChanged')
   }));
 
   it('initializes the merchant slug', inject(function($httpBackend) {

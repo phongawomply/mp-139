@@ -115,6 +115,30 @@ describe('TopBar', function() {
     expect($location.path).toHaveBeenCalled();
   }));
 
+  it('calls the passed through function on location changed', inject(function($rootScope, $compile, $httpBackend, Context) {
+
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+      {
+        slug: '1111'
+      }
+    ]}});
+
+    locationMenuCallback = null;
+    $rootScope.locationChange = jasmine.createSpy();
+
+    var ele = angular.element('<top-bar data-application-id="applicationId" data-user-menu-links="userMenuLinks" data-business-menu-links="businessMenuLinks" data-location-changed="locationChange"></top-bar>');
+    $compile(ele)($rootScope.$new());
+    $rootScope.$digest();
+
+    Context.initialize();
+    $rootScope.$digest();
+    $httpBackend.flush();
+
+    locationMenuCallback();
+
+    expect($rootScope.locationChange).toHaveBeenCalled();
+  }));
+
   it('renders the user menu', function() {
     expect(businessMenuRenderSpy).toHaveBeenCalled();
     expect(userSetUsernameSpy).toHaveBeenCalledWith('bob');

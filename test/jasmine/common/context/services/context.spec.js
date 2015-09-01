@@ -4,7 +4,7 @@ describe('Context', function() {
   disableModuleRun('womply');
   beforeEach(module('womply'));
 
-  var merchantLocations = [{id: 1, slug:'x', partner_slug:'x'}];
+  var merchantLocations = [{id: 1, slug:'x', partner_slug:'x'}, {id: 5, slug: 'y', partner_slug: 'y'}];
   var user = {id: 1};
   var rootScope, httpBackend, q, location;
   beforeEach(inject(function($rootScope, $q, $httpBackend, $location, Context, Environment) {
@@ -152,6 +152,50 @@ describe('Context', function() {
 
       rootScope.$digest();
       expect(spy).toHaveBeenCalledWith(merchantLocations[0]);
+    }));
+
+    it('finds the merchant location by id', inject(function($httpBackend) {
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
+        data: {
+          merchant_locations: merchantLocations,
+          user: user
+        }
+      });
+
+      location.path('/1');
+      rootScope.$broadcast('$locationChangeStart');
+      $httpBackend.flush();
+      rootScope.$digest();
+
+      var spy = jasmine.createSpy();
+      service.findMerchantLocation(5).then(spy);
+
+      rootScope.$digest();
+
+      expect(spy).toHaveBeenCalledWith(merchantLocations[1]);
+
+    }));
+
+    it('finds the merchant location by slug', inject(function($httpBackend) {
+      $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
+        data: {
+          merchant_locations: merchantLocations,
+          user: user
+        }
+      });
+
+      location.path('/1');
+      rootScope.$broadcast('$locationChangeStart');
+      $httpBackend.flush();
+      rootScope.$digest();
+
+      var spy = jasmine.createSpy();
+      service.findMerchantLocation('y').then(spy);
+
+      rootScope.$digest();
+
+      expect(spy).toHaveBeenCalledWith(merchantLocations[1]);
+
     }));
 
     it('calls initialize when slug changes', inject(function($httpBackend, $location) {

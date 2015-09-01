@@ -32,7 +32,11 @@ angular.module('womply')
          *  ...
          * ]
          */
-        businessMenuLinks: '='
+        businessMenuLinks: '=',
+        /**
+         * Callback function when location has changed, otherwise it will use the default
+         */
+        locationChanged: '&'
       },
       templateUrl: '/html/common/navigation/directives/topbar.html',
       link: function ($scope, $element, $attr) {
@@ -84,10 +88,16 @@ angular.module('womply')
             };
           });
 
+          var fn = _locationChangeCallback;
+
+          if (_.isFunction($scope.locationChanged())) {
+            fn = $scope.locationChanged();
+          }
+
           var locationMenu = new womply.ui.SelectMenu({
             type: 'location-menu',
             element: womply.ui.util.getId('gc-location-menu-list'),
-            changeCallback: _locationChangeCallback,
+            changeCallback: fn,
             collection: merchants
           });
 
