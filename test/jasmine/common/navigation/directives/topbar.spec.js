@@ -76,6 +76,12 @@ describe('TopBar', function() {
     scope = element.isolateScope();
   }));
 
+  it('renders the application launcher', inject(function($rootScope, $document) {
+    $document[0].body.id = 'womply';
+    $rootScope.$digest();
+    expect(applicationLauncherRenderSpy).toHaveBeenCalled();
+  }));
+
   it('renders business menu', function() {
     expect(businessMenuRenderSpy).toHaveBeenCalled();
   });
