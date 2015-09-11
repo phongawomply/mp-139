@@ -4,3 +4,4 @@ build
 node_modules
 test/lib
 coverage
+test/blueprints/blueprint.concat.md

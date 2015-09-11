@@ -42,14 +42,21 @@ angular.module('womply')
       link: function ($scope, $element, $attr) {
 
         $attr.$observe('applicationId', function() {
-          // Initialize the global component application launcher
-          var appLauncher = new womply.ui.ApplicationLauncher({
-              element: womply.ui.util.getId('gc-app-launcher-toggle'),
-              overlay: womply.ui.util.getId('gc-app-launcher-overlay'),
-              app: $attr.applicationId
-          });
+          var unwatch = $scope.$watch(function() {
+            return $document[0].body.id;
+          }, function(value) {
+            if (!_.isEmpty(value)) {
+              // Initialize the global component application launcher
+              var appLauncher = new womply.ui.ApplicationLauncher({
+                element: womply.ui.util.getId('gc-app-launcher-toggle'),
+                overlay: womply.ui.util.getId('gc-app-launcher-overlay'),
+                app: $attr.applicationId
+              });
 
-          appLauncher.render();
+              appLauncher.render();
+              unwatch();
+            }
+          });
         });
 
 

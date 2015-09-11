@@ -10,5 +10,6 @@ module.exports = {
   lib:      build_dir + '/lib',
   js:       build_dir + '/js',
   html:     build_dir + '/html',
-  test_lib: './test/lib'
+  test_lib: './test/lib',
+  blueprint: './test/blueprints'
 };
