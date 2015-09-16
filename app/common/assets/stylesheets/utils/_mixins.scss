@@ -1,0 +1,35 @@
+/*
+Set a rem font size with pixel fallback
+Usage:
+
+p {
+  @include font-size(14px)
+}
+
+*/
+
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+/*
+Border mixin
+Usage:
+
+p {
+  @include border-all(width, style, color);
+}
+
+*/
+
+@mixin border-all($width, $style, $color) {
+  border-width: $width;
+  border-style: $style;
+  border-color: $color;
+}
