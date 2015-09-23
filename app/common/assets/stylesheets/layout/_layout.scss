@@ -1,0 +1,31 @@
+body {
+  background-color: $body-background;
+  color: $body-font-color;
+  min-height: $body-min-height;
+  width: $body-width;
+
+  .layout-container {
+    box-shadow: $layout-box-shadow;
+    background: #FFFFFF;
+    width: $layout-width;
+    height: $layout-height;
+    min-width: $layout-min-width;
+    max-width: $body-width;
+
+    .view-layout {
+      background: $view-layout-background;
+      position: $view-layout-position;
+      top: $view-layout-top;
+      left: $view-layout-left;
+      bottom: $view-layout-bottom;
+      max-width: $view-layout-max-width;
+      overflow: $view-layout-overflow;
+
+      .page-container {
+        width: $page-container-width;
+        margin: $page-container-margin;
+        border: $page-container-border;
+      }
+    }
+  }
+}
