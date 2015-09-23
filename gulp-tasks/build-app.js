@@ -28,8 +28,19 @@ gulp.task('build:css', function() {
     .pipe(gulp.dest(directories.css));
 });
 
+gulp.task('build:images', function() {
+  return gulp.src([directories.src + '/**/*.png'], {base: directories.src})
+    .pipe(gulp.dest(directories.build));
+});
+
+gulp.task('build:favicon', function() {
+  return gulp.src(directories.src + '/common/assets/images/favicon.ico')
+    .pipe(gulp.dest(directories.build));
+});
+
 gulp.task('build:watch', function() {
   gulp.watch(directories.src + '/**/*.js', ['build:js']);
   gulp.watch(directories.src + '/**/*.html', ['build:html']);
   gulp.watch(directories.src + '/**/*.sass', ['build:css']);
+  gulp.watch(directories.src + '/**/*.sass', ['build:images']);
 });
