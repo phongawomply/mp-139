@@ -74,12 +74,14 @@ gulp.task('serve:blueprints', ['concat:blueprint'], function() {
       var act = {
         method: action.method,
         headers: [],
-        response: ''
+        response: '',
+        status: 200
       };
 
       if (!_.isEmpty(action.examples)) {
         act.response = action.examples[0].responses[0].body;
         act.headers = action.examples[0].responses[0].headers;
+        act.status = action.examples[0].responses[0].name || act.status;
       }
 
       res.actions.push(act);
@@ -112,7 +114,7 @@ gulp.task('serve:blueprints', ['concat:blueprint'], function() {
         res.set(header.name, header.value);
       });
 
-      res.send(action.response);
+      res.status(action.status).send(action.response);
     };
   };
 
