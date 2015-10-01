@@ -29,7 +29,7 @@ angular.module('womply')
    * Main application controller which initialize the configuration and sets the
    * controller values
    */
-  .controller('AppController', ['$document', 'ConfigLoader', 'Context', function($document, ConfigLoader, Context) {
+  .controller('AppController', ['$document', 'ConfigLoader', 'Context', 'MixPanelService', function($document, ConfigLoader, Context, MixPanelService) {
     var self = this;
     ConfigLoader.initialize()
       .then(function(config) {
@@ -51,6 +51,8 @@ angular.module('womply')
         $document[0].body.id = location.partner_slug.toLowerCase();
         $document[0].title = location.partner_name + " " + location.product_name + " - " + location.name;
       }
+
+      MixPanelService.initialize(data.mixpanel_token);
     });
 
     Context.initialize();

@@ -18,7 +18,7 @@ describe("AppController", function() {
     $q = $injector.get('$q');
   }));
 
-  beforeEach(inject(function(ConfigLoader, Context) {
+  beforeEach(inject(function(ConfigLoader, Context, MixPanelService) {
     var defer = $q.defer();
     defer.resolve({
       UserMenuLinks: 'userMenuLinks',
@@ -49,6 +49,8 @@ describe("AppController", function() {
     spyOn(Context, 'getMerchantLocations').and.returnValue(locations.promise);
 
     spyOn(Context, 'getCurrentMerchantSlug').and.returnValue('1111');
+
+    spyOn(MixPanelService, 'initialize').and.returnValue();
   }));
 
 
@@ -108,6 +110,26 @@ describe("AppController", function() {
     $httpBackend.flush();
 
     expect($document[0].title).toEqual('Partner template - myLocation');
+  }));
+
+  it('initializes mix panel', inject(function(MixPanelService) {
+    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+      {
+        slug: '1111',
+        partner_slug: 'partner',
+        partner_name: 'Partner',
+        product_name: 'template',
+        name: 'myLocation'
+      }
+    ],
+      mixpanel_token: '1234'
+    }});
+
+    var controller = $controller('AppController');
+    $rootScope.$digest();
+    $httpBackend.flush();
+
+    expect(MixPanelService.initialize).toHaveBeenCalledWith('1234');
   }));
 
   describe('authentication redirect', function() {
