@@ -9,6 +9,8 @@ describe("AppController", function() {
 
   beforeEach(module('womply'));
 
+  setApiPathLocal();
+
   beforeEach(inject(function($injector){
     // The injector unwraps the underscores (_) from around the parameter names when matching
     $controller = $injector.get('$controller');
@@ -67,7 +69,7 @@ describe("AppController", function() {
   }));
 
   it('initializes the merchant slug', inject(function($httpBackend) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111'
       }
@@ -80,7 +82,7 @@ describe("AppController", function() {
   }));
 
   it('initializes the body id', inject(function($document) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111',
         partner_slug: 'partner'
@@ -95,7 +97,7 @@ describe("AppController", function() {
   }));
 
   it('initializes the title', inject(function($document) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111',
         partner_slug: 'partner',
@@ -113,7 +115,7 @@ describe("AppController", function() {
   }));
 
   it('initializes mix panel', inject(function(MixPanelService) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111',
         partner_slug: 'partner',
