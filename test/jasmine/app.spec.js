@@ -36,7 +36,14 @@ describe("AppController", function() {
     slug.resolve({
       id: 1,
       slug: '1111',
-      partner_slug: 'partner'
+      partner_slug: 'partner',
+      name: 'myLocation',
+      address1: '723 8th St SE',
+      address2: '',
+      city: 'Washington',
+      state: 'DC',
+      zip: '20003',
+      partner_name: 'a partner'
     });
     spyOn(Context, 'getCurrentMerchantLocation').and.returnValue(slug.promise);
 
@@ -131,7 +138,7 @@ describe("AppController", function() {
     $rootScope.$digest();
     $httpBackend.flush();
 
-    expect(MixPanelService.initialize).toHaveBeenCalledWith('1234');
+    expect(MixPanelService.initialize).toHaveBeenCalledWith('1234', { 'Merchant name': 'myLocation - 723 8th St SE, Washington, DC', 'Brand': 'a partner', 'Visit type': 'Return visit' });
   }));
 
   describe('authentication redirect', function() {

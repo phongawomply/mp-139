@@ -112,7 +112,26 @@ describe('MixPanelService', function() {
       mixpanel.track.calls.reset();
       service.track('anotherEvent');
       rootScope.$digest();
-      expect(mixpanel.track).toHaveBeenCalledWith('anotherEvent', undefined);
+      expect(mixpanel.track).toHaveBeenCalledWith('anotherEvent', {});
+    });
+
+    it('appends the default properties', function() {
+      spyOn(mixpanel, 'init').and.callFake(function(token, options) {
+        options.loaded();
+      });
+
+      spyOn(mixpanel, 'track').and.callThrough();
+
+      service.initialize('1234', {myProperty: 'hello world'});
+      timeout.flush();
+      rootScope.$digest();
+
+      var data = {someProperty: 'some data'};
+      service.track('myEvent', data);
+
+      rootScope.$digest();
+
+      expect(mixpanel.track).toHaveBeenCalledWith('myEvent', _.extend({myProperty: 'hello world'}, data));
     });
 
   });
