@@ -9,6 +9,8 @@ describe("AppController", function() {
 
   beforeEach(module('womply'));
 
+  setApiPathLocal();
+
   beforeEach(inject(function($injector){
     // The injector unwraps the underscores (_) from around the parameter names when matching
     $controller = $injector.get('$controller');
@@ -18,7 +20,7 @@ describe("AppController", function() {
     $q = $injector.get('$q');
   }));
 
-  beforeEach(inject(function(ConfigLoader, Context) {
+  beforeEach(inject(function(ConfigLoader, Context, MixPanelService) {
     var defer = $q.defer();
     defer.resolve({
       UserMenuLinks: 'userMenuLinks',
@@ -34,7 +36,14 @@ describe("AppController", function() {
     slug.resolve({
       id: 1,
       slug: '1111',
-      partner_slug: 'partner'
+      partner_slug: 'partner',
+      name: 'myLocation',
+      address1: '723 8th St SE',
+      address2: '',
+      city: 'Washington',
+      state: 'DC',
+      zip: '20003',
+      partner_name: 'a partner'
     });
     spyOn(Context, 'getCurrentMerchantLocation').and.returnValue(slug.promise);
 
@@ -49,6 +58,8 @@ describe("AppController", function() {
     spyOn(Context, 'getMerchantLocations').and.returnValue(locations.promise);
 
     spyOn(Context, 'getCurrentMerchantSlug').and.returnValue('1111');
+
+    spyOn(MixPanelService, 'initialize').and.returnValue();
   }));
 
 
@@ -65,7 +76,7 @@ describe("AppController", function() {
   }));
 
   it('initializes the merchant slug', inject(function($httpBackend) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111'
       }
@@ -78,7 +89,7 @@ describe("AppController", function() {
   }));
 
   it('initializes the body id', inject(function($document) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111',
         partner_slug: 'partner'
@@ -93,7 +104,7 @@ describe("AppController", function() {
   }));
 
   it('initializes the title', inject(function($document) {
-    $httpBackend.expectGET('http://server:80/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111',
         partner_slug: 'partner',
@@ -108,6 +119,26 @@ describe("AppController", function() {
     $httpBackend.flush();
 
     expect($document[0].title).toEqual('Partner template - myLocation');
+  }));
+
+  it('initializes mix panel', inject(function(MixPanelService) {
+    $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
+      {
+        slug: '1111',
+        partner_slug: 'partner',
+        partner_name: 'Partner',
+        product_name: 'template',
+        name: 'myLocation'
+      }
+    ],
+      mixpanel_token: '1234'
+    }});
+
+    var controller = $controller('AppController');
+    $rootScope.$digest();
+    $httpBackend.flush();
+
+    expect(MixPanelService.initialize).toHaveBeenCalledWith('1234', { 'Merchant name': 'myLocation - 723 8th St SE, Washington, DC', 'Brand': 'a partner', 'Visit type': 'Return visit' });
   }));
 
   describe('authentication redirect', function() {

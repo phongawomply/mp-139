@@ -28,8 +28,13 @@ gulp.task('build:css', function() {
     .pipe(gulp.dest(directories.css));
 });
 
-gulp.task('build:images', function() {
-  return gulp.src([directories.src + '/**/*.png'], {base: directories.src})
+gulp.task('build:images:common', function() {
+  return gulp.src([directories.src + '/common/**/*.png'], {base: directories.src + '/common'})
+    .pipe(gulp.dest(directories.build));
+});
+
+gulp.task('build:images:components', function() {
+  return gulp.src([directories.src + '/components/**/*.png'], {base: directories.src + '/components'})
     .pipe(gulp.dest(directories.build));
 });
 
@@ -42,5 +47,4 @@ gulp.task('build:watch', function() {
   gulp.watch(directories.src + '/**/*.js', ['build:js']);
   gulp.watch(directories.src + '/**/*.html', ['build:html']);
   gulp.watch(directories.src + '/**/*.sass', ['build:css']);
-  gulp.watch(directories.src + '/**/*.sass', ['build:images']);
 });
