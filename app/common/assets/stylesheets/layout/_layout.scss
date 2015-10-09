@@ -1,0 +1,24 @@
+body {
+  background-color: $body-background;
+  color: $body-font-color;
+  min-height: $body-min-height;
+  width: $body-width;
+
+  .layout-container {
+    box-shadow: $layout-box-shadow;
+    background: $layout-background;
+    width: $layout-width;
+    height: $layout-height;
+
+    .view-layout {
+      background: $view-layout-background;
+      position: $view-layout-position;
+      top: $view-layout-top;
+      left: $view-layout-left;
+      bottom: $view-layout-bottom;
+      right: $view-layout-right;
+      overflow: $view-layout-overflow;
+      padding: $view-layout-padding;
+    }
+  }
+}

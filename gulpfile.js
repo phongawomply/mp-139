@@ -1,10 +1,10 @@
 
 var gulp        = require('gulp'),
-    del         = require('del'),
-    require_dir = require('require-dir'),
-    vinyl_paths = require('vinyl-paths'),
-    directories = require('./gulp-tasks/directories.js'),
-    sequence    = require('run-sequence');
+  del         = require('del'),
+  require_dir = require('require-dir'),
+  vinyl_paths = require('vinyl-paths'),
+  directories = require('./gulp-tasks/directories.js'),
+  sequence    = require('run-sequence');
 
 require_dir('./gulp-tasks');
 /**
@@ -23,12 +23,13 @@ gulp.task('asset', ['gc', 'sg']);
  * Copy all third party libraries
  */
 gulp.task('libraries', ['library:angular',
-                        'library:angular-route',
-                        'library:angular-aria',
-                        'library:angular-animate',
-                        'library:angular-material',
-                        'library:underscore',
-                        'library:moment']);
+  'library:angular-route',
+  'library:angular-aria',
+  'library:angular-animate',
+  'library:angular-material',
+  'library:angular-mocks',
+  'library:underscore',
+  'library:moment']);
 /**
  * Clean up the build directories
  */
@@ -44,18 +45,32 @@ gulp.task('clean:coverage', function() {
     .pipe(vinyl_paths(del));
 });
 /**
- * Watch the files to biuld
+ * Watch the files to build
  */
 gulp.task('watch', ['build:watch']);
 /**
- * Build the JS and HTML
+ * Clean and build all app assets
  */
-gulp.task('build', ['build:js', 'build:html', 'build:css']);
+gulp.task('build', function(cb) {
+  sequence('clean',
+    [
+      'build:js',
+      'build:html',
+      'build:index',
+      'build:css',
+      'build:images:common',
+      'build:images:components',
+      'build:favicon',
+      'asset',
+      'libraries'
+    ],
+    cb);
+});
 /**
  * Setup the test environment
  */
 gulp.task('test:karma:setup', function(cb) {
-  sequence('clean', 'clean:coverage', 'build', 'gc', 'libraries', 'library:angular-mocks', cb);
+  sequence('build', ['clean:coverage', 'library:angular-mocks'], cb);
 });
 /**
  * Test the files for development
@@ -65,18 +80,9 @@ gulp.task('test:karma:dev', function() {
   sequence('test:karma:setup', 'test:karma');
 });
 /**
- * Test the files for release
- * which tests the concat file
- */
-gulp.task('test:karma:prod', function() {
-  sequence('test:karma:setup', 'test:karma-concat');
-});
-/**
  * Run protractor tests
  */
-gulp.task('protractor', function() {
-  sequence('test:protractor');
-});
+gulp.task('protractor', ['test:protractor']);
 /**
  * Serve the api blueprints
  */
@@ -85,13 +91,14 @@ gulp.task('blueprints', ['serve:blueprints']);
  * Setup the serve tasks
  */
 gulp.task('serve:setup', function(cb) {
-  sequence('asset', 'build', 'libraries', cb);
+  sequence('build', cb);
 });
 /**
  * Serve the files
+ * Must kill and restart on blueprints change
  */
 gulp.task('serve', function() {
-  sequence('serve:setup', 'web-server', 'watch');
+  sequence('serve:setup', 'serve:blueprints', 'web-server', 'watch');
 });
 /**
  * Serve the files with live reload
@@ -103,5 +110,5 @@ gulp.task('serve:livereload', function() {
  * Deploy the current branch build to testing
  */
 gulp.task('deploy', function() {
-  sequence('clean', 'build', 'gc', 'libraries', 'aws:deploy');
+  sequence('build', 'aws:deploy');
 });

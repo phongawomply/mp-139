@@ -1,0 +1,10 @@
+// main.scss
+// template styles
+@import 'base/base_module';
+@import 'utils/utils_module';
+@import 'layout/layout_module';
+@import 'components/components_module';
+@import 'vendors/vendors_module';
+// application specific styles
+@import '../../../components/assets/stylesheets/themes/themes_module';
+@import '../../../components/assets/stylesheets/pages/pages_module';
