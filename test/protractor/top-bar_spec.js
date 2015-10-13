@@ -8,7 +8,6 @@ describe('Top-bar page validation', function () {
   describe('top bar elements all present', function () {
     beforeEach(function () {
       browser.get('#/197330/nav1');
-      browser.sleep(3000);
     });
     it('gc logo is present', function () {
       expect(topBarPage.getGcLogo().isPresent()).toBeTruthy();

@@ -23,8 +23,6 @@ test:
   override:
     - gulp test:karma:dev
     - codeclimate-test-reporter < ./coverage/lcov.info
-    - gulp blueprints:
-        background: true
     - gulp serve:
         background: true
     - sleep 5
