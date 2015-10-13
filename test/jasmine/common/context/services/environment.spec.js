@@ -24,25 +24,6 @@ describe('Environment', function() {
       expect(apiPath).toEqual('http://local.womply.com:3000/api/0.1');
     }));
 
-    it('gets the production api path from the config', inject(function($injector) {
-
-      spyOn($injector, 'has').and.returnValue(true);
-      var iGet = $injector.get;
-
-      spyOn($injector, 'get').and.callFake(function(param) {
-        if (param == 'EnvConfig') {
-          return {
-            ApiBase: '/hello/world',
-            ApiPath: '/api/2'
-          };
-        } else {
-          return iGet(param);
-        }
-      });
-
-      expect(service.getApiPath()).toEqual('/hello/world/api/2');
-    }));
-
     it('gets the production api path', inject(function($location, ConfigLoader) {
       var defer = q.defer();
       defer.resolve({});
@@ -55,6 +36,59 @@ describe('Environment', function() {
 
       expect(service.getApiPath()).toEqual('http://hello/api/0.1');
     }));
+
+    describe('config', function() {
+      it('gets the default production api path from the config', inject(function($injector) {
+
+        spyOn($injector, 'has').and.returnValue(true);
+        var iGet = $injector.get;
+
+        spyOn($injector, 'get').and.callFake(function(param) {
+          if (param == 'EnvConfig') {
+            return {
+              API: {
+                default: {
+                  host: '/hello/world',
+                  path: '/api/2'
+                }
+              }
+            };
+          } else {
+            return iGet(param);
+          }
+        });
+
+        expect(service.getApiPath()).toEqual('/hello/world/api/2');
+      }));
+
+      it('gets the named production api path from the config', inject(function($injector) {
+
+        spyOn($injector, 'has').and.returnValue(true);
+        var iGet = $injector.get;
+
+        spyOn($injector, 'get').and.callFake(function(param) {
+          if (param == 'EnvConfig') {
+            return {
+              API: {
+                default: {
+                  host: '/hello/world',
+                  path: '/api/2'
+                },
+                talk: {
+                  host: 'talk.to.me',
+                  path: '/say/something'
+                }
+              }
+            };
+          } else {
+            return iGet(param);
+          }
+        });
+
+        expect(service.getApiPath().for.talk()).toEqual('talk.to.me/say/something');
+      }));
+    });
+
   });
 
   describe('getInsightsPath', function() {
