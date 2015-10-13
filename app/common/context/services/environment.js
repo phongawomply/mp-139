@@ -27,6 +27,26 @@ angular.module('womply')
       /**
        * Get the API path as a default or as a named configuration
        *
+       * The override environment configuration for the API definitions
+       * should follow the following:
+       *
+       * API: {
+       *         default: {
+       *           host: '/hello/world',
+       *           path: '/api/2'
+       *         },
+       *         talk: {
+       *           host: 'talk.to.me',
+       *           path: '/say/something'
+       *         }
+       *       }
+       *
+       * from the configuration a URL is created for every key accessible by function, e.g:
+       *
+       * getApiPath().from.talk();
+       *
+       * the above call will return the API URL for the talk value
+       *
        * @returns {String} - fluent api object which extends a String
        */
       getApiPath: function() {
@@ -56,7 +76,7 @@ angular.module('womply')
 
         var str = new String(apiPath('default')());
 
-        str.by = by;
+        str.for = by;
 
         return str;
 

@@ -85,7 +85,7 @@ describe('Environment', function() {
           }
         });
 
-        expect(service.getApiPath().by.talk()).toEqual('talk.to.me/say/something');
+        expect(service.getApiPath().for.talk()).toEqual('talk.to.me/say/something');
       }));
     });
 
