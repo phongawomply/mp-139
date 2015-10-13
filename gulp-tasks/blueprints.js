@@ -30,7 +30,7 @@ gulp.task('concat:blueprint', ['clean:blueprint'], function() {
 /**
  * Serve the blueprints
  */
-gulp.task('serve:blueprints', ['concat:blueprint'], function() {
+gulp.task('blueprints', ['concat:blueprint'], function() {
   var processResource = function(resource) {
     var path = resource.uriTemplate.split('{?')[0].replace(new RegExp("}", "g"), "").replace(new RegExp("{", "g"), ":");
 

@@ -84,10 +84,6 @@ gulp.task('test:karma:dev', function() {
  */
 gulp.task('protractor', ['test:protractor']);
 /**
- * Serve the api blueprints
- */
-gulp.task('blueprints', ['serve:blueprints']);
-/**
  * Setup the serve tasks
  */
 gulp.task('serve:setup', function(cb) {
@@ -98,13 +94,19 @@ gulp.task('serve:setup', function(cb) {
  * Must kill and restart on blueprints change
  */
 gulp.task('serve', function() {
-  sequence('serve:setup', 'serve:blueprints', 'web-server', 'watch');
+  sequence('serve:setup', 'web-server', 'watch');
 });
 /**
  * Serve the files with live reload
  */
 gulp.task('serve:livereload', function() {
   sequence('serve:setup', 'web-server:livereload', 'watch', 'livereload');
+});
+/**
+ * Serve the api blueprints
+ */
+gulp.task('serve:blueprints', function() {
+  sequence('serve:setup', 'blueprints', 'web-server', 'watch');
 });
 /**
  * Deploy the current branch build to testing
