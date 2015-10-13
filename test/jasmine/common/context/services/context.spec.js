@@ -6,6 +6,7 @@ describe('Context', function() {
 
   var merchantLocations = [{id: 1, slug:'x', partner_slug:'x'}, {id: 5, slug: 'y', partner_slug: 'y'}];
   var user = {id: 1};
+  var token = '123456';
   var rootScope, httpBackend, q, location;
   beforeEach(inject(function($rootScope, $q, $httpBackend, $location, Context, Environment) {
     service = Context;
@@ -219,6 +220,7 @@ describe('Context', function() {
         var multiSpy = jasmine.createSpy();
         $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
           data: {
+            mixpanel_token: token,
             merchant_locations: merchantLocations,
             user: user
           }
@@ -232,6 +234,7 @@ describe('Context', function() {
         rootScope.$digest();
 
         expect(spy).toHaveBeenCalledWith({
+          mixpanel_token: token,
           merchant_locations: merchantLocations,
           user: user
         });
@@ -243,6 +246,7 @@ describe('Context', function() {
         var multiSpy = jasmine.createSpy();
         $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=1').respond({
           data: {
+            mixpanel_token: token,
             merchant_locations: merchantLocations,
             user: user
           }
@@ -258,6 +262,7 @@ describe('Context', function() {
         rootScope.$digest();
 
         expect(spy).toHaveBeenCalledWith({
+          mixpanel_token: token,
           merchant_locations: merchantLocations,
           user: user
         });

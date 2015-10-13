@@ -23,7 +23,7 @@ gulp.task('clean:blueprint', function() {
  * Concat the blueprints files together
  **/
 gulp.task('concat:blueprint', ['clean:blueprint'], function() {
-  return gulp.src([directories.blueprint + '/**/*.override.md', directories.blueprint + '/**/*.md', '!' + directories.blueprint + '/blueprint.concat.md', '!' + directories.blueprint + '/readme.md'])
+  return gulp.src([directories.blueprint + '/**/*.md', '!' + directories.blueprint + '/blueprint.concat.md', '!' + directories.blueprint + '/readme.md'])
     .pipe(concat('blueprint.concat.md'))
     .pipe(gulp.dest(directories.blueprint));
 });

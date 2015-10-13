@@ -1,10 +1,10 @@
 
 var gulp        = require('gulp'),
-  del         = require('del'),
-  require_dir = require('require-dir'),
-  vinyl_paths = require('vinyl-paths'),
-  directories = require('./gulp-tasks/directories.js'),
-  sequence    = require('run-sequence');
+    del         = require('del'),
+    require_dir = require('require-dir'),
+    vinyl_paths = require('vinyl-paths'),
+    directories = require('./gulp-tasks/directories.js'),
+    sequence    = require('run-sequence');
 
 require_dir('./gulp-tasks');
 /**
@@ -23,13 +23,12 @@ gulp.task('asset', ['gc', 'sg']);
  * Copy all third party libraries
  */
 gulp.task('libraries', ['library:angular',
-  'library:angular-route',
-  'library:angular-aria',
-  'library:angular-animate',
-  'library:angular-material',
-  'library:angular-mocks',
-  'library:underscore',
-  'library:moment']);
+                        'library:angular-route',
+                        'library:angular-aria',
+                        'library:angular-animate',
+                        'library:angular-material',
+                        'library:underscore',
+                        'library:moment']);
 /**
  * Clean up the build directories
  */

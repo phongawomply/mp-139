@@ -6,6 +6,7 @@ angular.module('womply')
 
     var merchantLocationsDefer = $q.defer();
     var userDefer = $q.defer();
+    var mixPanelToken = null;
 
     var merchantSlug = $location.path().split('/')[1];
     var callbacks = [];
@@ -32,9 +33,12 @@ angular.module('womply')
           merchantLocationsDefer.resolve(response.data.data.merchant_locations);
           userDefer.resolve(response.data.data.user);
 
+          mixPanelToken = response.data.data.mixpanel_token;
+
           _.each(callbacks, function(cb) {
             if (_.isFunction(cb)) {
               cb({
+                mixpanel_token: response.data.data.mixpanel_token,
                 merchant_locations: response.data.data.merchant_locations,
                 user: response.data.data.user
               })
@@ -117,6 +121,7 @@ angular.module('womply')
             })
             .then(function(locations) {
               callback({
+                mixpanel_token: mixPanelToken,
                 merchant_locations: locations,
                 user: user
               })
