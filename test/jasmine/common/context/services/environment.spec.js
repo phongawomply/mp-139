@@ -24,7 +24,18 @@ describe('Environment', function() {
       expect(apiPath).toEqual('http://local.womply.com:3000/api/0.1');
     }));
 
-    it('gets the production api path', inject(function($location, ConfigLoader) {
+    it('gets the production api path', inject(function($injector, $location, ConfigLoader) {
+      var iGet = $injector.get;
+
+      spyOn($injector, 'get').and.callFake(function(param) {
+        if (param == 'EnvConfig') {
+          return {
+          };
+        } else {
+          return iGet(param);
+        }
+      });
+
       var defer = q.defer();
       defer.resolve({});
       spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
