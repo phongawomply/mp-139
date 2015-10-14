@@ -23,45 +23,14 @@ gulp.task('clean:blueprint', function() {
  * Concat the blueprints files together
  **/
 gulp.task('concat:blueprint', ['clean:blueprint'], function() {
-  return gulp.src([directories.blueprint + '/**/*.override.md', directories.blueprint + '/**/*.md', '!' + directories.blueprint + '/blueprint.concat.md', '!' + directories.blueprint + '/readme.md'])
+  return gulp.src([directories.blueprint + '/**/*.md', '!' + directories.blueprint + '/blueprint.concat.md', '!' + directories.blueprint + '/readme.md'])
     .pipe(concat('blueprint.concat.md'))
     .pipe(gulp.dest(directories.blueprint));
 });
 /**
  * Serve the blueprints
  */
-//gulp.task('serve:blueprints', ['concat:blueprint'], function () {
-//  var mockServer = new ApiMock ( {
-//    blueprintPath: 'test/blueprints/blueprint.concat.md',
-//    options: {
-//      'port': 3000,
-//      'cors-disable': true
-//    }
-//  });
-//  mockServer.app.all('*', function(req, res, next){
-//    if (!req.get('Origin')) return next();
-//    res.set('Access-Control-Allow-Origin', 'http://local.womply.com:' + config.server_port);
-//    res.set('Access-Control-Allow-Methods', 'GET, POST');
-//    res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
-//    res.set('Access-Control-Allow-Credentials', 'true');
-//    if ('OPTIONS' == req.method) return res.send(200);
-//    //Only works for Irish Channel Slug/ID
-//    if(req.params[0].split('/')[4] === '250') {
-//      res.json({data: null});
-//    } else {
-//      // Uncomment this to test slow loading
-//      // setTimeout(function() {
-//      //   next();
-//      // }, 1000)
-//      next();
-//    }
-//  });
-//
-//  mockServer.run();
-//
-//});
-
-gulp.task('serve:blueprints', ['concat:blueprint'], function() {
+gulp.task('blueprints', ['concat:blueprint'], function() {
   var processResource = function(resource) {
     var path = resource.uriTemplate.split('{?')[0].replace(new RegExp("}", "g"), "").replace(new RegExp("{", "g"), ":");
 
@@ -140,9 +109,9 @@ gulp.task('serve:blueprints', ['concat:blueprint'], function() {
         res.json({data: null});
       } else {
         // Uncomment this to test slow loading
-        // setTimeout(function() {
-        //   next();
-        // }, 1000)
+        //setTimeout(function() {
+        //  next();
+        //}, 1000)
         next();
       }
     });

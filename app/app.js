@@ -2,7 +2,7 @@ angular.module('womply')
   /**
    * Set the $http request to allow for XHR
    */
-  .config(function($httpProvider, $routeProvider) {
+  .config(function($httpProvider, $routeProvider, $mdThemingProvider) {
     $httpProvider.defaults.withCredentials = true;
     $routeProvider
       .when('/:slug/nav1', {
