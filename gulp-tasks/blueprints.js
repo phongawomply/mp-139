@@ -109,10 +109,10 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
         res.json({data: null});
       } else {
         // Uncomment this to test slow loading
-        setTimeout(function() {
-          next();
-        }, 1000)
-        //next();
+        //setTimeout(function() {
+        //  next();
+        //}, 1000)
+        next();
       }
     });
 
