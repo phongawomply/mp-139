@@ -44,18 +44,32 @@ gulp.task('clean:coverage', function() {
     .pipe(vinyl_paths(del));
 });
 /**
- * Watch the files to biuld
+ * Watch the files to build
  */
 gulp.task('watch', ['build:watch']);
 /**
- * Build the JS and HTML
+ * Clean and build all app assets
  */
-gulp.task('build', ['build:js', 'build:html', 'build:css', 'build:images:common', 'build:images:components', 'build:favicon']);
+gulp.task('build', function(cb) {
+  sequence('clean',
+    [
+      'build:js',
+      'build:html',
+      'build:index',
+      'build:css',
+      'build:images:common',
+      'build:images:components',
+      'build:favicon',
+      'asset',
+      'libraries'
+    ],
+    cb);
+});
 /**
  * Setup the test environment
  */
 gulp.task('test:karma:setup', function(cb) {
-  sequence('clean', 'clean:coverage', 'build', 'gc', 'libraries', 'library:angular-mocks', cb);
+  sequence('build', ['clean:coverage', 'library:angular-mocks'], cb);
 });
 /**
  * Test the files for development
@@ -65,30 +79,18 @@ gulp.task('test:karma:dev', function() {
   sequence('test:karma:setup', 'test:karma');
 });
 /**
- * Test the files for release
- * which tests the concat file
- */
-gulp.task('test:karma:prod', function() {
-  sequence('test:karma:setup', 'test:karma-concat');
-});
-/**
  * Run protractor tests
  */
-gulp.task('protractor', function() {
-  sequence('test:protractor');
-});
-/**
- * Serve the api blueprints
- */
-gulp.task('blueprints', ['serve:blueprints']);
+gulp.task('protractor', ['test:protractor']);
 /**
  * Setup the serve tasks
  */
 gulp.task('serve:setup', function(cb) {
-  sequence('asset', 'build', 'libraries', cb);
+  sequence('build', cb);
 });
 /**
  * Serve the files
+ * Must kill and restart on blueprints change
  */
 gulp.task('serve', function() {
   sequence('serve:setup', 'web-server', 'watch');
@@ -100,8 +102,14 @@ gulp.task('serve:livereload', function() {
   sequence('serve:setup', 'web-server:livereload', 'watch', 'livereload');
 });
 /**
+ * Serve the api blueprints
+ */
+gulp.task('serve:blueprints', function() {
+  sequence('serve:setup', 'blueprints', 'web-server', 'watch');
+});
+/**
  * Deploy the current branch build to testing
  */
 gulp.task('deploy', function() {
-  sequence('clean', 'build', 'gc', 'libraries', 'aws:deploy');
+  sequence('build', 'aws:deploy');
 });
