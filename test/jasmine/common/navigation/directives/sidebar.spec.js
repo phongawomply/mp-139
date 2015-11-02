@@ -16,10 +16,6 @@ describe('SideBar', function() {
 
   var element, scope, rootScope;
 
-  beforeEach(inject(function($rootScope) {
-    rootScope = $rootScope;
-  }));
-
   describe('sets up navigation', function() {
     beforeEach(inject(function($rootScope, $compile) {
       rootScope = $rootScope;
@@ -30,6 +26,12 @@ describe('SideBar', function() {
           name: 'nav1',
           route: 'nav1',
           href: 'nav1'
+        },
+        {
+          id: '2',
+          name: 'nav2',
+          route: 'nav2',
+          href: 'nav2'
         }
       ];
 
@@ -45,7 +47,7 @@ describe('SideBar', function() {
     });
 
     it('sets the active navigation', function() {
-      expect(setActiveSpy).toHaveBeenCalled();
+      expect(setActiveSpy.calls.count()).toEqual(1);
     });
 
     it('sets active when location changes', inject(function($rootScope) {
@@ -92,5 +94,4 @@ describe('SideBar', function() {
 
     expect(navigationRenderSpy).not.toHaveBeenCalled();
   }));
-
 });

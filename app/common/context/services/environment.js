@@ -43,7 +43,7 @@ angular.module('womply')
        *
        * from the configuration a URL is created for every key accessible by function, e.g:
        *
-       * getApiPath().from.talk();
+       * getApiPath().for.talk();
        *
        * the above call will return the API URL for the talk value
        *
