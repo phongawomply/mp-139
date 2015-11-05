@@ -38,7 +38,7 @@ angular.module('womply')
          */
         locationChanged: '&'
       },
-      templateUrl: '/html/common/navigation/directives/topbar.html',
+      templateUrl: 'html/common/navigation/directives/topbar.html',
       link: function ($scope, $element, $attr) {
 
         $attr.$observe('applicationId', function() {

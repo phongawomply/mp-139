@@ -28,7 +28,7 @@ module.exports = function(config) {
     },
     ngHtml2JsPreprocessor: {
       moduleName: 'templates',
-      stripPrefix: 'build'
+      stripPrefix: 'build/'
     },
     coverageReporter: {
       type: 'lcov',

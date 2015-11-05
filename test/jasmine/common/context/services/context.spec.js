@@ -3,6 +3,7 @@ describe('Context', function() {
 
   disableModuleRun('womply');
   beforeEach(module('womply'));
+  beforeEach(module('templates'));
 
   var merchantLocations = [{id: 1, slug:'x', partner_slug:'x'}, {id: 5, slug: 'y', partner_slug: 'y'}];
   var user = {id: 1};
