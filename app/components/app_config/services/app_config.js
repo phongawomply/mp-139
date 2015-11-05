@@ -1,5 +1,5 @@
 angular.module('womply')
-  .factory('AppConfig', ['$q', '$location', 'Context', 'Environment', function($q, $location, Context, Environment) {
+  .factory('AppConfig', ['$q', '$rootScope', '$location', 'Context', 'Environment', function($q, $rootScope, $location, Context, Environment) {
     var defer = $q.defer();
 
     var slug = Context.getCurrentMerchantSlug();
@@ -29,8 +29,8 @@ angular.module('womply')
       NavigationSelected: function() {
         var self = this;
         var slug = Context.getCurrentMerchantSlug();
-
-        $location.path('/' + slug + '/' + self.route)
+        $location.path('/' + slug + '/' + self.route);
+        $rootScope.$apply();
       }
     });
 

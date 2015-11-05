@@ -4,14 +4,6 @@ angular.module('womply')
    */
   .config(function($httpProvider, $routeProvider, $mdThemingProvider) {
     $httpProvider.defaults.withCredentials = true;
-    $routeProvider
-      .when('/:slug/nav1', {
-        template: '<p>Nav 1</p><chart data-chart-id="myId"></chart>'
-      })
-      .when('/:slug/nav2', {
-        template: '<p>Nav 2</p>'
-      });
-
     // Check the response and redirect to
     $httpProvider.interceptors.push(['$q', '$window', 'Environment', function($q, $window, Environment) {
       return {
