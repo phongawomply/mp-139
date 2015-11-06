@@ -49,8 +49,14 @@ gulp.task('build:favicon', function() {
     .pipe(gulp.dest(directories.build));
 });
 
+gulp.task('build:favicon', function() {
+  return gulp.src(directories.src + '/common/assets/images/favicon.ico')
+    .pipe(gulp.dest(directories.build));
+});
+
 gulp.task('build:watch', function() {
   gulp.watch(directories.src + '/**/*.js', ['build:js']);
   gulp.watch(directories.src + '/**/*.html', ['build:html']);
   gulp.watch(directories.src + '/**/*.scss', ['build:css']);
+  gulp.watch(directories.src + '/**/*.png', ['build:images']);
 });

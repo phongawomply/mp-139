@@ -1,10 +1,9 @@
-
-var gulp        = require('gulp'),
-    del         = require('del'),
-    require_dir = require('require-dir'),
-    vinyl_paths = require('vinyl-paths'),
-    directories = require('./gulp-tasks/directories.js'),
-    sequence    = require('run-sequence');
+var gulp        = require('gulp');
+var del         = require('del');
+var require_dir = require('require-dir');
+var vinyl_paths = require('vinyl-paths');
+var directories = require('./gulp-tasks/directories.js');
+var sequence    = require('run-sequence');
 
 require_dir('./gulp-tasks');
 /**
@@ -18,7 +17,7 @@ gulp.task('sg', ['sg:images', 'sg:fonts', 'sg:css']);
 /**
  * Copy all assets
  */
-gulp.task('asset', ['gc', 'sg']);
+gulp.task('asset', ['gc', 'sg', 'ac']);
 /**
  * Copy all third party libraries
  */
