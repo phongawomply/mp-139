@@ -108,6 +108,12 @@ gulp.task('serve:blueprints', function() {
   sequence('serve:setup', 'blueprints', 'web-server', 'watch');
 });
 /**
+ * Serve the api blueprints
+ */
+gulp.task('serve:apis-proxy', function() {
+  sequence('serve:setup', 'apis-proxy', 'web-server', 'watch');
+});
+/**
  * Deploy the current branch build to testing
  */
 gulp.task('deploy', function() {
