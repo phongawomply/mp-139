@@ -108,6 +108,12 @@ will refresh itself.
 ```
 Serve the application on port 9999.
 
+##### serve:apis-proxy
+```js
+	gulp serve:apis-proxy
+```
+Proxy api requests.  Configuration is in apis-proxy.js.
+
 ##### test:karma:dev
 ```js
 	gulp test:karma:dev
