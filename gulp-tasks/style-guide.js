@@ -21,7 +21,7 @@ gulp.task('sg:fonts', function () {
 });
 
 gulp.task('sg:css', function() {
-  gulp.src('./node_modules/@womply/styleguide-ui/**/styleguide.scss')
+  return gulp.src('./node_modules/@womply/styleguide-ui/styleguide.scss')
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(gulp.dest(directories.css));
 });
