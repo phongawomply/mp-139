@@ -1,7 +1,8 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/angular-material.min.css">
-    <link rel="stylesheet" href="css/global-components-ui.css">
+    <!--<link rel="stylesheet" href="css/global-components-ui.css">-->
+    <link rel="stylesheet" href="css/gmd-nav.css">
     <link rel="stylesheet" href="css/app-styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900"/>
 
@@ -16,14 +17,17 @@
 
     <div class="layout-container">
 
-      <top-bar
-          data-application-id="{{app.applicationId}}"
-          data-business-menu-links="app.businessMenuLinks"
-          data-user-menu-links="app.userMenuLinks"
-          data-location-changed="app.locationChanged"></top-bar>
+      <!--<top-bar-->
+          <!--data-application-id="{{app.applicationId}}"-->
+          <!--data-business-menu-links="app.businessMenuLinks"-->
+          <!--data-user-menu-links="app.userMenuLinks"-->
+          <!--data-location-changed="app.locationChanged"></top-bar>-->
 
-      <side-bar data-navigation-links="app.navigationLinks" data-navigation-selected="app.navigationSelected"></side-bar>
-      <div class="main-section view-layout" ng-view></div>
+      <!--<side-bar data-navigation-links="app.navigationLinks" data-navigation-selected="app.navigationSelected"></side-bar>-->
+      <gmd-nav id="gmd-container" class="gmd-nav" layout="column" flex>
+        <div ng-view></div>
+      </gmd-nav>
+
     </div>
 
     <!-- script tags -->
@@ -35,6 +39,7 @@
     <script src="lib/angular-animate.min.js"></script>
     <script src="lib/angular-material.min.js"></script>
     <script src="lib/global-components-ui.js"></script>
+    <script src="lib/gmd-nav.min.js"></script>
     <script src="js/womply.min.js"></script>
     <!-- end script tags -->
   </body>

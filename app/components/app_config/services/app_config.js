@@ -2,7 +2,6 @@ angular.module('womply')
   .factory('AppConfig', ['$q', '$rootScope', '$location', 'Context', 'Environment', function($q, $rootScope, $location, Context, Environment) {
     var defer = $q.defer();
 
-    var slug = Context.getCurrentMerchantSlug();
     defer.resolve({
       ApplicationId: 'insights',
       UserMenuLinks: [
@@ -28,9 +27,10 @@ angular.module('womply')
       ],
       NavigationSelected: function() {
         var self = this;
-        var slug = Context.getCurrentMerchantSlug();
-        $location.path('/' + slug + '/' + self.route);
-        $rootScope.$apply();
+        Context.initialized(function(context) {
+          $location.path('/' + context.merchantSlug() + '/' + self.route);
+          $rootScope.$apply();
+        });
       }
     });
 

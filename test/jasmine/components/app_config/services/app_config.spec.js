@@ -1,6 +1,8 @@
 describe('AppConfig', function() {
   beforeEach(module('womply'));
 
+  mock.context();
+
   var service;
   beforeEach(inject(function(AppConfig) {
     service = AppConfig;
@@ -21,24 +23,9 @@ describe('AppConfig', function() {
     expect(_.isObject(config)).toEqual(true);
   }));
 
-  it('gets the current merchant slug on navigation selected', inject(function($rootScope, $location, Context) {
-    spyOn($location, 'path').and.returnValue('');
-    spyOn(Context, 'getCurrentMerchantSlug').and.returnValue('mySlug');
-
-    var config;
-    service.then(function(conf) {
-      config = conf;
-    });
-
-    $rootScope.$digest();
-
-    config.NavigationSelected.apply({route: 'myRoute'});
-    expect(Context.getCurrentMerchantSlug).toHaveBeenCalled();
-  }));
-
   it('sets the path on navigation selected', inject(function($rootScope, $location, Context) {
     spyOn($location, 'path').and.returnValue('');
-    spyOn(Context, 'getCurrentMerchantSlug').and.returnValue('mySlug');
+    spyOn(window.mock.context.contextModel, 'merchantSlug').and.returnValue('mySlug');
 
     var config;
     service.then(function(conf) {
@@ -48,6 +35,7 @@ describe('AppConfig', function() {
     $rootScope.$digest();
 
     config.NavigationSelected.apply({route: 'myRoute'});
+    initialize();
     expect($location.path).toHaveBeenCalledWith('/mySlug/myRoute');
   }));
 });

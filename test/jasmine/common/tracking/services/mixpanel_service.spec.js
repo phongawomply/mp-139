@@ -1,5 +1,5 @@
 describe('MixPanelService', function() {
-  beforeEach(module('womply'));
+  setup();
 
   window.mixpanel = {
     init: function () {},

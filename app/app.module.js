@@ -1,1 +1,1 @@
-angular.module('womply', ['ngRoute', 'ngMaterial']);
+angular.module('womply', ['ngRoute', 'ngMaterial', 'womply.gmd-nav']);
