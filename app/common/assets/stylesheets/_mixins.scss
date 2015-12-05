@@ -17,19 +17,3 @@ p {
   font-size: $size;
   font-size: calculateRem($size);
 }
-
-/*
-Border mixin
-Usage:
-
-p {
-  @include border-all(width, style, color);
-}
-
-*/
-
-@mixin border-all($width, $style, $color) {
-  border-width: $width;
-  border-style: $style;
-  border-color: $color;
-}
