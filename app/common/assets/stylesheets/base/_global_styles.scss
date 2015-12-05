@@ -1,3 +1,12 @@
+//
+// Add all HTML elements basic styles here
+// Variable names should be prefixed with "base-"
+//
+
+//
+// Variables
+//
+
 .bold {
   font-weight: bold;
 }
@@ -14,4 +23,14 @@
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+
+.vertically-centered {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
