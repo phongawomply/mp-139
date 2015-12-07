@@ -16,16 +16,9 @@
   </head>
   <body data-ng-app="womply" data-ng-controller="AppController as app">
 
-      <!--<top-bar-->
-          <!--data-application-id="{{app.applicationId}}"-->
-          <!--data-business-menu-links="app.businessMenuLinks"-->
-          <!--data-user-menu-links="app.userMenuLinks"-->
-          <!--data-location-changed="app.locationChanged"></top-bar>-->
-
-      <!--<side-bar data-navigation-links="app.navigationLinks" data-navigation-selected="app.navigationSelected"></side-bar>-->
-      <gmd-nav id="gmd-container" class="gmd-nav" layout="column" flex>
-        <div ng-view></div>
-      </gmd-nav>
+    <gmd-nav id="gmd-container" class="layout-gmd-nav" layout="column" flex>
+      <div ng-view></div>
+    </gmd-nav>
 
     <!-- script tags -->
     <script src="lib/moment.min.js"></script>
