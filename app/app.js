@@ -23,15 +23,7 @@ angular.module('womply')
    */
   .controller('AppController', ['$document', 'ConfigLoader', 'ContextService', 'MixPanelService', function($document, ConfigLoader, ContextService, MixPanelService) {
     var self = this;
-    ConfigLoader.initialize()
-      .then(function(config) {
-        self.userMenuLinks = config.UserMenuLinks;
-        self.applicationId = config.ApplicationId;
-        self.navigationLinks = config.NavigationLinks;
-        self.navigationSelected = config.NavigationSelected;
-        self.businessMenuLinks = config.BusinessMenuLinks;
-        self.locationChanged = config.LocationChanged;
-      });
+    ConfigLoader.executeSideBarConfig();
 
     ContextService.initialized(function(context) {
       var location = context.locations().find(context.merchantSlug());

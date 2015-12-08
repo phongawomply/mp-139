@@ -4,8 +4,10 @@ describe("AppController", function() {
   var $httpBackend;
   var $location;
   var $q;
+  var configLoader;
 
   setup();
+  mock.context();
 
   beforeEach(inject(function($injector){
     // The injector unwraps the underscores (_) from around the parameter names when matching
@@ -16,19 +18,9 @@ describe("AppController", function() {
     $q = $injector.get('$q');
   }));
 
-  mock.context();
-
-  beforeEach(inject(function($q, ConfigLoader, ContextService, ContextModel, MixPanelService) {
-    var defer = $q.defer();
-    defer.resolve({
-      UserMenuLinks: 'userMenuLinks',
-      ApplicationId: 'applicationId',
-      NavigationLinks: 'navigationLinks',
-      NavigationSelected: 'navigationSelected',
-      LocationChanged: 'locationChanged'
-    });
-
-    spyOn(ConfigLoader, 'initialize').and.returnValue(defer.promise);
+  beforeEach(inject(function(ConfigLoader, Context, MixPanelService) {
+    configLoader = ConfigLoader;
+    spyOn(ConfigLoader, 'executeSideBarConfig');
 
     spyOn(MixPanelService, 'initialize').and.returnValue();
   }));
@@ -38,12 +30,7 @@ describe("AppController", function() {
     spyOn(ContextService, 'initialize').and.returnValue();
     var controller = $controller('AppController');
     $rootScope.$digest();
-
-    expect(controller.applicationId).toEqual('applicationId');
-    expect(controller.userMenuLinks).toEqual('userMenuLinks');
-    expect(controller.navigationLinks).toEqual('navigationLinks');
-    expect(controller.navigationSelected).toEqual('navigationSelected');
-    expect(controller.locationChanged).toEqual('locationChanged')
+    expect(configLoader.executeSideBarConfig).toHaveBeenCalled();
   }));
 
   it('initializes the title', inject(function($document, ContextService) {
