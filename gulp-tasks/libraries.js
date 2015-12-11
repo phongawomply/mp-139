@@ -47,3 +47,9 @@ gulp.task('library:angular-mocks', function() {
   return gulp.src('./node_modules/angular-mocks/angular-mocks.js')
     .pipe(gulp.dest(directories.test_lib));
 });
+
+gulp.task('library:bowser', function() {
+  return gulp.src(['./node_modules/bowser/bowser.min.js'])
+    .pipe(gulp.dest(directories.lib));
+});
+

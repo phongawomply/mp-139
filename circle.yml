@@ -23,10 +23,10 @@ test:
   override:
     - gulp test:karma:dev
     - coveralls < ./coverage/lcov.info
-    - gulp serve:blueprints:
-        background: true
-    - sleep 5
-    - gulp protractor
+#    - gulp serve:blueprints:
+#        background: true
+#    - sleep 5
+#    - gulp protractor
 
 # TODO: Uncomment the deployment stanza below to get CircleCI deploys working.
 #

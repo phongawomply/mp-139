@@ -28,7 +28,7 @@ gulp.task('build:index', function() {
 });
 
 gulp.task('build:css', function() {
-  return gulp.src([directories.src + '/**/*.scss'])
+  return gulp.src([directories.src + '/common/assets/stylesheets/app.scss'])
     .pipe(sass({indentedSyntax: false}).on('error', sass.logError))
     .pipe(concat('app-styles.css'))
     .pipe(gulp.dest(directories.css));

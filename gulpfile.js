@@ -17,7 +17,7 @@ gulp.task('sg', ['sg:images', 'sg:fonts', 'sg:css']);
 /**
  * Copy all assets
  */
-gulp.task('asset', ['gc', 'sg', 'ac']);
+gulp.task('asset', ['gc', 'sg', 'ac', 'gmd-nav']);
 /**
  * Copy all third party libraries
  */
@@ -27,7 +27,8 @@ gulp.task('libraries', ['library:angular',
                         'library:angular-animate',
                         'library:angular-material',
                         'library:underscore',
-                        'library:moment']);
+                        'library:moment',
+                        'library:bowser']);
 /**
  * Clean up the build directories
  */
