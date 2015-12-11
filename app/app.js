@@ -5,11 +5,11 @@ angular.module('womply')
   .config(function($httpProvider, $routeProvider, $mdThemingProvider) {
     $httpProvider.defaults.withCredentials = true;
     // Check the response and redirect to
-    $httpProvider.interceptors.push(['$q', '$window', 'Environment', function($q, $window, Environment) {
+    $httpProvider.interceptors.push(['$q', '$window', 'EnvironmentService', function($q, $window, EnvironmentService) {
       return {
         responseError: function (resp) {
           if (resp.status === 401) {
-            $window.location.replace(Environment.getInsightsPath());
+            $window.location.replace(EnvironmentService.getInsightsPath());
           }
 
           return $q.reject(resp);
@@ -21,7 +21,7 @@ angular.module('womply')
    * Main application controller which initialize the configuration and sets the
    * controller values
    */
-  .controller('AppController', ['$document', 'ConfigLoader', 'Context', 'MixPanelService', function($document, ConfigLoader, Context, MixPanelService) {
+  .controller('AppController', ['$document', 'ConfigLoader', 'ContextService', 'MixPanelService', function($document, ConfigLoader, ContextService, MixPanelService) {
     var self = this;
     ConfigLoader.initialize()
       .then(function(config) {
@@ -33,8 +33,8 @@ angular.module('womply')
         self.locationChanged = config.LocationChanged;
       });
 
-    Context.initialized(function(context) {
-      var location = context.findLocation(context.merchantSlug());
+    ContextService.initialized(function(context) {
+      var location = context.locations().find(context.merchantSlug());
 
       if(location && _.isString(location.partnerSlug())) {
         $document[0].title = location.partnerName() + " " + location.productName() + " - " + location.name();
