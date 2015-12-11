@@ -1,11 +1,9 @@
 describe('SideBarConfig', function() {
   beforeEach(module('womply'));
 
-  //mock.context();
-  var service, applicationService, navItems;
-  beforeEach(inject(function(SideBarConfig, ApplicationService, SideBarNavigationAPI) {
+  var service, navItems;
+  beforeEach(inject(function(SideBarConfig, SideBarNavigationAPI) {
     service = SideBarConfig;
-    applicationService = ApplicationService;
     service.call();
     SideBarNavigationAPI.onAppNavigationItemsChange(function(items) {
       navItems = items;

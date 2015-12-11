@@ -18,7 +18,7 @@ describe("AppController", function() {
     $q = $injector.get('$q');
   }));
 
-  beforeEach(inject(function(ConfigLoader, Context, MixPanelService) {
+  beforeEach(inject(function(ConfigLoader, MixPanelService) {
     configLoader = ConfigLoader;
     spyOn(ConfigLoader, 'executeSideBarConfig');
 
