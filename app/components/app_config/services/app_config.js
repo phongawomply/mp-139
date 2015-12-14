@@ -1,5 +1,5 @@
 angular.module('womply')
-  .factory('AppConfig', ['$q', '$rootScope', '$location', 'Context', 'Environment', function($q, $rootScope, $location, Context, Environment) {
+  .factory('AppConfig', ['$q', '$rootScope', '$location', 'ContextService', 'EnvironmentService', function($q, $rootScope, $location, ContextService, EnvironmentService) {
     var defer = $q.defer();
 
     defer.resolve({
@@ -7,7 +7,7 @@ angular.module('womply')
       UserMenuLinks: [
         {
           text: 'Logout',
-          href: Environment.getInsightsPath() + '/users/sign_out'
+          href: EnvironmentService.getInsightsPath() + '/users/sign_out'
         }
       ],
       ApiBase: 'http://local.womply.com:3000',
@@ -27,7 +27,7 @@ angular.module('womply')
       ],
       NavigationSelected: function() {
         var self = this;
-        Context.initialized(function(context) {
+        ContextService.initialized(function(context) {
           $location.path('/' + context.merchantSlug() + '/' + self.route);
           $rootScope.$apply();
         });

@@ -18,7 +18,7 @@ describe("AppController", function() {
 
   mock.context();
 
-  beforeEach(inject(function($q, ConfigLoader, Context, ContextModel, MixPanelService) {
+  beforeEach(inject(function($q, ConfigLoader, ContextService, ContextModel, MixPanelService) {
     var defer = $q.defer();
     defer.resolve({
       UserMenuLinks: 'userMenuLinks',
@@ -34,8 +34,8 @@ describe("AppController", function() {
   }));
 
 
-  it('initializes config loader', inject(function(Context) {
-    spyOn(Context, 'initialize').and.returnValue();
+  it('initializes config loader', inject(function(ContextService) {
+    spyOn(ContextService, 'initialize').and.returnValue();
     var controller = $controller('AppController');
     $rootScope.$digest();
 
@@ -46,7 +46,7 @@ describe("AppController", function() {
     expect(controller.locationChanged).toEqual('locationChanged')
   }));
 
-  it('initializes the title', inject(function($document, Context) {
+  it('initializes the title', inject(function($document, ContextService) {
     $httpBackend.expectGET('http://local.womply.com:3000/api/0.1/initialize?id=undefined').respond({data: {merchant_locations: [
       {
         slug: '1111',
@@ -87,24 +87,24 @@ describe("AppController", function() {
   }));
 
   describe('authentication redirect', function() {
-    it('redirects to insights for 401', inject(function($window, $http, $httpBackend, Environment) {
+    it('redirects to insights for 401', inject(function($window, $http, $httpBackend, EnvironmentService) {
       $httpBackend.expectGET('/test').respond(401);
 
       spyOn($window.location, 'replace').and.returnValue();
 
-      spyOn(Environment, 'getInsightsPath').and.returnValue('http://insights');
+      spyOn(EnvironmentService, 'getInsightsPath').and.returnValue('http://insights');
 
       $http.get('/test');
       $httpBackend.flush();
       expect($window.location.replace).toHaveBeenCalledWith('http://insights');
     }));
 
-    it('does not redirect to insights', inject(function($window, $http, $httpBackend, Environment) {
+    it('does not redirect to insights', inject(function($window, $http, $httpBackend, EnvironmentService) {
       $httpBackend.expectGET('/test').respond(200);
 
       spyOn($window.location, 'replace').and.returnValue();
 
-      spyOn(Environment, 'getInsightsPath').and.returnValue('http://insights');
+      spyOn(EnvironmentService, 'getInsightsPath').and.returnValue('http://insights');
 
       $http.get('/test');
       $httpBackend.flush();
@@ -112,12 +112,12 @@ describe("AppController", function() {
       expect($window.location.replace).not.toHaveBeenCalled();
     }));
 
-    it('does not redirect to insights for other errors', inject(function($window, $http, $httpBackend, Environment) {
+    it('does not redirect to insights for other errors', inject(function($window, $http, $httpBackend, EnvironmentService) {
       $httpBackend.expectGET('/test').respond(503);
 
       spyOn($window.location, 'replace').and.returnValue();
 
-      spyOn(Environment, 'getInsightsPath').and.returnValue('http://insights');
+      spyOn(EnvironmentService, 'getInsightsPath').and.returnValue('http://insights');
 
       $http.get('/test');
       $httpBackend.flush();

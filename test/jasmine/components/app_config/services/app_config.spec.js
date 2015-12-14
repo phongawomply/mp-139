@@ -23,7 +23,7 @@ describe('AppConfig', function() {
     expect(_.isObject(config)).toEqual(true);
   }));
 
-  it('sets the path on navigation selected', inject(function($rootScope, $location, Context) {
+  it('sets the path on navigation selected', inject(function($rootScope, $location, ContextService) {
     spyOn($location, 'path').and.returnValue('');
     spyOn(window.mock.context.contextModel, 'merchantSlug').and.returnValue('mySlug');
 
