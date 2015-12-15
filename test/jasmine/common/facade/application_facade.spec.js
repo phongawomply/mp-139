@@ -14,14 +14,14 @@ describe('Service: ApplicationFacade', function() {
   var EVENTS = null;
   var setProductPartnerAndSlug;
 
-  beforeEach(inject(function($injector, ContextModel, ProductListModel, PartnerModel, CONTEXT_EVENTS) {
+  beforeEach(inject(function($injector, ContextModel, ProductListModel, PartnerModel, APPLICATION_EVENTS) {
     setProductPartnerAndSlug = function(model) {
       model.products(new ProductListModel(products_data.data));
       model.partner(new PartnerModel(products_data.data.partner));
       model.merchantSlug(193);
     };
 
-    EVENTS = CONTEXT_EVENTS;
+    EVENTS = APPLICATION_EVENTS;
     contextModel = new ContextModel(context_data);
     setProductPartnerAndSlug(contextModel);
     contextService = $injector.get('ContextService');
@@ -330,6 +330,45 @@ describe('Service: ApplicationFacade', function() {
         service.subscribe(EVENTS.onPathChange, callback);
         expect(callback).toHaveBeenCalled();
         expect(path).toBe(mockedPath);
+      });
+    });
+
+    describe('onMixPanelTokenChange', function() {
+      var token;
+      var callback;
+      var deRegister;
+
+      beforeEach(inject(function($location) {
+        callback = jasmine.createSpy('onMixPanelTokenChange').and.callFake(function(l) {
+          token = l;
+        });
+        deRegister = service.subscribe(EVENTS.onMixPanelTokenChange, callback);
+        initializedCallback(contextModel);
+      }));
+
+      it('will get notified when it changes', inject(function(UserModel, ContextModel) {
+        expect(callback).toHaveBeenCalled();
+        expect(token).toBe(context_data.mixpanel_token);
+      }));
+
+      it('will not get notified when it does not change', function() {
+        callback.calls.reset();
+        expect(callback).not.toHaveBeenCalled();
+        initializedCallback(contextModel);
+        expect(callback).not.toHaveBeenCalled();
+      });
+
+      it('will get notified when subscribing if the value is present', function() {
+        callback.calls.reset();
+        expect(callback).not.toHaveBeenCalled();
+        deRegister();
+        initializedCallback(contextModel);
+        callback = jasmine.createSpy('onMixPanelTokenChange').and.callFake(function(l) {
+          token = l;
+        });
+        service.subscribe(EVENTS.onMixPanelTokenChange, callback);
+        expect(callback).toHaveBeenCalled();
+        expect(token).toBe(context_data.mixpanel_token);
       });
     });
 

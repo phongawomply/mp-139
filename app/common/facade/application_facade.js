@@ -3,11 +3,15 @@ angular.module('womply')
  * Facade that exposes the internal API's of gmd-nav
  */
   .factory('ApplicationFacade', [
-    'ContextService', 'SideBarNavigationAPI', 'CONTEXT_EVENTS',
-    function(ContextService, SideBarNavigationAPI, CONTEXT_EVENTS) {
+    'ContextService', 'SideBarNavigationAPI', 'APPLICATION_EVENTS',
+    function(ContextService, SideBarNavigationAPI, APPLICATION_EVENTS) {
       var eventMap = {};
 
-      _.each(CONTEXT_EVENTS, function(event) {
+      var isPrimitiveChanged = function(oldValue, newValue) {
+        return oldValue !== newValue;
+      };
+
+      _.each(APPLICATION_EVENTS, function(event) {
         var map = {
           callbacks: [],
           data: null,
@@ -20,9 +24,8 @@ angular.module('womply')
         };
         eventMap[event] = map;
       });
-      eventMap[CONTEXT_EVENTS.onPathChange].isModelChanged = function(oldPath, newPath) {
-        return oldPath !== newPath;
-      };
+      eventMap[APPLICATION_EVENTS.onPathChange].isModelChanged = isPrimitiveChanged;
+      eventMap[APPLICATION_EVENTS.onMixPanelTokenChange].isModelChanged = isPrimitiveChanged;
 
       var notifyOnModelObjectChange = function(newModelObject, event) {
         var map = eventMap[event];
@@ -42,7 +45,7 @@ angular.module('womply')
       };
 
       var subscribeToIndividualEvent = function(event, callback) {
-        if (!_.has(CONTEXT_EVENTS, event)) {
+        if (!_.has(APPLICATION_EVENTS, event)) {
           throw new Error('event:' + event + ' is not a valid event');
         }
 
@@ -82,18 +85,19 @@ angular.module('womply')
       };
 
       ContextService.initialized(function(context) {
-        notifyOnModelObjectChange(context.activeLocation(), CONTEXT_EVENTS.onActiveMerchantLocationChange);
-        notifyOnModelObjectChange(context.activeProduct(), CONTEXT_EVENTS.onActiveProductChange);
-        notifyOnModelObjectChange(context.partner(), CONTEXT_EVENTS.onActivePartnerChange);
-        notifyOnModelObjectChange(context.products(), CONTEXT_EVENTS.onProductsChange);
-        notifyOnModelObjectChange(context.locations(), CONTEXT_EVENTS.onMerchantLocationsChange);
-        notifyOnModelObjectChange(context.user(), CONTEXT_EVENTS.onUserChange);
-        notifyOnModelObjectChange(context.activePath(), CONTEXT_EVENTS.onPathChange);
+        notifyOnModelObjectChange(context.activeLocation(), APPLICATION_EVENTS.onActiveMerchantLocationChange);
+        notifyOnModelObjectChange(context.activeProduct(), APPLICATION_EVENTS.onActiveProductChange);
+        notifyOnModelObjectChange(context.partner(), APPLICATION_EVENTS.onActivePartnerChange);
+        notifyOnModelObjectChange(context.products(), APPLICATION_EVENTS.onProductsChange);
+        notifyOnModelObjectChange(context.locations(), APPLICATION_EVENTS.onMerchantLocationsChange);
+        notifyOnModelObjectChange(context.user(), APPLICATION_EVENTS.onUserChange);
+        notifyOnModelObjectChange(context.activePath(), APPLICATION_EVENTS.onPathChange);
+        notifyOnModelObjectChange(context.mixpanelToken(), APPLICATION_EVENTS.onMixPanelTokenChange);
       });
 
       return {
         /**
-         * Can subscribe to various app events. Looks at the CONTEXT_EVENTS for exhaustive
+         * Can subscribe to various app events. Looks at the APPLICATION_EVENTS for exhaustive
          * list of events.
          *
          * Subscription takes individual events and callbacks or array of events and callbacks.
@@ -137,12 +141,13 @@ angular.module('womply')
         sideBarNavigationConfig: SideBarNavigationAPI.appNavigationConfig
       }
     }
-  ]).constant('CONTEXT_EVENTS', {
+  ]).constant('APPLICATION_EVENTS', {
     onActiveMerchantLocationChange: 'onActiveMerchantLocationChange',
     onActiveProductChange: 'onActiveProductChange',
     onActivePartnerChange: 'onActivePartnerChange',
     onProductsChange: 'onProductsChange',
     onMerchantLocationsChange: 'onMerchantLocationsChange',
     onUserChange: 'onUserChange',
-    onPathChange: 'onPathChange'
+    onPathChange: 'onPathChange',
+    onMixPanelTokenChange: 'onMixPanelTokenChange'
   });

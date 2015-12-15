@@ -1,23 +1,25 @@
 window.mock = window.mock || {};
 
-window.mock.context = function(slug) {
+window.mock.application = function(slug) {
   slug = slug || '193';
+  window.application = window.application || {};
 
-  window.initialize = null;
+  window.application.initialize = null;
 
-  beforeEach(inject(function(ContextService, ContextModel, ProductListModel) {
-    var initializedCallback = [];
-    spyOn(ContextService, 'initialized').and.callFake(function(fn) {
-      initializedCallback.push(fn);
+  beforeEach(inject(function(ApplicationFacade, ContextModel, ProductListModel) {
+    var initializedCallback = {};
+    spyOn(ApplicationFacade, 'subscribe').and.callFake(function(event, fn) {
+      initializedCallback[event] = initializedCallback[event] || [];
+      initializedCallback[event].push(fn);
     });
 
-    window.mock.context.contextModel = new ContextModel(context_data);
-    window.mock.context.contextModel.merchantSlug(slug);
-    window.mock.context.contextModel.products(new ProductListModel(products_data.data));
+    window.mock.application.contextModel = new ContextModel(context_data);
+    window.mock.application.contextModel.merchantSlug(slug);
+    window.mock.application.contextModel.products(new ProductListModel(products_data.data));
 
-    window.initialize = function() {
-      _.each(initializedCallback, function(cb) {
-        cb(window.mock.context.contextModel);
+    window.application.initialize = function(event, data) {
+      _.each(initializedCallback[event], function(cb) {
+        cb(data);
       });
     };
 
