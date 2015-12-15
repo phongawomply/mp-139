@@ -21,24 +21,39 @@ angular.module('womply')
    * Main application controller which initialize the configuration and sets the
    * controller values
    */
-  .controller('AppController', ['$document', 'ConfigLoader', 'ContextService', 'MixPanelService', function($document, ConfigLoader, ContextService, MixPanelService) {
-    var self = this;
-    ConfigLoader.executeSideBarConfig();
+  .controller('AppController', ['$document', 'ConfigLoader', 'ApplicationFacade', 'MixPanelService', 'APPLICATION_EVENTS',
+    function($document, ConfigLoader, ApplicationFacade, MixPanelService, APPLICATION_EVENTS) {
+      var activeLocation = null;
+      var mixPanelToken = null;
+      var mixPanelInitialized = false;
 
-    ContextService.initialized(function(context) {
-      var location = context.locations().find(context.merchantSlug());
+      var initializeMixPanel = function() {
+        if (activeLocation && mixPanelToken && !mixPanelInitialized) {
+          var location_info = activeLocation.name() + " - " + activeLocation.address1() + ", " + activeLocation.city() + ", " + activeLocation.state();
+          var visit_type = activeLocation.isFirstVisit() ? 'New visit' : 'Return visit';
 
-      if(location && _.isString(location.partnerSlug())) {
-        $document[0].title = location.partnerName() + " " + location.productName() + " - " + location.name();
-      }
+          MixPanelService.initialize(mixPanelToken, {
+            'Merchant name': location_info,
+            'Brand': activeLocation.partnerName(),
+            'Visit type': visit_type
+          });
 
-      var location_info = location.name() + " - " + location.address1() + ", " + location.city() + ", " + location.state();
-      var visit_type = location.isFirstVisit() ? 'New visit' : 'Return visit';
+          mixPanelInitialized = true;
+        }
+      };
 
-      MixPanelService.initialize(context.mixpanelToken(), {
-        'Merchant name': location_info,
-        'Brand': location.partnerName(),
-        'Visit type': visit_type
+      ConfigLoader.executeSideBarConfig();
+
+      ApplicationFacade.subscribe(APPLICATION_EVENTS.onActiveMerchantLocationChange, function(location) {
+        activeLocation = location;
+        if(activeLocation && _.isString(activeLocation.partnerSlug())) {
+          $document[0].title = activeLocation.partnerName() + " " + activeLocation.productName() + " - " + activeLocation.name();
+        }
+        initializeMixPanel();
       });
-    });
+
+      ApplicationFacade.subscribe(APPLICATION_EVENTS.onMixPanelTokenChange, function(token) {
+        mixPanelToken = token;
+        initializeMixPanel();
+      });
   }]);
