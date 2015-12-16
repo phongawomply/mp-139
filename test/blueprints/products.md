@@ -1,5 +1,5 @@
 # Products API
-## Products resource [/api/0.1/products/{id}]
+## Products resource [/v1/products/{id}]
    + Parameters
     + id: 1 (number) - The Merchant Location ID
 
