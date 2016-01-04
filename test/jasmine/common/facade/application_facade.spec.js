@@ -451,9 +451,11 @@ describe('Service: ApplicationFacade', function() {
       unwatch();
     });
 
-    service.subscribe(EVENTS.onUserChange, onUserChangeCallback);
+    var dereg = service.subscribe(EVENTS.onUserChange, onUserChangeCallback);
     initializedCallback(contextModel);
     expect(onUserChangeCallback).toHaveBeenCalled();
+
+    dereg();
   });
 
   describe('it will throw error if', function() {

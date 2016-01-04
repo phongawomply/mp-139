@@ -44,10 +44,6 @@ angular.module('womply')
             callback(data);
           }
         });
-
-        eventMap[event].callbacks = _.reject(eventMap[event].callbacks, function(fn) {
-          return !_.isFunction(fn);
-        });
       };
 
       var subscribeToIndividualEvent = function(event, callback) {
