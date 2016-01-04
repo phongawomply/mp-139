@@ -40,7 +40,13 @@ angular.module('womply')
       var notify = function(event, data) {
         var callbacks = eventMap[event].callbacks;
         _.each(callbacks, function(callback) {
-          callback(data);
+          if (_.isFunction(callback)) {
+            callback(data);
+          }
+        });
+
+        eventMap[event].callbacks = _.reject(eventMap[event].callbacks, function(fn) {
+          return !_.isFunction(fn);
         });
       };
 
@@ -58,7 +64,7 @@ angular.module('womply')
         }
         var length = eventMap[event].callbacks.length;
         var deRegister = function deRegister() {
-          eventMap[event].callbacks.splice(length - 1, 1);
+          eventMap[event].callbacks[length -1] = null;
         };
         return deRegister;
       };
