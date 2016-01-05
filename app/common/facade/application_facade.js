@@ -3,8 +3,8 @@ angular.module('womply')
  * Facade that exposes the internal API's of gmd-nav
  */
   .factory('ApplicationFacade', [
-    'ContextService', 'SideBarNavigationAPI', 'APPLICATION_EVENTS',
-    function(ContextService, SideBarNavigationAPI, APPLICATION_EVENTS) {
+    '$timeout', 'ContextService', 'SideBarNavigationAPI', 'APPLICATION_EVENTS',
+    function($timeout, ContextService, SideBarNavigationAPI, APPLICATION_EVENTS) {
       var eventMap = {};
 
       var isPrimitiveChanged = function(oldValue, newValue) {
@@ -56,7 +56,11 @@ angular.module('womply')
         }
         eventMap[event].callbacks.push(callback);
         if (eventMap[event].data) {
-          callback(eventMap[event].data);
+          // Need a timeout so that the deregister can return before
+          // callback is executed.
+          $timeout(function() {
+            callback(eventMap[event].data);
+          });
         }
         var length = eventMap[event].callbacks.length;
         var deRegister = function deRegister() {
