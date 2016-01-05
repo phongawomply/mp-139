@@ -13,8 +13,9 @@ describe('Service: ApplicationFacade', function() {
   var initializedCallback = null;
   var EVENTS = null;
   var setProductPartnerAndSlug;
+  var timeout;
 
-  beforeEach(inject(function($injector, ContextModel, ProductListModel, PartnerModel, APPLICATION_EVENTS) {
+  beforeEach(inject(function($injector, $timeout, ContextModel, ProductListModel, PartnerModel, APPLICATION_EVENTS) {
     setProductPartnerAndSlug = function(model) {
       model.products(new ProductListModel(products_data.data));
       model.partner(new PartnerModel(products_data.data.partner));
@@ -30,6 +31,7 @@ describe('Service: ApplicationFacade', function() {
     });
     service = $injector.get('ApplicationFacade');
     sideBarNavigationAPI = $injector.get('SideBarNavigationAPI');
+    timeout = $timeout;
   }));
 
   it('returns sideBarNavigationConfig', inject(function($injector) {
@@ -84,6 +86,7 @@ describe('Service: ApplicationFacade', function() {
           location = l;
         });
         service.subscribe(EVENTS.onActiveMerchantLocationChange, callback);
+        timeout.flush();
         expect(callback).toHaveBeenCalled();
         expect(location.id()).toBe(193);
       });
@@ -134,6 +137,7 @@ describe('Service: ApplicationFacade', function() {
           product = l;
         });
         service.subscribe(EVENTS.onActiveProductChange, callback);
+        timeout.flush();
         expect(callback).toHaveBeenCalled();
         expect(product.id()).toBe(104);
       });
@@ -182,6 +186,7 @@ describe('Service: ApplicationFacade', function() {
           partner = l;
         });
         service.subscribe(EVENTS.onActivePartnerChange, callback);
+        timeout.flush();
         expect(callback).toHaveBeenCalled();
         expect(partner.id()).toBe(10);
       });
@@ -231,6 +236,8 @@ describe('Service: ApplicationFacade', function() {
           products = l;
         });
         service.subscribe(EVENTS.onProductsChange, callback);
+        timeout.flush();
+
         expect(callback).toHaveBeenCalled();
         expect(products.products().length).toBe(7);
       });
@@ -281,6 +288,8 @@ describe('Service: ApplicationFacade', function() {
           locations = l;
         });
         service.subscribe(EVENTS.onMerchantLocationsChange, callback);
+        timeout.flush();
+
         expect(callback).toHaveBeenCalled();
         expect(locations.list().length).toBe(4);
       });
@@ -328,6 +337,8 @@ describe('Service: ApplicationFacade', function() {
           path = l;
         });
         service.subscribe(EVENTS.onPathChange, callback);
+        timeout.flush();
+
         expect(callback).toHaveBeenCalled();
         expect(path).toBe(mockedPath);
       });
@@ -367,6 +378,8 @@ describe('Service: ApplicationFacade', function() {
           token = l;
         });
         service.subscribe(EVENTS.onMixPanelTokenChange, callback);
+        timeout.flush();
+
         expect(callback).toHaveBeenCalled();
         expect(token).toBe(context_data.mixpanel_token);
       });
@@ -457,6 +470,16 @@ describe('Service: ApplicationFacade', function() {
 
     dereg();
   });
+
+  it('handles deregistered immediately', inject(function($timeout) {
+    initializedCallback(contextModel);
+
+    var unwatch = service.subscribe(EVENTS.onUserChange, function() {
+      expect(_.isFunction(unwatch)).toBe(true);
+    });
+
+    $timeout.flush();
+  }));
 
   describe('it will throw error if', function() {
     it('registered for an invalid event', function() {
