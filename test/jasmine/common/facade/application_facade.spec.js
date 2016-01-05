@@ -444,6 +444,20 @@ describe('Service: ApplicationFacade', function() {
     expect(onPathChangeCallback).not.toHaveBeenCalled();
   });
 
+  it('handles nested deregister', function() {
+    var onUserChangeCallback = jasmine.createSpy('onUserChangeCallback');
+
+    var unwatch = service.subscribe(EVENTS.onUserChange, function() {
+      unwatch();
+    });
+
+    var dereg = service.subscribe(EVENTS.onUserChange, onUserChangeCallback);
+    initializedCallback(contextModel);
+    expect(onUserChangeCallback).toHaveBeenCalled();
+
+    dereg();
+  });
+
   describe('it will throw error if', function() {
     it('registered for an invalid event', function() {
       expect(function() {
