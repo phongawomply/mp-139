@@ -11,6 +11,7 @@ describe('Service: ApplicationFacade', function() {
   var products = null;
   var partner = null;
   var initializedCallback = null;
+  var initializingCallback = null;
   var EVENTS = null;
   var setProductPartnerAndSlug;
   var timeout;
@@ -28,6 +29,9 @@ describe('Service: ApplicationFacade', function() {
     contextService = $injector.get('ContextService');
     spyOn(contextService, 'initialized').and.callFake(function(cb) {
       initializedCallback = cb;
+    });
+    spyOn(contextService, 'initializing').and.callFake(function(cb) {
+      initializingCallback = cb;
     });
     service = $injector.get('ApplicationFacade');
     sideBarNavigationAPI = $injector.get('SideBarNavigationAPI');
@@ -382,6 +386,26 @@ describe('Service: ApplicationFacade', function() {
 
         expect(callback).toHaveBeenCalled();
         expect(token).toBe(context_data.mixpanel_token);
+      });
+    });
+
+    describe('onInitialized', function() {
+      var callback;
+      var deRegister;
+
+      beforeEach(inject(function($location) {
+        callback = jasmine.createSpy('onInitialized');
+        deRegister = service.subscribe(EVENTS.onInitialized, callback);
+      }));
+
+      it('will get notified when context is in flight', function() {
+        initializingCallback();
+        expect(callback).toHaveBeenCalledWith(null)
+      });
+
+      it('will get notified when context initialized is complete', function() {
+        initializedCallback(contextModel);
+        expect(callback).toHaveBeenCalledWith(true)
       });
     });
 

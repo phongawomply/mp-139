@@ -90,7 +90,12 @@ angular.module('womply')
         return deRegister;
       };
 
+      ContextService.initializing(function() {
+        notify(APPLICATION_EVENTS.onInitialized, null);
+      });
+
       ContextService.initialized(function(context) {
+        notify(APPLICATION_EVENTS.onInitialized, true);
         notifyOnModelObjectChange(context.activeLocation(), APPLICATION_EVENTS.onActiveMerchantLocationChange);
         notifyOnModelObjectChange(context.activeProduct(), APPLICATION_EVENTS.onActiveProductChange);
         notifyOnModelObjectChange(context.partner(), APPLICATION_EVENTS.onActivePartnerChange);
@@ -155,5 +160,6 @@ angular.module('womply')
     onMerchantLocationsChange: 'onMerchantLocationsChange',
     onUserChange: 'onUserChange',
     onPathChange: 'onPathChange',
-    onMixPanelTokenChange: 'onMixPanelTokenChange'
+    onMixPanelTokenChange: 'onMixPanelTokenChange',
+    onInitialized: 'onInitialized'
   });
