@@ -95,6 +95,7 @@ angular.module('womply')
       });
 
       ContextService.initialized(function(context) {
+        eventMap[APPLICATION_EVENTS.onInitialized].data = true;
         notify(APPLICATION_EVENTS.onInitialized, true);
         notifyOnModelObjectChange(context.activeLocation(), APPLICATION_EVENTS.onActiveMerchantLocationChange);
         notifyOnModelObjectChange(context.activeProduct(), APPLICATION_EVENTS.onActiveProductChange);
