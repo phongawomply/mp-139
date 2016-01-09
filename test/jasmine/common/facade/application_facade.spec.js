@@ -43,7 +43,9 @@ describe('Service: ApplicationFacade', function() {
   }));
 
   it('will not throw error if context has null values', inject(function(ContextModel) {
-    var model = new ContextModel({});
+    var localContextData = angular.copy(context_data);
+    localContextData.merchant_locations = null;
+    var model = new ContextModel(context_data);
     setProductPartnerAndSlug(model);
     initializedCallback(model);
   }));
