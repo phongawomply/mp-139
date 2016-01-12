@@ -12,10 +12,6 @@ angular.module('womply')
 
     return {
       API: {
-        product: {
-          host: protocol + $location.host(),
-          path: ''
-        },
         default: {
           host: protocol + getHost(),
           path: '/api/0.1'
