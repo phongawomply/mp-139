@@ -1,0 +1,17 @@
+var gulp        = require('gulp');
+var directories = require('./directories.js');
+var vinyl_paths = require('vinyl-paths');
+var del         = require('del');
+
+
+gulp.task('clean:womply-common', function() {
+  return gulp.src([directories.lib + '/**/womply-common.min.js'])
+    .pipe(vinyl_paths(del));
+});
+
+gulp.task('womply-common:js', ['clean:womply-common'], function() {
+  return gulp.src('./node_modules/@womply/womply-common-js/build/js/womply-common.min.js')
+    .pipe(gulp.dest(directories.lib));
+});
+
+gulp.task('womply-common', ['womply-common:js'])
