@@ -1,8 +1,6 @@
 describe('Service: ApplicationFacade', function() {
-  disableModuleRun('womply');
-  beforeEach(module('womply'));
   beforeEach(module('womply.mock'));
-  beforeEach(module('womply.gmd-nav'));
+  setup();
 
   var service = null;
   var sideBarNavigationAPI = null;
@@ -400,7 +398,9 @@ describe('Service: ApplicationFacade', function() {
         deRegister = service.subscribe(EVENTS.onInitialized, callback);
       }));
 
-      it('will get notified when context is in flight', function() {
+      it('will get notified when context is in flight after data has been initialized', function() {
+        initializedCallback(contextModel);
+
         initializingCallback();
         expect(callback).toHaveBeenCalledWith(null)
       });
@@ -408,6 +408,41 @@ describe('Service: ApplicationFacade', function() {
       it('will get notified when context initialized is complete', function() {
         initializedCallback(contextModel);
         expect(callback).toHaveBeenCalledWith(true)
+      });
+
+      describe("On active merchant location change", function() {
+        var location;
+        var mlCallback;
+        var deregML;
+        var deRegInitialized;
+
+        beforeEach(function() {
+          mlCallback = jasmine.createSpy('onActiveMerchantLocationChange').and.callFake(function(l){
+            location = l;
+            deregML();
+            deRegInitialized();
+          });
+          callback = jasmine.createSpy('onInitialized').and.callFake(function(data) {
+            deregML = service.subscribe(EVENTS.onActiveMerchantLocationChange, mlCallback);
+            timeout.flush();
+          });
+          deRegInitialized = service.subscribe(EVENTS.onInitialized, callback);
+        });
+
+        it('will update the location id', inject(function(MerchantLocationModel) {
+          initializedCallback(contextModel);
+          expect(callback).toHaveBeenCalledWith(true);
+          expect(mlCallback).toHaveBeenCalledWith(location);
+          expect(location.id()).toBe(193);
+
+          initializingCallback();
+          deRegInitialized = service.subscribe(EVENTS.onInitialized, callback);
+
+          contextModel.merchantSlug(250);
+          initializedCallback(contextModel);
+          expect(mlCallback).toHaveBeenCalledWith(location);
+          expect(location.id()).toBe(250);
+        }));
       });
     });
 
