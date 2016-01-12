@@ -12,6 +12,7 @@ module.exports = function(config) {
       'build/lib/moment.min.js',
       'build/lib/bowser.min.js',
       'build/lib/gmd-nav.min.js',
+      'build/lib/womply-common.min.js',
       'build/html/**/*.html',
       'test/jasmine/helpers/**/*.js',
       'test/jasmine/mocks/**/*.js',

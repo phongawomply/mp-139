@@ -17,7 +17,7 @@ gulp.task('sg', ['sg:images', 'sg:fonts', 'sg:css']);
 /**
  * Copy all assets
  */
-gulp.task('asset', ['gc', 'sg', 'ac', 'gmd-nav']);
+gulp.task('asset', ['gc', 'sg', 'ac', 'gmd-nav', 'womply-common']);
 /**
  * Copy all third party libraries
  */
