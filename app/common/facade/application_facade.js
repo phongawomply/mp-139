@@ -26,6 +26,7 @@ angular.module('womply')
       });
       eventMap[APPLICATION_EVENTS.onPathChange].isModelChanged = isPrimitiveChanged;
       eventMap[APPLICATION_EVENTS.onMixPanelTokenChange].isModelChanged = isPrimitiveChanged;
+      eventMap[APPLICATION_EVENTS.onInitialized].isModelChanged = isPrimitiveChanged;
 
       var notifyOnModelObjectChange = function(newModelObject, event) {
         var map = eventMap[event];
@@ -55,7 +56,7 @@ angular.module('womply')
           throw new Error('callback should be a function');
         }
         eventMap[event].callbacks.push(callback);
-        if (eventMap[event].data) {
+        if (eventMap[event].data && eventMap[APPLICATION_EVENTS.onInitialized].data) {
           // Need a timeout so that the deregister can return before
           // callback is executed.
           $timeout(function() {
@@ -91,12 +92,10 @@ angular.module('womply')
       };
 
       ContextService.initializing(function() {
-        notify(APPLICATION_EVENTS.onInitialized, null);
+        notifyOnModelObjectChange(null, APPLICATION_EVENTS.onInitialized);
       });
 
       ContextService.initialized(function(context) {
-        eventMap[APPLICATION_EVENTS.onInitialized].data = true;
-        notify(APPLICATION_EVENTS.onInitialized, true);
         notifyOnModelObjectChange(context.activeLocation(), APPLICATION_EVENTS.onActiveMerchantLocationChange);
         notifyOnModelObjectChange(context.activeProduct(), APPLICATION_EVENTS.onActiveProductChange);
         notifyOnModelObjectChange(context.partner(), APPLICATION_EVENTS.onActivePartnerChange);
@@ -105,6 +104,7 @@ angular.module('womply')
         notifyOnModelObjectChange(context.user(), APPLICATION_EVENTS.onUserChange);
         notifyOnModelObjectChange(context.activePath(), APPLICATION_EVENTS.onPathChange);
         notifyOnModelObjectChange(context.mixpanelToken(), APPLICATION_EVENTS.onMixPanelTokenChange);
+        notifyOnModelObjectChange(true, APPLICATION_EVENTS.onInitialized);
       });
 
       return {
