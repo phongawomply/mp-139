@@ -11,6 +11,7 @@ window.mock.application = function(slug) {
     spyOn(ApplicationFacade, 'subscribe').and.callFake(function(event, fn) {
       initializedCallback[event] = initializedCallback[event] || [];
       initializedCallback[event].push(fn);
+      return function() {};
     });
 
     window.mock.application.contextModel = new ContextModel(context_data);

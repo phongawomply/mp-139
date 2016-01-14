@@ -19,9 +19,11 @@ function disableModuleRun(module) {
  * Setup the spec
  */
 function setup() {
+  disableModuleRun('womply.common-js');
   disableModuleRun('womply');
   disableModuleRun('womply.gmd-nav');
 
+  beforeEach(module('womply.common-js'));
   beforeEach(module('womply'));
   beforeEach(module('womply.gmd-nav'));
 
