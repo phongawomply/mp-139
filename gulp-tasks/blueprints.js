@@ -97,6 +97,13 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
     var server = express();
 
     server.all('*', function(req, res, next) {
+      if (req.query != {}) {
+        req.url = req.originalUrl.replace('?', '!');
+      }
+      next();
+    });
+
+    server.all('*', function(req, res, next) {
       if (!req.get('Origin')) return next();
       res.set('Access-Control-Allow-Origin', 'http://local.womply.com:' + config.server_port);
       res.set('Access-Control-Allow-Methods', 'GET, POST');
@@ -104,7 +111,6 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
       res.set('Access-Control-Allow-Credentials', 'true');
       if ('OPTIONS' == req.method) return res.send(200);
 
-      //Only works for Irish Channel Slug/ID
       if(req.params[0].split('/')[4] === '250') {
         res.json({data: null});
       } else {
@@ -125,7 +131,7 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
       _.each(resource.actions, function(action) {
         var fn = server[action.method.toLowerCase()];
         util.log(pad('[' + action.method + ']', 10).green + ' ' + resource.uri);
-        fn.call(server, resource.uri, handler(action));
+        fn.call(server, resource.uri.replace('?', '!'), handler(action));
       });
     });
 
