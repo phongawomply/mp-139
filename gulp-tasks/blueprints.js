@@ -96,12 +96,13 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
 
     var server = express();
 
-    server.all('*', function(req, res, next) {
-      if (req.query != {}) {
-        req.url = req.originalUrl.replace('?', '!');
-      }
-      next();
-    });
+    // Express matching currently does not function as expected, temporarily removing this.
+    // server.all('*', function(req, res, next) {
+    //   if (req.query != {}) {
+    //     req.url = req.originalUrl.replace('?', '!');
+    //   }
+    //   next();
+    // });
 
     server.all('*', function(req, res, next) {
       if (!req.get('Origin')) return next();
@@ -131,7 +132,9 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
       _.each(resource.actions, function(action) {
         var fn = server[action.method.toLowerCase()];
         util.log(pad('[' + action.method + ']', 10).green + ' ' + resource.uri);
-        fn.call(server, resource.uri.replace('?', '!'), handler(action));
+        // Express does not match correctly
+        // fn.call(server, resource.uri.replace('?', '!'), handler(action));
+        fn.call(server, resource.uri, handler(action));
       });
     });
 

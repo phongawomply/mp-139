@@ -1,6 +1,6 @@
 # Group Womply Initialize API
 
-## Womply Initialize Resource [/api/0.1/initialize{?id}]
+## Womply Initialize Resource [/api/0.1/initialize?{id}]
 An example of defining a resource in blueprints.
 + Parameters
   + id: 1 (number) - An unique identifier of the resource.
