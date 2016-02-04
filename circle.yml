@@ -27,13 +27,22 @@ test:
 #        background: true
 #    - sleep 5
 #    - gulp protractor
-
-# TODO: Uncomment the deployment stanza below to get CircleCI deploys working.
 #
-# deployment:
-#   everywhere:
-#     branch: /(master|develop)/
-#     commands:
-#       - gulp build
-#       - sudo pip install --upgrade awscli
-#       - bin/deploy $CIRCLE_BRANCH
+deployment:
+  everywhere:
+    branch: /(master|develop)/
+    commands:
+      - gulp build
+      - sudo pip install --upgrade awscli
+      - bin/deploy $CIRCLE_BRANCH
+        - >
+                    if [ "${CIRCLE_BRANCH}" = "master" ]; then
+                      SLACK_CHANNEL="#releases"
+                      DEPLOYMENT_TARGET="production"
+                    else
+                      SLACK_CHANNEL="#team-pdx-app-notify"
+                      DEPLOYMENT_TARGET="testing"
+                    fi &&
+                    if [ "${SLACK_NOTIFICATION_WEBHOOK}" != "" ]; then
+                      curl -X POST -d "payload={\"username\":\"Github\", \"channel\":\"${SLACK_CHANNEL}\", \"icon_emoji\":\":octocat:\", \"attachments\":[{ \"mrkdwn_in\":[\"text\"], \"color\":\"#439FE0\", \"fallback\":\"Merge and Deployment Complete Notification\", \"pretext\":\"Merge and Deployment Complete Notification\", \"text\":\"*Project* \`${CIRCLE_PROJECT_REPONAME}\`\n*Branch* \`${CIRCLE_BRANCH}\`\n*User* \`${CIRCLE_USERNAME}\`\n*Deployed to* \`${DEPLOYMENT_TARGET}\`\nClick <$CIRCLE_COMPARE_URL|here> to see what changed\"}]}" ${SLACK_NOTIFICATION_WEBHOOK}
+                     fi
