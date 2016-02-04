@@ -30,7 +30,7 @@ test:
 #
  deployment:
    everywhere:
-     branch: [ master, develop ]
+     branch: /(master|develop)/
      commands:
        - gulp build
        - sudo pip install --upgrade awscli
