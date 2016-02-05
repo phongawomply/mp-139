@@ -1,9 +1,9 @@
 machine:
   post:
   - >
-      if [ "${SLACK_NOTIFICATION_WEBHOOK}" != "" -a "${CIRCLE_BRANCH}" = "master" ]; then
-        curl -X POST -d "payload={\"username\":\"Github\", \"channel\":\"#releases\", \"icon_emoji\":\":octocat:\", \"attachments\":[{ \"mrkdwn_in\":[\"text\"], \"color\":\"#439FE0\", \"fallback\":\"Merge and Build Start Notification\", \"pretext\":\"Merge and Build Start Notification\", \"text\":\"*Project* \`${CIRCLE_PROJECT_REPONAME}\`\n*Branch* \`${CIRCLE_BRANCH}\`\n*User* \`${CIRCLE_USERNAME}\`\nClick <$CIRCLE_COMPARE_URL|here> to see what changed\"}]}" ${SLACK_NOTIFICATION_WEBHOOK}
-      fi
+    if [ "${SLACK_NOTIFICATION_WEBHOOK}" != "" -a "${CIRCLE_BRANCH}" = "master" ]; then
+      curl -X POST -d "payload={\"username\":\"Github\", \"channel\":\"#releases\", \"icon_emoji\":\":octocat:\", \"attachments\":[{ \"mrkdwn_in\":[\"text\"], \"color\":\"#439FE0\", \"fallback\":\"Merge and Build Start Notification\", \"pretext\":\"Merge and Build Start Notification\", \"text\":\"*Project* \`${CIRCLE_PROJECT_REPONAME}\`\n*Branch* \`${CIRCLE_BRANCH}\`\n*User* \`${CIRCLE_USERNAME}\`\nClick <$CIRCLE_COMPARE_URL|here> to see what changed\"}]}" ${SLACK_NOTIFICATION_WEBHOOK}
+    fi
     - npm install -g gulp
     - npm install -g protractor
     - npm install -g coveralls
@@ -40,13 +40,13 @@ deployment:
       - sudo pip install --upgrade awscli
       - bin/deploy $CIRCLE_BRANCH
         - >
-                    if [ "${CIRCLE_BRANCH}" = "master" ]; then
+          if [ "${CIRCLE_BRANCH}" = "master" ]; then
                       SLACK_CHANNEL="#releases"
                       DEPLOYMENT_TARGET="production"
                     else
                       SLACK_CHANNEL="#team-pdx-app-notify"
                       DEPLOYMENT_TARGET="testing"
-                    fi &&
-                    if [ "${SLACK_NOTIFICATION_WEBHOOK}" != "" ]; then
-                      curl -X POST -d "payload={\"username\":\"Github\", \"channel\":\"${SLACK_CHANNEL}\", \"icon_emoji\":\":octocat:\", \"attachments\":[{ \"mrkdwn_in\":[\"text\"], \"color\":\"#439FE0\", \"fallback\":\"Merge and Deployment Complete Notification\", \"pretext\":\"Merge and Deployment Complete Notification\", \"text\":\"*Project* \`${CIRCLE_PROJECT_REPONAME}\`\n*Branch* \`${CIRCLE_BRANCH}\`\n*User* \`${CIRCLE_USERNAME}\`\n*Deployed to* \`${DEPLOYMENT_TARGET}\`\nClick <$CIRCLE_COMPARE_URL|here> to see what changed\"}]}" ${SLACK_NOTIFICATION_WEBHOOK}
-                     fi
+          fi &&
+          if [ "${SLACK_NOTIFICATION_WEBHOOK}" != "" ]; then
+          curl -X POST -d "payload={\"username\":\"Github\", \"channel\":\"${SLACK_CHANNEL}\", \"icon_emoji\":\":octocat:\", \"attachments\":[{ \"mrkdwn_in\":[\"text\"], \"color\":\"#439FE0\", \"fallback\":\"Merge and Deployment Complete Notification\", \"pretext\":\"Merge and Deployment Complete Notification\", \"text\":\"*Project* \`${CIRCLE_PROJECT_REPONAME}\`\n*Branch* \`${CIRCLE_BRANCH}\`\n*User* \`${CIRCLE_USERNAME}\`\n*Deployed to* \`${DEPLOYMENT_TARGET}\`\nClick <$CIRCLE_COMPARE_URL|here> to see what changed\"}]}" ${SLACK_NOTIFICATION_WEBHOOK}
+          fi
