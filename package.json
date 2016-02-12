@@ -2,8 +2,8 @@
   "name": "app-template-angular",
   "version": "0.0.1",
   "dependencies": {
-    "@womply/gmd-nav": "0.0.322",
-    "@womply/womply-common-js": "0.0.27",
+    "@womply/gmd-nav": "0.0.330",
+    "@womply/womply-common-js": "0.0.33",
     "angular": "1.4.7",
     "angular-route": "1.4.7",
     "angular-aria": "1.4.7",
