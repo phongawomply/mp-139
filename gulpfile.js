@@ -6,18 +6,11 @@ var directories = require('./gulp-tasks/directories.js');
 var sequence    = require('run-sequence');
 
 require_dir('./gulp-tasks');
-/**
- * Copy all global component assets
- */
-gulp.task('gc', ['gc:js', 'gc:css', 'gc:images', 'gc:logos']);
-/**
- * Copy all styleguide assets
- */
-gulp.task('sg', ['sg:images', 'sg:fonts', 'sg:css']);
+
 /**
  * Copy all assets
  */
-gulp.task('asset', ['gc', 'sg', 'ac', 'gmd-nav', 'womply-common']);
+gulp.task('asset', ['ac', 'gmd-nav', 'womply-common']);
 /**
  * Copy all third party libraries
  */
@@ -56,9 +49,6 @@ gulp.task('build', function(cb) {
       'build:js',
       'build:html',
       'build:index',
-      'build:css',
-      'build:images:common',
-      'build:images:components',
       'build:favicon',
       'asset',
       'libraries'
