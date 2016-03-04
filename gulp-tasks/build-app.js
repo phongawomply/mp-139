@@ -29,13 +29,13 @@ gulp.task('build:css', function() {
     .pipe(gulp.dest(directories.css));
 });
 
-gulp.task('build:index', function() {
-  return gulp.src([directories.src + '/index.html'], {base: directories.src})
+gulp.task('build:images', function() {
+  return gulp.src([directories.src + '/components/**/*.png'], {base: directories.src + '/components'})
     .pipe(gulp.dest(directories.build));
 });
 
-gulp.task('build:favicon', function() {
-  return gulp.src(directories.src + '/common/assets/images/favicon.ico')
+gulp.task('build:index', function() {
+  return gulp.src([directories.src + '/index.html'], {base: directories.src})
     .pipe(gulp.dest(directories.build));
 });
 
@@ -47,4 +47,6 @@ gulp.task('build:favicon', function() {
 gulp.task('build:watch', function() {
   gulp.watch(directories.src + '/**/*.js', ['build:js']);
   gulp.watch(directories.src + '/**/*.html', ['build:html']);
+  gulp.watch(directories.src + '/**/*.scss', ['build:css']);
+  gulp.watch(directories.src + '/**/*.png', ['build:images']);
 });

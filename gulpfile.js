@@ -48,6 +48,8 @@ gulp.task('build', function(cb) {
     [
       'build:js',
       'build:html',
+      'build:css',
+      'build:images',
       'build:index',
       'build:favicon',
       'asset',
