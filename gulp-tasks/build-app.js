@@ -22,6 +22,13 @@ gulp.task('build:html', function() {
     .pipe(gulp.dest(directories.html));
 });
 
+gulp.task('build:css', function() {
+  return gulp.src([directories.src + '/components/assets/stylesheets/app.scss'])
+    .pipe(sass({indentedSyntax: false}).on('error', sass.logError))
+    .pipe(concat('app-styles.css'))
+    .pipe(gulp.dest(directories.css));
+});
+
 gulp.task('build:index', function() {
   return gulp.src([directories.src + '/index.html'], {base: directories.src})
     .pipe(gulp.dest(directories.build));
