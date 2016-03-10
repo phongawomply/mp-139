@@ -22,15 +22,14 @@ dependencies:
 
 test:
   pre:
+    - gulp serve:blueprints:
+       background: true
     - git config --global user.name 'deploy'
     - git config --global user.email 'devs@womply.com'
   override:
     - gulp test:karma:dev
     - coveralls < ./coverage/lcov.info
-#    - gulp serve:blueprints:
-#       background: true
-#  - sleep 5
-# - gulp protractor
+    - gulp protractor
 
 #deployment:
 #  everywhere:
