@@ -4,6 +4,7 @@ module.exports = {
   coverage: './coverage',
   src:      './app',
   css:      build_dir + '/css',
+  assets:   build_dir + '/assets',
   lib:      build_dir + '/lib',
   js:       build_dir + '/js',
   html:     build_dir + '/html',
