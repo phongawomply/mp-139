@@ -10,7 +10,7 @@ gulp.task('clean:womply-common', function() {
 });
 
 gulp.task('clean:womply-common-css', function() {
-  return gulp.src([directories.lib + '/**/womply-common.css'])
+  return gulp.src([directories.css + '/**/womply-common.css'])
     .pipe(vinyl_paths(del));
 });
 
