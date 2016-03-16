@@ -4,7 +4,7 @@
   "dependencies": {
     "@womply/gmd-nav": "0.0.365",
     "@womply/womply-common-js": "0.0.33",
-    "@womply/womply-common-css": "0.0.4",
+    "@womply/womply-common-css": "0.0.5",
     "angular": "1.4.7",
     "angular-route": "1.4.7",
     "angular-aria": "1.4.7",
