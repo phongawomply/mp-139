@@ -15,6 +15,7 @@ gulp.task('asset', ['ac', 'gmd-nav', 'womply-common']);
  * Copy all third party libraries
  */
 gulp.task('libraries', ['library:angular',
+                        'library:angular-messages',
                         'library:angular-route',
                         'library:angular-aria',
                         'library:angular-animate',
