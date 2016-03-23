@@ -1,16 +1,17 @@
-var gulp        = require('gulp'),
-  concat      = require('gulp-concat'),
-  directories = require('./directories.js'),
-  ApiMock     = require('api-mock'),
-  vinyl_paths = require('vinyl-paths'),
-  del         = require('del'),
-  protagonist = require('protagonist'),
-  fs          = require('fs'),
-  _           = require('underscore'),
-  express     = require('express'),
-  colors      = require('colors'),
-  util        = require('util'),
-  config      = require('./_config.js');
+var gulp        = require('gulp');
+var concat      = require('gulp-concat');
+var directories = require('./directories.js');
+var ApiMock     = require('api-mock');
+var vinyl_paths = require('vinyl-paths');
+var del         = require('del');
+var protagonist = require('protagonist');
+var fs          = require('fs');
+var _           = require('underscore');
+var express     = require('express');
+var colors      = require('colors');
+var util        = require('util');
+var config      = require('./_config.js');
+var bpOverrides = require('./blueprints-overrides.js');
 
 /**
  * Remove the old blueprints concatenated file
@@ -23,7 +24,11 @@ gulp.task('clean:blueprint', function() {
  * Concat the blueprints files together
  **/
 gulp.task('concat:blueprint', ['clean:blueprint'], function() {
-  return gulp.src([directories.blueprint + '/**/*.md', '!' + directories.blueprint + '/blueprint.concat.md', '!' + directories.blueprint + '/readme.md'])
+  return gulp.src([
+    directories.blueprint + '/**/*.override.md',
+    directories.blueprint + '/**/*.md',
+    '!' + directories.blueprint + '/blueprint.concat.md',
+    '!' + directories.blueprint + '/readme.md'])
     .pipe(concat('blueprint.concat.md'))
     .pipe(gulp.dest(directories.blueprint));
 });
@@ -111,17 +116,12 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
       res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
       res.set('Access-Control-Allow-Credentials', 'true');
       if ('OPTIONS' == req.method) return res.send(200);
-
-      if(req.params[0].split('/')[4] === '250') {
-        res.json({data: null});
-      } else {
-        // Uncomment this to test slow loading
-        //setTimeout(function() {
-        //  next();
-        //}, 1000)
-        next();
-      }
     });
+
+    // Execute all overrides in the optional blueprints-overrides.js file
+    for(var i=0; i<bpOverrides.length; i++) {
+      bpOverrides[i](server);
+    }
 
     var pad = function(value, len) {
       var p = ' ';
