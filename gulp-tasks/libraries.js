@@ -6,6 +6,11 @@ gulp.task('library:angular', function() {
     .pipe(gulp.dest(directories.lib));
 });
 
+gulp.task('library:angular-messages', function() {
+  return gulp.src('./node_modules/angular-messages/angular-messages.min.js')
+    .pipe(gulp.dest(directories.lib));
+});
+
 gulp.task('library:angular-route', function() {
   return gulp.src('./node_modules/angular-route/angular-route.min.js')
     .pipe(gulp.dest(directories.lib));
