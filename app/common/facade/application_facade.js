@@ -6,6 +6,7 @@ angular.module('womply')
     '$timeout', 'ContextService', 'SideBarNavigationAPI', 'APPLICATION_EVENTS',
     function($timeout, ContextService, SideBarNavigationAPI, APPLICATION_EVENTS) {
       var eventMap = {};
+      var activeContext = null;
 
       var isPrimitiveChanged = function(oldValue, newValue) {
         return oldValue !== newValue;
@@ -96,6 +97,7 @@ angular.module('womply')
       });
 
       ContextService.initialized(function(context) {
+        activeContext = context;
         notifyOnModelObjectChange(context.activeLocation(), APPLICATION_EVENTS.onActiveMerchantLocationChange);
         notifyOnModelObjectChange(context.activeProduct(), APPLICATION_EVENTS.onActiveProductChange);
         notifyOnModelObjectChange(context.partner(), APPLICATION_EVENTS.onActivePartnerChange);
@@ -106,6 +108,18 @@ angular.module('womply')
         notifyOnModelObjectChange(context.mixpanelToken(), APPLICATION_EVENTS.onMixPanelTokenChange);
         notifyOnModelObjectChange(true, APPLICATION_EVENTS.onInitialized);
       });
+      /**
+       * Get the active context
+       *
+       * @returns {ContextModel}
+       */
+      function getActiveContext() {
+        if (activeContext == null) {
+          throw new Error('Accessors can only be used in subscribed callbacks');
+        }
+
+        return activeContext;
+      }
 
       return {
         /**
@@ -150,7 +164,62 @@ angular.module('womply')
          *
          *  Note that save() has to be called at the end so that all the callbacks will be fired.
          */
-        sideBarNavigationConfig: SideBarNavigationAPI.appNavigationConfig
+        sideBarNavigationConfig: SideBarNavigationAPI.appNavigationConfig,
+        /**
+         * Get the active merchant location
+         * @returns {MerchantLocationModel}
+         */
+        getActiveMerchantLocation: function() {
+          return getActiveContext().activeLocation();
+        },
+        /**
+         * Get the active product
+         * @returns {ProductModel}
+         */
+        getActiveProduct: function() {
+          return getActiveContext().activeProduct();
+        },
+        /**
+         * Get the active partner
+         * @returns {PartnerModel}
+         */
+        getActivePartner: function() {
+          return getActiveContext().partner();
+        },
+        /**
+         * Get the products list
+         * @returns {ProductListModel}
+         */
+        getProducts: function() {
+          return getActiveContext().products();
+        },
+        /**
+         * Get the merchant locations
+         * @returns {MerchantLocationListModel}
+         */
+        getMerchantLocations: function() {
+          return getActiveContext().locations();
+        },
+        /**
+         * Get the user
+         * @returns {UserModel}
+         */
+        getUser: function() {
+          return getActiveContext().user();
+        },
+        /**
+         * Get the active path
+         * @returns {string}
+         */
+        getActivePath: function() {
+          return getActiveContext().activePath();
+        },
+        /**
+         * Get the mixpanel toke
+         */
+        getMixPanelToken: function() {
+          return getActiveContext().mixpanelToken();
+        }
       }
     }
   ]).constant('APPLICATION_EVENTS', {

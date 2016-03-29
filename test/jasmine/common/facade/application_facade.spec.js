@@ -1,5 +1,4 @@
 describe('Service: ApplicationFacade', function() {
-  beforeEach(module('womply.mock'));
   setup();
 
   var service = null;
@@ -560,6 +559,106 @@ describe('Service: ApplicationFacade', function() {
         service.subscribe([EVENTS.onActiveMerchantLocationChange], [])
       }).toThrowError('No of events and callbacks does not match');
     });
+  });
+
+  describe('accessors', function() {
+    var context;
+    beforeEach(inject(function(ContextModel, ProductListModel, PartnerModel) {
+      context = new ContextModel(context_data);
+      context.products(new ProductListModel(products_data.data));
+      context.partner(new PartnerModel(products_data.data.partner));
+      context.merchantSlug(193);
+    }));
+
+    describe('successful getters', function() {
+      beforeEach(function() {
+        initializedCallback(context);
+      });
+
+      it('gets the active merchant location', function() {
+        expect(service.getActiveMerchantLocation()).toEqual(context.activeLocation());
+      });
+
+      it('gets the active product', function() {
+        expect(service.getActiveProduct()).toEqual(context.activeProduct());
+      });
+
+      it('gets the active partner', function() {
+        expect(service.getActivePartner()).toEqual(context.partner());
+      });
+
+      it('gets the product list', function() {
+        expect(service.getProducts()).toEqual(context.products());
+      });
+
+      it('gets the merchant locations', function() {
+        expect(service.getMerchantLocations()).toEqual(context.locations());
+      });
+
+      it('gets the user', function() {
+        expect(service.getUser()).toEqual(context.user());
+      });
+
+      it('gets the active path', function() {
+        expect(service.getActivePath()).toEqual(context.activePath());
+      });
+
+      it('gets the mix panel token', function() {
+        expect(service.getMixPanelToken()).toEqual(context.mixpanelToken());
+      });
+    });
+
+    describe('unsuccessful getters', function() {
+      it('throws an error an error if context is null for active merchant location', function() {
+        expect(function() {
+          service.getActiveMerchantLocation();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for active product', function() {
+        expect(function() {
+          service.getActiveProduct();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for active partner', function() {
+        expect(function() {
+          service.getActivePartner();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for products', function() {
+        expect(function() {
+          service.getProducts();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for merchant locations', function() {
+        expect(function() {
+          service.getMerchantLocations();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for user', function() {
+        expect(function() {
+          service.getUser();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for active path', function() {
+        expect(function() {
+          service.getActivePath();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+
+      it('throws an error an error if context is null for mix panel token', function() {
+        expect(function() {
+          service.getMixPanelToken();
+        }).toThrowError('Accessors can only be used in subscribed callbacks');
+      });
+    });
+
+
   });
 
 });
