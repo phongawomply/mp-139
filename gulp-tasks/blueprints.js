@@ -116,6 +116,7 @@ gulp.task('blueprints', ['concat:blueprint'], function() {
       res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
       res.set('Access-Control-Allow-Credentials', 'true');
       if ('OPTIONS' == req.method) return res.send(200);
+      next();
     });
 
     // Execute all overrides in the optional blueprints-overrides.js file
