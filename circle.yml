@@ -44,7 +44,7 @@ test:
 #          SLACK_CHANNEL="#releases"
 #          DEPLOYMENT_TARGET="production"
 #        else
-#          SLACK_CHANNEL="#team-pdx-app-notify"
+#          SLACK_CHANNEL=${DEV_NOTIFICATION_SLACK_ROOM:-#releases}
 #          DEPLOYMENT_TARGET="testing"
 #        fi &&
 #        if [ "${SLACK_NOTIFICATION_WEBHOOK}" != "" ]; then
