@@ -21,11 +21,10 @@ describe("AppController", function() {
     EVENTS = APPLICATION_EVENTS;
   }));
 
-  beforeEach(inject(function(ConfigLoader, MixPanelService, MerchantLocationModel) {
+  beforeEach(inject(function(ConfigLoader, MerchantLocationModel) {
     merchantLocationModel = MerchantLocationModel;
     configLoader = ConfigLoader;
     spyOn(ConfigLoader, 'executeSideBarConfig');
-    spyOn(MixPanelService, 'initialize').and.returnValue();
   }));
 
 
@@ -42,15 +41,5 @@ describe("AppController", function() {
     var model = new merchantLocationModel(context_data.merchant_locations[0]);
     application.initialize(EVENTS.onActiveMerchantLocationChange, model);
     expect($document[0].title).toEqual('Womply Insights - The Ugly Mug TEST');
-  }));
-
-  it('initializes mix panel', inject(function(MixPanelService) {
-    var controller = $controller('AppController');
-    $rootScope.$digest();
-    var model = new merchantLocationModel(context_data.merchant_locations[0]);
-    application.initialize(EVENTS.onActiveMerchantLocationChange, model);
-    application.initialize(EVENTS.onMixPanelTokenChange, 'a5a297cbb4f0ba1d02ae09c33e5e5053');
-
-    expect(MixPanelService.initialize).toHaveBeenCalledWith('a5a297cbb4f0ba1d02ae09c33e5e5053', { 'Merchant name': 'The Ugly Mug TEST - 723 8th St SE, Washington, DC', Brand: 'Womply', 'Visit type': 'Return visit' });
   }));
 });
