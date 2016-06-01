@@ -1,7 +1,7 @@
 angular.module('womply')
-  .factory('SideBarConfig', ['ApplicationFacade', function(ApplicationFacade) {
+  .factory('SideBarConfig', ['SideBarNavigationAPI', function(SideBarNavigationAPI) {
     return function() {
-      ApplicationFacade.sideBarNavigationConfig
+      SideBarNavigationAPI.appNavigationConfig
         .create()
         .id('getStarted')
         .text('Get Started')
