@@ -35,6 +35,7 @@
     "gulp-sourcemaps": "1.5.2",
     "gulp-uglify": "1.2.0",
     "gulp-util": "3.0.6",
+    "gulp-confirm": "1.x.x",
     "jasmine-core": "2.3.4",
     "karma": "0.13.7",
     "karma-chrome-launcher": "0.2.0",
