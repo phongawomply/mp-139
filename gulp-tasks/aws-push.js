@@ -59,8 +59,3 @@ var deploy = function(directory) {
 gulp.task('aws:push:testing', function() {
   deploy('testing');
 });
-
-// Task to deploy the current build to aws testing
-gulp.task('aws:push', function() {
-  deploy('production');
-});
