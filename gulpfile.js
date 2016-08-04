@@ -10,7 +10,7 @@ require_dir('./gulp-tasks');
 /**
  * Copy all assets
  */
-gulp.task('asset', ['ac', 'gmd-nav', 'womply-common']);
+gulp.task('asset', ['ac', 'gmd-nav', 'womply-common', 'billing-component']);
 /**
  * Copy all third party libraries
  */
