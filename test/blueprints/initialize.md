@@ -352,6 +352,7 @@ Get the initialize resource from the monolith.
                       "is_womply_staff": true,
                       "is_admin": true,
                       "is_demo": false,
+                      "is_legacy": false,
                       "show_individual_transactions": false,
                       "mobile_phone_number_verified": false,
                       "completed_merchant_setup": false

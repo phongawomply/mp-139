@@ -1,13 +1,10 @@
 angular.module('womply')
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
-      .when('/:slug/nav1', {
-        template: '<p>Nav 1</p><chart data-chart-id="myId"></chart>'
-      })
-      .when('/:slug/nav2', {
-        template: '<p>Nav 2</p>'
+      .when('/:slug/example', {
+        templateUrl: 'html/components/pages/example/example.html'
       })
       .when('/:slug', {
-        redirectTo: '/:slug/nav1'
+        redirectTo: '/:slug/example'
       });
   }]);
