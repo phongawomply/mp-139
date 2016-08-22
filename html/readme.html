@@ -1,0 +1,193 @@
+<h3 id="thetemplate">The Template</h3>
+
+<p>This template is specifically for an AngularJS project in womply, it will provide the developer
+with a standard layout that contains the top navigation and side navigation. It also provides
+the following libraries: angular, underscore and angular-material.</p>
+
+<h4 id="applicationsetup">Application Setup</h4>
+
+<p>There are application specific setup required for every application that clones this repository. An AppConfig factory
+must be created that returns a promise which resolves an object that describes application specific settings. An example
+has been included in ./app/components/app<em>config/services/app</em>config.js. A description of the configuration keys are as
+follows:</p>
+
+<h5 id="applicationidstring">ApplicationId (string)</h5>
+
+<p>A string containing the id for the application.</p>
+
+<h5 id="usermenulinksarrayobject">UserMenuLinks (Array<Object>)</h5>
+
+<p>An array of object to define the user menu links, each object has the following properties:</p>
+
+<ul>
+<li>name - the title to display on the menu</li>
+
+<li>href - the location that the menu item navigates to</li>
+</ul>
+
+<h5 id="apibasestring">ApiBase (string)</h5>
+
+<p>Defines the base url for the API service.</p>
+
+<h5 id="apipathstring">ApiPath (string)</h5>
+
+<p>Defines the path for the API service.</p>
+
+<h5 id="navigationlinksarrayobject">NavigationLinks (Array<Object>)</h5>
+
+<p>Array of objects to define the side bar navigation links. Each object has the following properties:</p>
+
+<ul>
+<li>id - the id for the navigation</li>
+
+<li>name - the name of the navigation item</li>
+
+<li>route - the route that the navigation will go to</li>
+
+<li>active - boolean to state which is active initially</li>
+
+<li>href - the location that will be navigated to when the navigation link has been clicked</li>
+</ul>
+
+<h5 id="navigationselectedfunction">NavigationSelected (Function)</h5>
+
+<p>This is an optional configuration that when set, will trigger every time the navigation menu item has been clicked. This
+overriedes any href that has been set in the NavigationLinks</p>
+
+<pre><code class="js language-js">angular.module('womply')
+  .factory('AppConfig', ['$q', '$location', 'Context', 'Environment', function($q, $location, Context, Environment) {
+    var defer = $q.defer();
+
+
+    Context.getCurrentMerchantLocation()
+      .then(function(slug) {
+        defer.resolve({
+          ApplicationId: 'insights',
+          UserMenuLinks: [
+            {
+              name: 'Logout',
+              href: Environment.getInsightsPath() + '/users/sign_out'
+            }
+          ],
+          ApiBase: 'http://local.womply.com:3000',
+          ApiPath: '/api/0.1',
+          NavigationLinks: [
+            {
+              id:     'nav1',
+              name:   'Nav 1',
+              route:  'nav1',
+              active: true
+            },
+            {
+              id:     'nav2',
+              name:   'Nav 2',
+              route:  'nav2'
+            }
+          ],
+          NavigationSelected: function() {
+            var self = this;
+            Context.getCurrentMerchantLocation()
+              .then(function(slug) {
+                $location.path('/' + slug + '/' + self.route)
+              });
+          }
+        });
+      });
+
+    return defer.promise;
+  }]);
+</code></pre>
+
+<h4 id="deploymentsetup">Deployment Setup</h4>
+
+<p>Forks of this template can be configured to automatically deploy to S3/nginx. To enable automatic deployment:</p>
+
+<ol>
+<li><p>Issue a request to Devops to create a new S3 bucket for your app and proxy it via a new domain hosted by nginx.</p></li>
+
+<li><p>Add <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> environment variables to the CircleCI build for your forked repo.</p></li>
+
+<li><p>Edit the <code>APP_S3_BUCKET</code> and <code>ADDITIONAL_S3_PATH</code> variables in <code>bin/deploy</code>.</p></li>
+
+<li><p>Uncomment the <code>deployment</code> section in <code>circle.yml</code>.</p></li>
+
+<li><p>Merge your changes for steps 3-4 to your develop branch which will cause CircleCI to automatically deploy to your testing S3 bucket. Rinse and repeat for your master branch.</p></li>
+</ol>
+
+<h4 id="gulptasks">Gulp Tasks</h4>
+
+<h5 id="servelivereload">serve:livereload</h5>
+
+<pre><code class="js language-js">    gulp serve:livereload
+</code></pre>
+
+<p>Serve the application on port 9999 with a watch and livereload pushes. This means that when there is a change in the code, the browser
+will refresh itself.</p>
+
+<h5 id="serve">serve</h5>
+
+<pre><code class="js language-js">    gulp serve
+</code></pre>
+
+<p>Serve the application on port 9999.</p>
+
+<h5 id="serveapisproxy">serve:apis-proxy</h5>
+
+<pre><code class="js language-js">    gulp serve:apis-proxy
+</code></pre>
+
+<p>Proxy api requests.  Configuration is in apis-proxy.js.</p>
+
+<h5 id="testkarmadev">test:karma:dev</h5>
+
+<pre><code class="js language-js">    gulp test:karma:dev
+</code></pre>
+
+<p>Run karma on the js code for unit testing and to provide a coverage report that is placed under ./coverage directory.</p>
+
+<h5 id="testkarmaprod">test:karma:prod</h5>
+
+<pre><code class="js language-js">    gulp test:karma:prod
+</code></pre>
+
+<p>Run karma on the concatenated js file built with coverage report under the ./coverage directory.</p>
+
+<h4 id="downstreamrepository">Downstream Repository</h4>
+
+<h5 id="initialization">Initialization</h5>
+
+<p>To use application template in a downstream repository the following steps must be initiated in the application repository (downstream):</p>
+
+<ol>
+<li>Add the remote branch: git remote add origin git@github.com:OtoAnalytics/<project name>.git</li>
+
+<li>Add the template remote as "upstream": git remote add upstream git@github.com:OtoAnalytics/app-template-angular.git</li>
+
+<li>git fetch upstream</li>
+
+<li>git checkout -b master upstream/master</li>
+
+<li>git push origin master</li>
+
+<li>set your working copy "master" branch tracking back to origin: git branch master --set-upstream-to origin/master</li>
+
+<li>git checkout -b master upstream/develop</li>
+
+<li>git push origin develop</li>
+
+<li>set your working copy "develop" branch tracking back to origin: git branch develop --set-upstream-to origin/develop</li>
+</ol>
+
+<h4 id="updating">Updating</h4>
+
+<p>To update the project repository with the latest template repository:</p>
+
+<ol>
+<li>git checkout develop</li>
+
+<li>git pull upstream master</li>
+
+<li>git commit</li>
+</ol>
+
+<p>From this point you can create a PR to merge to master and perform a git rebase to you feature branches.</p>

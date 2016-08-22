@@ -53,6 +53,7 @@ gulp.task('build', function(cb) {
       'build:images',
       'build:index',
       'build:favicon',
+      'build:markdown',
       'asset',
       'libraries'
     ],
