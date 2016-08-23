@@ -8,9 +8,15 @@ angular.module('womply')
         .route('example')
         .type('primary-nav')
         .gmdIconName('remove_red_eye')
-        .active(true)
         .add()
 
+        .create()
+        .id('billing')
+        .text('Billing')
+        .route('billing')
+        .type('primary-nav')
+        .gmdIconName('remove_red_eye')
+        .add()
 
         .save();
     };

@@ -1,0 +1,11 @@
+<md-card class="layout-app-content" flex>
+  <md-toolbar class="md-toolbar-tools">
+    {{$ctrl.cardTitle}}
+  </md-toolbar>
+
+  <md-card-content class="layout-card-content">
+    <md-content class="layout-content">
+      <billing data-ng-if="$ctrl.hasBillingAccess" billing-card-state="$ctrl.billingCardState(validCard)"></billing>
+    </md-content>
+  </md-card-content>
+</md-card>
